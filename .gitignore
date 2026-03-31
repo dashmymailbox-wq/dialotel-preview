@@ -1,0 +1,20 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Config reels (cles API reelles)
+assets/data/config/*.config.json
+!assets/data/config/config.example.json
+
+# Fonts clients (fichiers fournis par le client, pas sur git)
+clients/*/fonts/
+
+# Logs
+*.log
