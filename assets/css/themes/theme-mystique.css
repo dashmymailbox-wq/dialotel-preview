@@ -9,13 +9,15 @@
   --theme-border-accent: #ed8ce6;
   --theme-text: #f0eaf5;
   --theme-text-muted: #7a5e8a;
-  --theme-title-color: #000000;
+  --theme-title-color: #f0eaf5;
   --theme-btn-bg: #ed8ce6;
-  --theme-btn-text: #000000;
+  --theme-btn-text: #0a0012;
   --theme-btn-bg-alt: #e2ed77;
-  --theme-btn-text-alt: #000000;
+  --theme-btn-text-alt: #0a0012;
   --theme-icon-primary: #ed8ce6;
   --theme-icon-halo: #e2ed77;
-  --theme-font-title: inherit;
-  --theme-font-body: inherit;
+  --theme-font-title: 'Cinzel', serif;
+  --theme-font-body: 'DM Sans', sans-serif;
+  --theme-glow-primary: rgba(237, 140, 230, 0.4);
+  --theme-glow-secondary: rgba(226, 237, 119, 0.3);
 }
