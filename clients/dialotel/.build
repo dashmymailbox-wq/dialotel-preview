@@ -6,6 +6,9 @@ assets/css/global.css
 assets/css/components.css
 assets/js/core.js
 assets/icons/zodiac-sprite.svg
+assets/textures/grain.svg
+assets/textures/stars.svg
+assets/textures/cosmic-gradient.svg
 assets/data/astrology/signs.json
 assets/data/compatibility/matrix.json
 assets/data/tarot/definitions.json
