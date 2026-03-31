@@ -29,6 +29,9 @@
       // Initialiser le moteur d'etapes
       VT.StepEngine.init('.vt-app', '.vt-step');
 
+      // Initialiser le switch light/dark
+      VT.Theme.init();
+
       // Binder les evenements
       this._bindEvents();
 

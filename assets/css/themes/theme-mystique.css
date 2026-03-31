@@ -21,3 +21,26 @@
   --theme-glow-primary: rgba(237, 140, 230, 0.4);
   --theme-glow-secondary: rgba(226, 237, 119, 0.3);
 }
+
+/* ===== Mode clair — meme ambiance mystique, fond lumineux ===== */
+.vt-app[data-theme="light"] {
+  --theme-bg: #faf5ff;
+  --theme-bg-card: rgba(237, 220, 245, 0.5);
+  --theme-bg-card-alt: rgba(220, 200, 235, 0.4);
+  --theme-border: rgba(180, 140, 200, 0.35);
+  --theme-border-accent: #c75fb8;
+  --theme-text: #2d1b3d;
+  --theme-text-muted: #8a6fa0;
+  --theme-title-color: #2d1b3d;
+  --theme-primary: #c75fb8;
+  --theme-secondary: #b8c42e;
+  --theme-btn-bg: #c75fb8;
+  --theme-btn-text: #ffffff;
+  --theme-btn-bg-alt: #b8c42e;
+  --theme-btn-text-alt: #ffffff;
+  --theme-icon-primary: #c75fb8;
+  --theme-icon-halo: #b8c42e;
+  --theme-glow-primary: rgba(199, 95, 184, 0.25);
+  --theme-glow-secondary: rgba(184, 196, 46, 0.2);
+}
+

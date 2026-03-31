@@ -326,3 +326,48 @@
   margin-top: 0.5rem;
   letter-spacing: 0.02em;
 }
+
+/* ===== Toggle light/dark ===== */
+.vt-app .vt-theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--theme-border);
+  background: var(--theme-bg-card);
+  color: var(--theme-text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 300ms ease, box-shadow 300ms ease, background 300ms ease;
+  backdrop-filter: blur(6px);
+}
+
+.vt-app .vt-theme-toggle:hover {
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 16px var(--theme-glow-primary);
+}
+
+.vt-app .vt-theme-toggle svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 1px;
+  fill: none;
+  transition: transform 400ms ease;
+}
+
+.vt-app .vt-theme-toggle:hover svg {
+  transform: rotate(30deg);
+}
+
+/* Icone soleil visible en mode sombre, lune en mode clair */
+.vt-app .vt-theme-toggle .vt-icon-sun { display: block; }
+.vt-app .vt-theme-toggle .vt-icon-moon { display: none; }
+
+.vt-app[data-theme="light"] .vt-theme-toggle .vt-icon-sun { display: none; }
+.vt-app[data-theme="light"] .vt-theme-toggle .vt-icon-moon { display: block; }

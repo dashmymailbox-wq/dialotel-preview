@@ -34,6 +34,20 @@
 
 <div class="vt-app">
 
+  <!-- Toggle light/dark -->
+  <button class="vt-theme-toggle" type="button" title="Changer de theme">
+    <svg class="vt-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+    <svg class="vt-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </button>
+
   <!-- Etoiles decoratives en arriere-plan -->
   <div class="vt-star" style="top:8%; left:12%; --dur:3.2s; --delay:0s;"></div>
   <div class="vt-star" style="top:22%; left:78%; --dur:4.1s; --delay:1.2s;"></div>
@@ -325,12 +339,12 @@
     "counterBase": 4200,
     "ai": {
       "provider": "mistral",
-      "apiKey": "REMPLACER_ICI",
+      "apiKey": "XtsCBn8NEzj7M3d4s3hlUBSYNgH3BHMk",
       "model": "mistral-small-latest"
     },
     "tts": { "enabled": true, "autoplay": false },
     "rateLimit": { "enabled": true, "freePerDay": 3, "extendedPerDay": 8 },
-    "emailCapture": { "enabled": true, "provider": "brevo", "apiKey": "REMPLACER_ICI" },
+    "emailCapture": { "enabled": true, "provider": "brevo", "apiKey": "XtsCBn8NEzj7M3d4s3hlUBSYNgH3BHMk" },
     "ctaVoyants": { "enabled": true, "label": "Consulter un voyant", "url": "#", "position": "after-result" }
   }
 </script>

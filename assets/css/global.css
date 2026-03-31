@@ -207,6 +207,46 @@
   box-shadow: 0 0 6px var(--theme-glow-secondary);
 }
 
+/* Mode clair : etoiles plus discretes */
+.vt-app[data-theme="light"] .vt-star {
+  opacity: 0.3;
+  background: var(--theme-primary);
+}
+
+.vt-app[data-theme="light"] .vt-star--bright {
+  opacity: 0.35;
+  box-shadow: 0 0 4px var(--theme-glow-secondary);
+}
+
+/* Mode clair : fond cosmique adapte (nuages violets legers) */
+.vt-app[data-theme="light"]::before {
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(199, 95, 184, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 90%, rgba(184, 196, 46, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(180, 140, 200, 0.08) 0%, transparent 70%);
+}
+
+/* Mode clair : grain plus leger */
+.vt-app[data-theme="light"]::after {
+  opacity: 0.02;
+}
+
+/* Mode clair : inputs adaptes */
+.vt-app[data-theme="light"] input,
+.vt-app[data-theme="light"] select,
+.vt-app[data-theme="light"] textarea {
+  background-color: rgba(255, 255, 255, 0.7);
+  border-color: var(--theme-border);
+  color: var(--theme-text);
+}
+
+.vt-app[data-theme="light"] input:focus,
+.vt-app[data-theme="light"] select:focus,
+.vt-app[data-theme="light"] textarea:focus {
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 16px var(--theme-glow-primary);
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 480px) {
   .vt-app h1 { font-size: 1.6rem; letter-spacing: 0.03em; }

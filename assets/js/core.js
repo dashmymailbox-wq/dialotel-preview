@@ -466,7 +466,55 @@
   };
 
   /* ============================================================
-     10. HELPERS
+     10. THEME TOGGLE (dark/light)
+     ============================================================ */
+  VT.Theme = {
+    STORAGE_KEY: 'vt_theme',
+    DARK: 'dark',
+    LIGHT: 'light',
+
+    init: function () {
+      var saved = localStorage.getItem(this.STORAGE_KEY);
+      var theme = saved || this.DARK;
+      this.apply(theme);
+
+      var self = this;
+      var toggleBtns = document.querySelectorAll('.vt-theme-toggle');
+      toggleBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          self.toggle();
+        });
+      });
+    },
+
+    apply: function (theme) {
+      var app = document.querySelector('.vt-app');
+      if (!app) return;
+      app.setAttribute('data-theme', theme);
+      localStorage.setItem(this.STORAGE_KEY, theme);
+
+      // Mettre a jour le fond du body aussi
+      if (theme === this.LIGHT) {
+        document.body.style.backgroundColor = '#faf5ff';
+      } else {
+        document.body.style.backgroundColor = '#0a0012';
+      }
+    },
+
+    toggle: function () {
+      var current = document.querySelector('.vt-app').getAttribute('data-theme') || this.DARK;
+      var next = current === this.DARK ? this.LIGHT : this.DARK;
+      this.apply(next);
+      VT.Analytics.track('vt_theme_toggled', { theme: next });
+    },
+
+    isDark: function () {
+      return (document.querySelector('.vt-app').getAttribute('data-theme') || this.DARK) === this.DARK;
+    }
+  };
+
+  /* ============================================================
+     11. HELPERS
      ============================================================ */
   VT.$ = function (selector) {
     return document.querySelector(selector);
