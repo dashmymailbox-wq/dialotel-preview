@@ -230,6 +230,8 @@
     },
 
     _showError: function (message) {
+      // Revenir a l'etape formulaire pour afficher l'erreur
+      VT.StepEngine.goTo(1);
       var errorEl = VT.$('#vt-error');
       if (errorEl) {
         errorEl.querySelector('p').textContent = message;
