@@ -1,0 +1,110 @@
+{
+  "aries": {
+    "name": "Belier",
+    "dates": "21 mars - 19 avril",
+    "element": "feu",
+    "quality": "cardinal",
+    "ruler": "Mars",
+    "traits": ["courageux", "determine", "confiant", "enthousiaste"],
+    "description": "Le Belier est un pionnier naturel. Plein d'energie et d'audace, il fonce tete baissee vers ses objectifs."
+  },
+  "taurus": {
+    "name": "Taureau",
+    "dates": "20 avril - 20 mai",
+    "element": "terre",
+    "quality": "fixe",
+    "ruler": "Venus",
+    "traits": ["fiable", "patient", "pratique", "devoue"],
+    "description": "Le Taureau cherche la stabilite et le confort. Determiné et fiable, il apprécie les plaisirs simples de la vie."
+  },
+  "gemini": {
+    "name": "Gemeaux",
+    "dates": "21 mai - 20 juin",
+    "element": "air",
+    "quality": "mutable",
+    "ruler": "Mercure",
+    "traits": ["adaptable", "curieux", "sociable", "spirituel"],
+    "description": "Les Gemeaux sont communicatifs et polyvalents. Leur curiosite les pousse a explorer sans cesse de nouveaux horizons."
+  },
+  "cancer": {
+    "name": "Cancer",
+    "dates": "21 juin - 22 juillet",
+    "element": "eau",
+    "quality": "cardinal",
+    "ruler": "Lune",
+    "traits": ["intuitif", "emotif", "protecteur", "nostalgique"],
+    "description": "Le Cancer est profondement lie au foyer et a la famille. Son intuition est son plus grand atout."
+  },
+  "leo": {
+    "name": "Lion",
+    "dates": "23 juillet - 22 aout",
+    "element": "feu",
+    "quality": "fixe",
+    "ruler": "Soleil",
+    "traits": ["creatifs", "passionnes", "generes", "charismatiques"],
+    "description": "Le Lion est le chef naturel du zodiaque. Charismatique et genereux, il brille par sa presence."
+  },
+  "virgo": {
+    "name": "Vierge",
+    "dates": "23 aout - 22 septembre",
+    "element": "terre",
+    "quality": "mutable",
+    "ruler": "Mercure",
+    "traits": ["analytique", "methodique", "serviable", "perfectionniste"],
+    "description": "La Vierge est meticulous et rigoureuse. Son sens du detail et son devouement en font une alliee precieuse."
+  },
+  "libra": {
+    "name": "Balance",
+    "dates": "23 septembre - 22 octobre",
+    "element": "air",
+    "quality": "cardinal",
+    "ruler": "Venus",
+    "traits": ["diplomate", "equitable", "harmonieux", "romantique"],
+    "description": "La Balance recherche l'harmonie et la justice. Son sens de l'esthetique et de l'equilibre guide ses choix."
+  },
+  "scorpio": {
+    "name": "Scorpion",
+    "dates": "23 octobre - 21 novembre",
+    "element": "eau",
+    "quality": "fixe",
+    "ruler": "Pluton",
+    "traits": ["passionne", "strategique", "intense", "mysterieux"],
+    "description": "Le Scorpion est intense et magnetique. Sa profondeur emotionnelle et sa determination sont redoutables."
+  },
+  "sagittarius": {
+    "name": "Sagittaire",
+    "dates": "22 novembre - 21 decembre",
+    "element": "feu",
+    "quality": "mutable",
+    "ruler": "Jupiter",
+    "traits": ["optimiste", "aventurier", "philosophe", "franc"],
+    "description": "Le Sagittaire est l'aventurier du zodiaque. Optimiste et curieux, il cherche toujours a repousser ses limites."
+  },
+  "capricorn": {
+    "name": "Capricorne",
+    "dates": "22 decembre - 19 janvier",
+    "element": "terre",
+    "quality": "cardinal",
+    "ruler": "Saturne",
+    "traits": ["ambitieux", "discipline", "responsable", "prudent"],
+    "description": "Le Capricorne est determine et ambitieux. Sa patience et sa rigueur lui permettent d'atteindre ses objectifs."
+  },
+  "aquarius": {
+    "name": "Verseau",
+    "dates": "20 janvier - 18 fevrier",
+    "element": "air",
+    "quality": "fixe",
+    "ruler": "Uranus",
+    "traits": ["original", "independant", "humaniste", "visionnaire"],
+    "description": "Le Verseau est l'esprit libre du zodiaque. Original et visionnaire, il pense en dehors des cadres."
+  },
+  "pisces": {
+    "name": "Poissons",
+    "dates": "19 fevrier - 20 mars",
+    "element": "eau",
+    "quality": "mutable",
+    "ruler": "Neptune",
+    "traits": ["empathique", "imaginatif", "intuitif", "reveur"],
+    "description": "Les Poissons sont les reveurs du zodiaque. Leur grande sensibilite et leur imagination en font des ames creatives."
+  }
+}

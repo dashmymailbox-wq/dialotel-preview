@@ -1,0 +1,32 @@
+# .build — Liste des fichiers a embarquer dans le zip de livraison Dialotel
+# Chemins relatifs a la racine du projet
+
+assets/css/themes/theme-mystique.css
+assets/css/global.css
+assets/css/components.css
+assets/js/core.js
+assets/icons/zodiac-sprite.svg
+assets/data/astrology/signs.json
+assets/data/compatibility/matrix.json
+assets/data/tarot/definitions.json
+assets/data/i18n/fr.json
+assets/animations/transitions/fade.css
+assets/animations/transitions/slide.css
+assets/animations/transitions/scale-reveal.css
+assets/animations/transitions/blur-reveal.css
+assets/animations/loaders/pulse.css
+assets/animations/loaders/shimmer.css
+assets/animations/loaders/orbit.css
+assets/animations/loaders/dots.css
+assets/animations/cards/card-shuffle.css
+assets/animations/cards/card-draw.css
+assets/animations/cards/card-flip.css
+assets/animations/cards/card-hover.css
+assets/animations/reveal/glow.css
+assets/animations/reveal/typewriter.css
+assets/animations/reveal/unfold.css
+assets/animations/reveal/star-burst.css
+clients/dialotel/theme-dialotel.css
+clients/dialotel/config/hexagon-voyance.config.json
+clients/dialotel/README-install.md
+compatibilite-amoureuse.html

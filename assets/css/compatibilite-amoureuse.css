@@ -1,0 +1,160 @@
+/* compatibilite-amoureuse.css — Styles specifiques app compatibilite amoureuse */
+
+/* ===== Intro ===== */
+.vt-app .vt-am-intro {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.vt-app .vt-am-intro-title {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.vt-app .vt-am-intro-desc {
+  color: var(--theme-text-muted);
+  margin-bottom: 1.5rem;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ===== Formulaire saisie ===== */
+.vt-app .vt-am-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.vt-app .vt-am-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.vt-app .vt-am-field-group label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--theme-text);
+}
+
+.vt-app .vt-am-person-header {
+  font-family: var(--theme-font-title);
+  color: var(--theme-primary);
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--theme-border);
+}
+
+/* ===== Transition rituelle ===== */
+.vt-app .vt-am-ritual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.vt-app .vt-am-ritual-text {
+  color: var(--theme-text);
+  font-size: 1.1rem;
+}
+
+.vt-app .vt-am-ritual-names {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--theme-font-title);
+  font-size: 1.25rem;
+}
+
+.vt-app .vt-am-ritual-names span {
+  color: var(--theme-primary);
+}
+
+.vt-app .vt-am-ritual-heart {
+  color: var(--theme-secondary);
+}
+
+/* ===== Resultat ===== */
+.vt-app .vt-am-result-score {
+  font-size: 3.5rem;
+  font-weight: 700;
+  font-family: var(--theme-font-title);
+  margin-bottom: 0.25rem;
+}
+
+.vt-app .vt-am-result-score-label {
+  color: var(--theme-text-muted);
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+}
+
+.vt-app .vt-am-result-summary {
+  color: var(--theme-text);
+  line-height: 1.7;
+  max-width: 520px;
+  margin: 0 auto 1.5rem;
+}
+
+.vt-app .vt-am-section {
+  text-align: left;
+  margin-bottom: 1.25rem;
+}
+
+.vt-app .vt-am-section-title {
+  font-family: var(--theme-font-title);
+  font-size: 1rem;
+  color: var(--theme-primary);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.vt-app .vt-am-section-title svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 1px;
+}
+
+.vt-app .vt-am-section-text {
+  color: var(--theme-text);
+  line-height: 1.6;
+}
+
+/* ===== Barre de score ===== */
+.vt-app .vt-am-score-bar {
+  width: 100%;
+  max-width: 300px;
+  height: 8px;
+  background: var(--theme-bg-card-alt);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0.75rem auto;
+}
+
+.vt-app .vt-am-score-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--theme-primary), var(--theme-secondary));
+  border-radius: 4px;
+  transition: width 1.5s ease;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+  .vt-app .vt-am-intro-title {
+    font-size: 1.5rem;
+  }
+  .vt-app .vt-am-result-score {
+    font-size: 2.75rem;
+  }
+  .vt-app .vt-am-ritual-names {
+    font-size: 1rem;
+  }
+}

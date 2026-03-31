@@ -1,0 +1,16 @@
+/* reveal/glow.css */
+@keyframes vt-glow {
+  0%   { text-shadow: 0 0 4px var(--theme-primary); }
+  50%  { text-shadow: 0 0 20px var(--theme-primary), 0 0 40px var(--theme-primary); }
+  100% { text-shadow: 0 0 4px var(--theme-primary); }
+}
+
+.vt-app .vt-anim-glow {
+  animation: vt-glow 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vt-app .vt-anim-glow {
+    animation: none;
+  }
+}

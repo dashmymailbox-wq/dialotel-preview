@@ -2,8 +2,8 @@
 
 ```markdown
 # TODO.md — Voyance Tirages
-> Suivi d'avancement. Ouvrir en début de chaque session de travail.
-> Dernière mise à jour : 31 mars 2026
+> Suivi d'avancement. Ouvrir en debut de chaque session de travail.
+> Derniere mise a jour : 31 mars 2026
 
 ---
 
@@ -12,66 +12,66 @@
 | Phase | Avancement |
 |-------|------------|
 | Phase 1 — Apps HTML | En cours |
-| Phase 2 — Plugin WP | Non démarré |
-| Phase 3 — IA premium | Non démarré |
+| Phase 2 — Plugin WP | Non demarre |
+| Phase 3 — IA premium | Non demarre |
 
 ---
 
 ## En cours
 
-- [ ] Récupérer le fichier Catchy Mager auprès de Dialotel -> clients/dialotel/fonts/CatchyMager.woff2
-- [ ] Configurer la clé API Mistral
-- [ ] Définir les counterBase pour chaque tirage
-- [ ] Définir les quotas du limiteur (freePerDay, extendedPerDay)
-- [ ] Définir l'URL de la landing voyants (CTA)
+- [ ] Recuperer le fichier Catchy Mager aupres de Dialotel -> clients/dialotel/fonts/CatchyMager.woff2
+- [ ] Configurer la cle API Mistral
+- [ ] Definir les counterBase pour chaque tirage
+- [ ] Definir les quotas du limiteur (freePerDay, extendedPerDay)
+- [ ] Definir l'URL de la landing voyants (CTA)
 
 ---
 
 ## A faire — Phase 1
 
 ### Setup
-- [ ] Récupérer le fichier Catchy Mager auprès de Dialotel -> clients/dialotel/fonts/CatchyMager.woff2
-- [ ] Creer le dossier clients/dialotel/
-- [ ] Creer clients/dialotel/theme-dialotel.css (palette fond blanc)
-- [ ] Creer clients/dialotel/config/hexagon-voyance.config.json
-- [ ] Initialiser Git local (git init) dans le dossier du projet
-- [ ] Creer .gitignore (config reels, fichiers OS)
+- [ ] Recuperer le fichier Catchy Mager aupres de Dialotel -> clients/dialotel/fonts/CatchyMager.woff2
+- [x] Creer le dossier clients/dialotel/
+- [x] Creer clients/dialotel/theme-dialotel.css (palette fond blanc)
+- [x] Creer clients/dialotel/config/hexagon-voyance.config.json
+- [x] Initialiser Git local (git init) dans le dossier du projet
+- [x] Creer .gitignore (config reels, fichiers OS)
 
 ### Socle partage
-- [ ] Creer assets/css/themes/theme-mystique.css
-- [ ] Creer assets/css/global.css (variables CSS, reset scope .vt-app)
-- [ ] Creer assets/css/components.css (bouton hex, cards, etats loading/error)
-- [ ] Creer assets/js/core.js (moteur etapes, TTS, IA adapter, limiteur, analytics, i18n)
-- [ ] Generer assets/icons/zodiac-sprite.svg (12 signes, style Hybride)
-- [ ] Creer assets/data/i18n/fr.json
+- [x] Creer assets/css/themes/theme-mystique.css
+- [x] Creer assets/css/global.css (variables CSS, reset scope .vt-app)
+- [x] Creer assets/css/components.css (bouton hex, cards, etats loading/error)
+- [x] Creer assets/js/core.js (moteur etapes, TTS, IA adapter, limiteur, analytics, i18n)
+- [x] Generer assets/icons/zodiac-sprite.svg (12 signes, style Hybride)
+- [x] Creer assets/data/i18n/fr.json
 
 ### Banque d'animations
-- [ ] assets/animations/transitions/fade.css
-- [ ] assets/animations/transitions/slide.css
-- [ ] assets/animations/transitions/scale-reveal.css
-- [ ] assets/animations/transitions/blur-reveal.css
-- [ ] assets/animations/loaders/pulse.css
-- [ ] assets/animations/loaders/shimmer.css
-- [ ] assets/animations/loaders/orbit.css
-- [ ] assets/animations/loaders/dots.css
-- [ ] assets/animations/cards/card-shuffle.css
-- [ ] assets/animations/cards/card-draw.css
-- [ ] assets/animations/cards/card-flip.css
-- [ ] assets/animations/cards/card-hover.css
-- [ ] assets/animations/reveal/glow.css
-- [ ] assets/animations/reveal/typewriter.css
-- [ ] assets/animations/reveal/unfold.css
-- [ ] assets/animations/reveal/star-burst.css
+- [x] assets/animations/transitions/fade.css
+- [x] assets/animations/transitions/slide.css
+- [x] assets/animations/transitions/scale-reveal.css
+- [x] assets/animations/transitions/blur-reveal.css
+- [x] assets/animations/loaders/pulse.css
+- [x] assets/animations/loaders/shimmer.css
+- [x] assets/animations/loaders/orbit.css
+- [x] assets/animations/loaders/dots.css
+- [x] assets/animations/cards/card-shuffle.css
+- [x] assets/animations/cards/card-draw.css
+- [x] assets/animations/cards/card-flip.css
+- [x] assets/animations/cards/card-hover.css
+- [x] assets/animations/reveal/glow.css
+- [x] assets/animations/reveal/typewriter.css
+- [x] assets/animations/reveal/unfold.css
+- [x] assets/animations/reveal/star-burst.css
 
 ### Donnees
-- [ ] Creer assets/data/astrology/signs.json
-- [ ] Creer assets/data/compatibility/matrix.json
-- [ ] Creer assets/data/tarot/definitions.json
-- [ ] Creer assets/data/i18n/fr.json
-- [ ] Generer assets/icons/zodiac-sprite.svg (12 signes, style Hybride)
+- [x] Creer assets/data/astrology/signs.json
+- [x] Creer assets/data/compatibility/matrix.json
+- [x] Creer assets/data/tarot/definitions.json
+- [x] Creer assets/data/i18n/fr.json
+- [x] Generer assets/icons/zodiac-sprite.svg (12 signes, style Hybride)
 
 ### Apps de tirage
-- [ ] Compatibilite amoureuse (compatibilite-amoureuse.html)
+- [x] Compatibilite amoureuse (compatibilite-amoureuse.html)
 - [ ] Compatibilite astrologique (compatibilite-astrologique.html)
 - [ ] Tirage tarot (tirage-tarot.html)
 - [ ] Numerologie (numerologie.html)
@@ -119,4 +119,5 @@
 | Mars 2026 | v0.8 | Creation CLAUDE.md - 6 points de cadrage valides |
 | Mars 2026 | v0.9 | Ajout modele white label - client Dialotel / hexagon-voyance |
 | Mars 2026 | v1.0 | Systeme de typo 3 niveaux (local, Google Fonts, heritage WP) |
+| 2026-03-31 | v1.1 | Build complet : Git, .gitignore, theme-mystique, theme-dialotel, global.css, components.css, core.js, config Dialotel, 16 animations, donnees JSON, sprite SVG, app compatibilite-amoureuse |
 ```

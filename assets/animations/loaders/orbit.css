@@ -1,0 +1,27 @@
+/* loaders/orbit.css */
+@keyframes vt-orbit {
+  0%   { transform: rotate(0deg)   translateX(20px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(20px) rotate(-360deg); }
+}
+
+.vt-app .vt-anim-orbit {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--theme-primary);
+  animation: vt-orbit 1.4s linear infinite;
+}
+
+.vt-app .vt-anim-orbit-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vt-app .vt-anim-orbit {
+    animation: none;
+  }
+}

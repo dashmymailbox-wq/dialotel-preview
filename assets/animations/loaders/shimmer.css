@@ -1,0 +1,22 @@
+/* loaders/shimmer.css */
+@keyframes vt-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.vt-app .vt-anim-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--theme-bg-card) 25%,
+    var(--theme-bg-card-alt, var(--theme-bg-card)) 50%,
+    var(--theme-bg-card) 75%
+  );
+  background-size: 400px 100%;
+  animation: vt-shimmer 1.4s ease infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vt-app .vt-anim-shimmer {
+    animation: none;
+  }
+}

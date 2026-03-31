@@ -1,0 +1,18 @@
+/* transitions/scale-reveal.css */
+@keyframes vt-scale-reveal {
+  0%   { opacity: 0; transform: scale(0.5); }
+  60%  { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.vt-app .vt-anim-scale-reveal {
+  animation: vt-scale-reveal 800ms ease forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vt-app .vt-anim-scale-reveal {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

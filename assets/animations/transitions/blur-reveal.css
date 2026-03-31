@@ -1,0 +1,18 @@
+/* transitions/blur-reveal.css */
+@keyframes vt-blur-reveal {
+  0%   { opacity: 0; filter: blur(12px); transform: scale(0.95); }
+  100% { opacity: 1; filter: blur(0);    transform: scale(1); }
+}
+
+.vt-app .vt-anim-blur-reveal {
+  animation: vt-blur-reveal 800ms ease forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vt-app .vt-anim-blur-reveal {
+    animation: none;
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}

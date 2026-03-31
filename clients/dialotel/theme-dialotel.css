@@ -1,0 +1,21 @@
+/* theme-dialotel.css — Thème Dialotel (fond blanc, palette claire) */
+.vt-app {
+  --theme-primary: #ed8ce6;
+  --theme-secondary: #e2ed77;
+  --theme-bg: #ffffff;
+  --theme-bg-card: #f5f5f5;
+  --theme-bg-card-alt: #efefef;
+  --theme-border: #e0e0e0;
+  --theme-border-accent: #ed8ce6;
+  --theme-text: #000000;
+  --theme-text-muted: #666666;
+  --theme-title-color: #000000;
+  --theme-btn-bg: #ed8ce6;
+  --theme-btn-text: #000000;
+  --theme-btn-bg-alt: #e2ed77;
+  --theme-btn-text-alt: #000000;
+  --theme-icon-primary: #ed8ce6;
+  --theme-icon-halo: #e2ed77;
+  --theme-font-title: 'Catchy Mager', inherit;
+  --theme-font-body: inherit;
+}
