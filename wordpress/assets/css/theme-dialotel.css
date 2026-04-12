@@ -554,16 +554,19 @@
 }
 
 /* Contenu cache tant que le splash est present */
+@keyframes vt-container-reveal {
+  to { opacity: 1; }
+}
 .vt-app .vt-container {
   opacity: 0 !important;
   min-height: 100vh !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
   transition: opacity 0.5s ease-out !important;
+  /* Fallback CSS si le JS ne se declenche pas */
+  animation: vt-container-reveal 0.5s 3.5s ease-out forwards;
 }
 .vt-app .vt-container.vt-ready {
   opacity: 1 !important;
+  animation: none !important;
 }
 
 /* ===== Signes astrologiques — Rituel ===== */
