@@ -61,7 +61,7 @@ function vt_render_shortcode( $atts ) {
 
 	// CSS inline — cacher le chrome WP + forcer le layout du plugin
 	$hide_css = '<style>
-		/* Cacher le titre de page et le chrome du theme */
+		/* Cacher le titre de page et le chrome du theme (classique + bloc FSE) */
 		body .entry-title,
 		body .page-title,
 		body h1.entry-title,
@@ -75,9 +75,14 @@ function vt_render_shortcode( $atts ) {
 		body #secondary,
 		body .wp-block-post-title,
 		body .wp-block-site-title,
-		body .wp-block-navigation {
+		body .wp-block-navigation,
+		body header.wp-block-template-part,
+		body footer.wp-block-template-part {
 			display: none !important;
 		}
+		/* Supprimer le padding de la barre admin WP (uniquement quand on est connecte) */
+		body.admin-bar { padding-top: 0 !important; margin-top: 0 !important; }
+		body.admin-bar #wpadminbar { display: none !important; }
 		/* Forcer les conteneurs parents a ne pas contraindre le plugin */
 		body .site-content,
 		body #primary,
