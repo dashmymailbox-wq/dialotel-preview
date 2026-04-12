@@ -1,12 +1,12 @@
-/* compatibilite-amoureuse.css — Style immersif mystique */
+/* compatibilite-astrologique.css — Style immersif mystique */
 
-/* ===== Intro — portail d'entree ===== */
-.vt-app .vt-am-intro {
+/* ===== Intro ===== */
+.vt-app .vt-astro-intro {
   text-align: center;
   padding: 3rem 1rem 2rem;
 }
 
-.vt-app .vt-am-intro-title {
+.vt-app .vt-astro-intro-title {
   font-size: 2.5rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -18,7 +18,7 @@
   filter: drop-shadow(0 0 24px var(--theme-glow-primary));
 }
 
-.vt-app .vt-am-intro-desc {
+.vt-app .vt-astro-intro-desc {
   color: var(--theme-text-muted);
   margin: 1rem auto 2rem;
   max-width: 440px;
@@ -26,8 +26,7 @@
   line-height: 1.7;
 }
 
-/* Ligne decorative mystique sous le titre */
-.vt-app .vt-am-intro-line {
+.vt-app .vt-astro-intro-line {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,15 +35,15 @@
   max-width: 280px;
 }
 
-.vt-app .vt-am-intro-line::before,
-.vt-app .vt-am-intro-line::after {
+.vt-app .vt-astro-intro-line::before,
+.vt-app .vt-astro-intro-line::after {
   content: '';
   flex: 1;
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--theme-primary), transparent);
 }
 
-.vt-app .vt-am-intro-line svg {
+.vt-app .vt-astro-intro-line svg {
   width: 16px;
   height: 16px;
   stroke: var(--theme-primary);
@@ -53,42 +52,72 @@
   filter: drop-shadow(0 0 6px var(--theme-glow-primary));
 }
 
-/* ===== Formulaire saisie — parchemin ethere ===== */
-.vt-app .vt-am-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  max-width: 420px;
-  margin: 0 auto;
+/* ===== Grille de selection des signes ===== */
+.vt-app .vt-astro-sign-group {
+  margin-bottom: 1.5rem;
 }
 
-.vt-app .vt-am-field-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.vt-app .vt-am-field-group label {
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--theme-text-muted);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.vt-app .vt-am-person-header {
+.vt-app .vt-astro-sign-group-title {
   font-family: var(--theme-font-title);
   color: var(--theme-primary);
   font-size: 1rem;
   letter-spacing: 0.06em;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.75rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid rgba(237, 140, 230, 0.2);
   text-shadow: 0 0 20px var(--theme-glow-primary);
 }
 
-/* ===== Transition rituelle — revelation cosmique ===== */
-.vt-app .vt-am-ritual {
+.vt-app .vt-astro-sign-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.vt-app .vt-astro-sign {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.6rem 0.3rem;
+  border: 1px solid var(--theme-border);
+  border-radius: 10px;
+  background: rgba(26, 14, 36, 0.4);
+  cursor: pointer;
+  transition: all 300ms ease;
+}
+
+.vt-app .vt-astro-sign:hover {
+  border-color: var(--theme-primary);
+  background: rgba(237, 140, 230, 0.08);
+  box-shadow: 0 0 12px var(--theme-glow-primary);
+}
+
+.vt-app .vt-astro-sign--selected {
+  border-color: var(--theme-primary);
+  background: rgba(237, 140, 230, 0.15);
+  box-shadow: 0 0 16px var(--theme-glow-primary), inset 0 0 8px rgba(237, 140, 230, 0.05);
+}
+
+.vt-app .vt-astro-sign svg {
+  width: 24px;
+  height: 24px;
+}
+
+.vt-app .vt-astro-sign-name {
+  font-size: 0.7rem;
+  color: var(--theme-text-muted);
+  letter-spacing: 0.02em;
+}
+
+.vt-app .vt-astro-sign--selected .vt-astro-sign-name {
+  color: var(--theme-primary);
+}
+
+/* ===== Rituel ===== */
+.vt-app .vt-astro-ritual {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -99,19 +128,19 @@
   padding: 2rem 0;
 }
 
-.vt-app .vt-am-ritual-text {
+.vt-app .vt-astro-ritual-text {
   color: var(--theme-text);
   font-size: 1rem;
   letter-spacing: 0.02em;
-  animation: vt-ritual-pulse 2s ease-in-out infinite;
+  animation: vt-astro-ritual-pulse 2s ease-in-out infinite;
 }
 
-@keyframes vt-ritual-pulse {
+@keyframes vt-astro-ritual-pulse {
   0%, 100% { opacity: 0.6; }
   50%      { opacity: 1; }
 }
 
-.vt-app .vt-am-ritual-names {
+.vt-app .vt-astro-ritual-names {
   display: flex;
   align-items: center;
   gap: 1.5rem;
@@ -120,58 +149,54 @@
   letter-spacing: 0.04em;
 }
 
-.vt-app .vt-am-ritual-names span {
+.vt-app .vt-astro-ritual-name {
   color: var(--theme-primary);
   text-shadow: 0 0 20px var(--theme-glow-primary);
 }
 
-.vt-app .vt-am-ritual-heart {
+.vt-app .vt-astro-ritual-link {
   color: var(--theme-secondary);
   filter: drop-shadow(0 0 8px var(--theme-glow-secondary));
-  animation: vt-heartbeat 1.4s ease-in-out infinite;
+  animation: vt-astro-orbit-link 2s ease-in-out infinite;
 }
 
-@keyframes vt-heartbeat {
-  0%, 100% { transform: scale(1); }
-  14%      { transform: scale(1.15); }
-  28%      { transform: scale(1); }
-  42%      { transform: scale(1.08); }
-  56%      { transform: scale(1); }
+@keyframes vt-astro-orbit-link {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50%      { transform: scale(1.1); opacity: 1; }
 }
 
-/* Cercle rituel decoratif */
-.vt-app .vt-am-ritual-circle {
+.vt-app .vt-astro-ritual-circle {
   position: relative;
   width: 120px;
   height: 120px;
 }
 
-.vt-app .vt-am-ritual-circle::before {
+.vt-app .vt-astro-ritual-circle::before {
   content: '';
   position: absolute;
   inset: 0;
   border: 1px solid rgba(237, 140, 230, 0.3);
   border-radius: 50%;
-  animation: vt-ritual-ring 3s linear infinite;
+  animation: vt-astro-ring 3s linear infinite;
 }
 
-.vt-app .vt-am-ritual-circle::after {
+.vt-app .vt-astro-ritual-circle::after {
   content: '';
   position: absolute;
   inset: 12px;
   border: 1px solid rgba(226, 237, 119, 0.2);
   border-radius: 50%;
-  animation: vt-ritual-ring 3s linear infinite reverse;
+  animation: vt-astro-ring 3s linear infinite reverse;
 }
 
-@keyframes vt-ritual-ring {
+@keyframes vt-astro-ring {
   0%   { transform: rotate(0deg); opacity: 1; }
   50%  { opacity: 0.4; }
   100% { transform: rotate(360deg); opacity: 1; }
 }
 
-/* ===== Resultat — revelation finale ===== */
-.vt-app .vt-am-result-score {
+/* ===== Resultat ===== */
+.vt-app .vt-astro-result-score {
   font-size: 4rem;
   font-weight: 700;
   font-family: var(--theme-font-title);
@@ -184,7 +209,7 @@
   filter: drop-shadow(0 0 28px var(--theme-glow-primary));
 }
 
-.vt-app .vt-am-result-score-label {
+.vt-app .vt-astro-result-score-label {
   color: var(--theme-text-muted);
   font-size: 0.8rem;
   margin-bottom: 1.5rem;
@@ -192,8 +217,8 @@
   text-transform: uppercase;
 }
 
-/* ===== Barre de score — arc cosmique ===== */
-.vt-app .vt-am-score-bar {
+/* Barre de score */
+.vt-app .vt-astro-score-bar {
   width: 100%;
   max-width: 280px;
   height: 6px;
@@ -204,7 +229,7 @@
   position: relative;
 }
 
-.vt-app .vt-am-score-bar::before {
+.vt-app .vt-astro-score-bar::before {
   content: '';
   position: absolute;
   inset: -1px;
@@ -213,7 +238,7 @@
   opacity: 0.15;
 }
 
-.vt-app .vt-am-score-bar-fill {
+.vt-app .vt-astro-score-bar-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--theme-primary), var(--theme-secondary));
   border-radius: 3px;
@@ -222,7 +247,7 @@
   position: relative;
 }
 
-.vt-app .vt-am-score-bar-fill::after {
+.vt-app .vt-astro-score-bar-fill::after {
   content: '';
   position: absolute;
   right: 0;
@@ -236,7 +261,7 @@
 }
 
 /* ===== Sections de resultat ===== */
-.vt-app .vt-am-section {
+.vt-app .vt-astro-section {
   text-align: left;
   margin-bottom: 1.5rem;
   padding: 1.25rem;
@@ -246,7 +271,7 @@
   backdrop-filter: blur(4px);
 }
 
-.vt-app .vt-am-section-title {
+.vt-app .vt-astro-section-title {
   font-family: var(--theme-font-title);
   font-size: 0.95rem;
   color: var(--theme-primary);
@@ -258,25 +283,25 @@
   text-shadow: 0 0 16px var(--theme-glow-primary);
 }
 
-.vt-app .vt-am-section-title svg {
+.vt-app .vt-astro-section-title svg {
   width: 16px;
   height: 16px;
   stroke-width: 1px;
   stroke: var(--theme-primary);
 }
 
-.vt-app .vt-am-section-text {
+.vt-app .vt-astro-section-text {
   color: var(--theme-text);
   line-height: 1.7;
   font-size: 0.92rem;
 }
 
-.vt-app .vt-am-section-text li {
+.vt-app .vt-astro-section-text li {
   padding: 0.3rem 0 0.3rem 0.75rem;
   position: relative;
 }
 
-.vt-app .vt-am-section-text li::before {
+.vt-app .vt-astro-section-text li::before {
   content: '';
   position: absolute;
   left: 0;
@@ -289,8 +314,8 @@
   box-shadow: 0 0 6px var(--theme-glow-primary);
 }
 
-/* ===== Separateur decoratif ===== */
-.vt-app .vt-am-divider {
+/* ===== Separateur ===== */
+.vt-app .vt-astro-divider {
   width: 60px;
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--theme-primary), transparent);
@@ -298,7 +323,7 @@
   position: relative;
 }
 
-.vt-app .vt-am-divider::before {
+.vt-app .vt-astro-divider::before {
   content: '';
   position: absolute;
   top: -3px;
@@ -313,51 +338,20 @@
 
 /* ===== Responsive ===== */
 @media (max-width: 480px) {
-  .vt-app .vt-am-intro-title {
+  .vt-app .vt-astro-intro-title {
     font-size: 1.75rem;
   }
-  .vt-app .vt-am-result-score {
+  .vt-app .vt-astro-result-score {
     font-size: 3rem;
   }
-  .vt-app .vt-am-ritual-names {
+  .vt-app .vt-astro-sign-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .vt-app .vt-astro-ritual-names {
     font-size: 1.15rem;
     gap: 1rem;
   }
-  .vt-app .vt-am-section {
+  .vt-app .vt-astro-section {
     padding: 1rem;
   }
-}
-
-/* ===== Pastilles signes astro — contraste maximum ===== */
-.vt-app .vt-sign-badge {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: #9c27b0 !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 18px rgba(156, 39, 176, 0.5);
-  border: 3px solid #fff;
-}
-
-.vt-app .vt-sign-badge svg {
-  width: 28px;
-  height: 28px;
-  color: #fff !important;
-  stroke: #fff !important;
-  fill: none !important;
-}
-
-.vt-app .vt-sign-badge--result {
-  width: 50px;
-  height: 50px;
-  background: #8e24aa !important;
-  border: 3px solid #fff;
-  box-shadow: 0 3px 14px rgba(142, 36, 170, 0.5);
-}
-
-.vt-app .vt-sign-badge--result svg {
-  width: 24px;
-  height: 24px;
 }

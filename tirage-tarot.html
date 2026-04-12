@@ -3,21 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Compatibilite Amoureuse — Voyance Tirages</title>
+  <title>Tirage Tarot — Voyance Tirages</title>
 
-  <!-- Google Fonts : Cinzel (titres mystiques) + DM Sans (corps) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Theme (charger EN PREMIER) -->
   <link rel="stylesheet" href="assets/css/themes/theme-mystique.css">
-
-  <!-- CSS global et composants -->
   <link rel="stylesheet" href="assets/css/global.css">
   <link rel="stylesheet" href="assets/css/components.css">
-
-  <!-- Animations -->
   <link rel="stylesheet" href="assets/animations/transitions/fade.css">
   <link rel="stylesheet" href="assets/animations/transitions/slide.css">
   <link rel="stylesheet" href="assets/animations/transitions/scale-reveal.css">
@@ -25,16 +19,13 @@
   <link rel="stylesheet" href="assets/animations/loaders/orbit.css">
   <link rel="stylesheet" href="assets/animations/loaders/dots.css">
   <link rel="stylesheet" href="assets/animations/reveal/glow.css">
-  <link rel="stylesheet" href="assets/animations/reveal/typewriter.css">
-
-  <!-- CSS specifique app -->
-  <link rel="stylesheet" href="assets/css/compatibilite-amoureuse.css">
+  <link rel="stylesheet" href="assets/animations/cards/card-flip.css">
+  <link rel="stylesheet" href="assets/css/tirage-tarot.css">
 </head>
 <body style="margin:0; background:#0a0012;">
 
 <div class="vt-app">
 
-  <!-- Toggle light/dark -->
   <button class="vt-theme-toggle" type="button" title="Changer de theme">
     <svg class="vt-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor">
       <circle cx="12" cy="12" r="5"/>
@@ -48,12 +39,9 @@
     </svg>
   </button>
 
-  <!-- Etoiles decoratives — halos cosmiques SVG -->
   <div class="vt-stars-layer">
     <img src="assets/textures/cosmic-gradient.svg" alt="" class="vt-stars-img" aria-hidden="true">
   </div>
-
-  <!-- Particules flottantes — poussieres d'etoiles CSS -->
   <div class="vt-particles" aria-hidden="true">
     <span class="vt-particle"></span><span class="vt-particle"></span>
     <span class="vt-particle"></span><span class="vt-particle"></span>
@@ -67,21 +55,17 @@
 
   <div class="vt-container">
 
-    <!-- ===== ETAPE 0 : Introduction — portail d'entree ===== -->
+    <!-- ===== ETAPE 0 : Introduction ===== -->
     <div class="vt-step" data-step="intro">
-      <div class="vt-am-intro vt-anim-fade-in">
-        <h1 class="vt-am-intro-title">Compatibilite Amoureuse</h1>
-
-        <div class="vt-am-intro-line">
+      <div class="vt-tarot-intro vt-anim-fade-in">
+        <h1 class="vt-tarot-intro-title">Tirage Tarot</h1>
+        <div class="vt-tarot-intro-line">
           <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
         </div>
-
-        <p class="vt-am-intro-desc">
-          Plongez dans les mysteres de l'alchimie amoureuse.
-          Notre analyse revele l'harmonie profonde entre deux ames,
-          leurs points de lumiere et leurs zones d'ombre.
+        <p class="vt-tarot-intro-desc">
+          Laissez les arcanes majeurs vous guider.
+          Un tirage en trois cartes — passe, present, futur — pour eclairer votre chemin.
         </p>
-
         <div class="vt-counter">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -92,26 +76,24 @@
           <strong><span class="vt-counter-value">0</span></strong>
           <span>tirages ce mois</span>
         </div>
-
         <div style="margin-top: 2rem;">
           <button class="btn-hex" id="vt-btn-start">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
             </svg>
-            Decouvrir ma compatibilite
+            Tirer les cartes
           </button>
         </div>
-
         <p class="vt-rate-info"></p>
       </div>
     </div>
 
-    <!-- ===== ETAPE 1 : Saisie — parchemin ethere ===== -->
+    <!-- ===== ETAPE 1 : Question ===== -->
     <div class="vt-step" data-step="form">
-      <div class="vt-am-intro vt-anim-fade-in">
-        <h2 style="font-family:var(--theme-font-title); letter-spacing:0.05em; margin-bottom:0.5rem;">Entrez vos informations</h2>
+      <div class="vt-tarot-intro vt-anim-fade-in">
+        <h2 style="font-family:var(--theme-font-title); letter-spacing:0.05em; margin-bottom:0.5rem;">Posez votre question</h2>
         <p style="color:var(--theme-text-muted); font-size:0.85rem; margin-bottom:2rem;">
-          Deux prenoms, un desti
+          Formulez votre intention ou laissez le tarot vous guider
         </p>
       </div>
 
@@ -122,79 +104,96 @@
         <p></p>
       </div>
 
-      <form class="vt-am-form" id="vt-am-form" onsubmit="return false;">
-        <div class="vt-am-person-header">Premiere personne</div>
-        <div class="vt-am-field-group">
-          <label for="vt-name1">Prenom</label>
-          <input type="text" id="vt-name1" placeholder="Ex : Marie" required autocomplete="given-name">
-        </div>
-        <div class="vt-am-field-group">
-          <label for="vt-birth1">Date de naissance (optionnel)</label>
-          <input type="date" id="vt-birth1" autocomplete="bday" value="2000-01-01">
-        </div>
+      <div class="vt-tarot-question">
+        <label for="vt-question">Votre question (optionnel)</label>
+        <textarea id="vt-question" placeholder="Ex : Que me reserve l'avenir sentimentalement ?" rows="3"></textarea>
+        <p class="vt-tarot-question-hint">Trois cartes seront tirees pour vous eclairer.</p>
+      </div>
 
-        <div class="vt-am-divider"></div>
-
-        <div class="vt-am-person-header">Deuxieme personne</div>
-        <div class="vt-am-field-group">
-          <label for="vt-name2">Prenom</label>
-          <input type="text" id="vt-name2" placeholder="Ex : Pierre" required autocomplete="given-name">
-        </div>
-        <div class="vt-am-field-group">
-          <label for="vt-birth2">Date de naissance (optionnel)</label>
-          <input type="date" id="vt-birth2" autocomplete="bday" value="2000-01-01">
-        </div>
-
-        <div style="text-align:center; margin-top:1.25rem;">
-          <button type="button" class="btn-hex" id="vt-btn-tirage">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
-            Lancer le tirage
-          </button>
-        </div>
-      </form>
+      <div style="text-align:center; margin-top:1.25rem;">
+        <button type="button" class="btn-hex" id="vt-btn-tirage">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          Tirer les cartes
+        </button>
+      </div>
     </div>
 
-    <!-- ===== ETAPE 2 : Rituel — revelation cosmique ===== -->
+    <!-- ===== ETAPE 2 : Rituel — retournement des cartes ===== -->
     <div class="vt-step" data-step="ritual">
-      <div class="vt-am-ritual">
-        <div class="vt-am-ritual-names">
-          <span class="vt-am-ritual-name"></span>
-          <span class="vt-am-ritual-heart">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
-          </span>
-          <span class="vt-am-ritual-name"></span>
-        </div>
-
-        <div class="vt-am-ritual-circle">
-          <div class="vt-anim-orbit-container" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;">
-            <div class="vt-anim-orbit"></div>
+      <div class="vt-tarot-ritual">
+        <p class="vt-tarot-ritual-text">Les arcanes se revelent...</p>
+        <div class="vt-tarot-cards-row">
+          <div class="vt-tarot-card" data-position="passe">
+            <div class="vt-tarot-card-front">
+              <span class="vt-tarot-card-number"></span>
+              <span class="vt-tarot-card-name"></span>
+            </div>
+            <div class="vt-tarot-card-back"></div>
+          </div>
+          <div class="vt-tarot-card" data-position="present">
+            <div class="vt-tarot-card-front">
+              <span class="vt-tarot-card-number"></span>
+              <span class="vt-tarot-card-name"></span>
+            </div>
+            <div class="vt-tarot-card-back"></div>
+          </div>
+          <div class="vt-tarot-card" data-position="futur">
+            <div class="vt-tarot-card-front">
+              <span class="vt-tarot-card-number"></span>
+              <span class="vt-tarot-card-name"></span>
+            </div>
+            <div class="vt-tarot-card-back"></div>
           </div>
         </div>
-
-        <p class="vt-am-ritual-text">Les astres convergent...</p>
         <div class="vt-anim-dots"><span></span><span></span><span></span></div>
       </div>
     </div>
 
-    <!-- ===== ETAPE 3 : Resultat — revelation finale ===== -->
+    <!-- ===== ETAPE 3 : Resultat ===== -->
     <div class="vt-step" data-step="result">
-      <div class="vt-result">
+      <div style="text-align:center;">
 
-        <!-- Score principal -->
-        <div class="vt-am-result-score vt-anim-glow" id="vt-result-score">0%</div>
-        <p class="vt-am-result-score-label">de compatibilite amoureuse</p>
+        <h2 style="font-family:var(--theme-font-title); letter-spacing:0.05em; margin-bottom:1.5rem; color:var(--theme-primary); text-shadow:0 0 20px var(--theme-glow-primary);">Votre lecture</h2>
 
-        <!-- Barre cosmique -->
-        <div class="vt-am-score-bar">
-          <div class="vt-am-score-bar-fill" style="width:0%"></div>
+        <!-- 3 cartes interpretees -->
+        <div class="vt-tarot-result-cards">
+          <div class="vt-tarot-result-card">
+            <div class="vt-tarot-result-card-label">Passe</div>
+            <div class="vt-tarot-result-card-name" id="vt-result-card-passe-name"></div>
+            <div class="vt-tarot-result-card-text" id="vt-result-card-passe-text"></div>
+          </div>
+          <div class="vt-tarot-result-card">
+            <div class="vt-tarot-result-card-label">Present</div>
+            <div class="vt-tarot-result-card-name" id="vt-result-card-present-name"></div>
+            <div class="vt-tarot-result-card-text" id="vt-result-card-present-text"></div>
+          </div>
+          <div class="vt-tarot-result-card">
+            <div class="vt-tarot-result-card-label">Futur</div>
+            <div class="vt-tarot-result-card-name" id="vt-result-card-futur-name"></div>
+            <div class="vt-tarot-result-card-text" id="vt-result-card-futur-text"></div>
+          </div>
         </div>
 
+        <div class="vt-tarot-divider"></div>
+
+        <!-- Synthese -->
+        <div class="vt-tarot-section">
+          <h3 class="vt-tarot-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            Synthese
+          </h3>
+          <p class="vt-tarot-section-text" id="vt-result-synthese"></p>
+        </div>
+
+        <div class="vt-tarot-divider"></div>
+
         <!-- TTS -->
-        <div class="vt-tts-controls" style="margin-bottom:1.5rem;">
+        <div class="vt-tts-controls" style="margin-bottom:1rem;">
           <button class="vt-tts-btn" type="button" title="Lecture vocale">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
               <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
@@ -203,59 +202,6 @@
             </svg>
           </button>
         </div>
-
-        <!-- Separateur -->
-        <div class="vt-am-divider"></div>
-
-        <!-- Resume -->
-        <div class="vt-am-section">
-          <h3 class="vt-am-section-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <polyline points="14 2 14 8 20 8"/>
-            </svg>
-            Resume
-          </h3>
-          <p class="vt-am-section-text" id="vt-result-resume"></p>
-        </div>
-
-        <!-- Points forts -->
-        <div class="vt-am-section">
-          <h3 class="vt-am-section-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-            </svg>
-            Points forts
-          </h3>
-          <ul class="vt-am-section-text" id="vt-result-strengths"></ul>
-        </div>
-
-        <!-- Points de tension -->
-        <div class="vt-am-section">
-          <h3 class="vt-am-section-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="12" y1="8" x2="12" y2="12"/>
-              <line x1="12" y1="16" x2="12.01" y2="16"/>
-            </svg>
-            Points de tension
-          </h3>
-          <ul class="vt-am-section-text" id="vt-result-tensions"></ul>
-        </div>
-
-        <!-- Conseil -->
-        <div class="vt-am-section">
-          <h3 class="vt-am-section-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-              <path d="M9 18l6-6-6-6"/>
-            </svg>
-            Conseil
-          </h3>
-          <p class="vt-am-section-text" id="vt-result-advice"></p>
-        </div>
-
-        <!-- Separateur -->
-        <div class="vt-am-divider"></div>
 
         <!-- Actions -->
         <div class="vt-result-actions">
@@ -282,7 +228,7 @@
 
   </div><!-- .vt-container -->
 
-  <!-- ===== Modale capture email ===== -->
+  <!-- Modale email -->
   <div class="vt-modal-overlay" id="vt-email-modal">
     <div class="vt-modal">
       <button class="vt-modal-close" onclick="this.closest('.vt-modal-overlay').classList.remove('vt-modal--open'); VT.Analytics.track('vt_email_dismissed');">
@@ -290,9 +236,9 @@
           <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
         </svg>
       </button>
-      <h3>Recevez votre resultat</h3>
+      <h3>Recevez votre lecture</h3>
       <p style="color:var(--theme-text-muted); margin:0.5rem 0 1.25rem; font-size:0.85rem; line-height:1.6;">
-        Entrez votre email pour recevoir votre analyse complete.
+        Entrez votre email pour recevoir votre tirage complet.
       </p>
       <form class="vt-email-form" id="vt-email-form">
         <input type="email" id="vt-email-input" placeholder="Votre adresse email" required autocomplete="email">
@@ -310,12 +256,12 @@
           <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
           <polyline points="22 4 12 14.01 9 11.01"/>
         </svg>
-        <p>Merci ! Votre resultat a ete envoye.</p>
+        <p>Merci ! Votre tirage a ete envoye.</p>
       </div>
     </div>
   </div>
 
-  <!-- ===== Modale limite atteinte ===== -->
+  <!-- Modale limite -->
   <div class="vt-modal-overlay" id="vt-rate-limit-modal">
     <div class="vt-modal">
       <h3>Limite atteinte</h3>
@@ -325,29 +271,27 @@
       </p>
       <form class="vt-email-form" id="vt-extend-form">
         <input type="email" id="vt-extend-email" placeholder="Votre adresse email" required autocomplete="email">
-        <button type="submit" class="btn-hex" style="width:100%;">
-          Debloquer
-        </button>
+        <button type="submit" class="btn-hex" style="width:100%;">Debloquer</button>
       </form>
     </div>
   </div>
 
 </div><!-- .vt-app -->
 
-<!-- ===== Donnees inline (JSON) ===== -->
-<script type="application/json" id="vt-config-compat-amour">
+<!-- Donnees inline -->
+<script type="application/json" id="vt-config-tarot">
   {
-    "tirageId": "compat-amour",
+    "tirageId": "tirage-tarot",
     "theme": "mystique",
-    "counterBase": 4200,
+    "counterBase": 3500,
     "ai": {
       "provider": "mistral",
-      "apiKey": "XtsCBn8NEzj7M3d4s3hlUBSYNgH3BHMk",
+      "apiKey": "REMPLACER_ICI",
       "model": "mistral-small-latest"
     },
     "tts": { "enabled": true, "autoplay": false },
     "rateLimit": { "enabled": true, "freePerDay": 3, "extendedPerDay": 8 },
-    "emailCapture": { "enabled": true, "provider": "brevo", "apiKey": "XtsCBn8NEzj7M3d4s3hlUBSYNgH3BHMk" },
+    "emailCapture": { "enabled": true, "provider": "brevo", "apiKey": "REMPLACER_ICI" },
     "ctaVoyants": { "enabled": true, "label": "Consulter un voyant", "url": "#", "position": "after-result" }
   }
 </script>
@@ -356,20 +300,46 @@
   {
     "app": { "loading": "Chargement...", "error": "Une erreur est survenue.", "retry": "Reessayer", "restart": "Refaire un tirage" },
     "counter": { "label": "tirages effectues ce mois" },
-    "rateLimiter": { "remaining": "Il vous reste {count} tirage(s) aujourd'hui" },
-    "compatibility": { "title": "Compatibilite Amoureuse" }
+    "rateLimiter": { "remaining": "Il vous reste {count} tirage(s) aujourd'hui" }
   }
 </script>
 
-<!-- Prompt IA inline -->
-<script type="text/plain" id="vt-prompt-compat-amour">
-Tu es un astrologue et expert en compatibilite amoureuse. Redige une analyse de compatibilite en JSON uniquement :
-{ "score": <1-100>, "resume": "<2-3 phrases>", "pointsFort": ["<1>", "<2>", "<3>"], "tensions": ["<1>", "<2>"], "conseil": "<2-3 phrases>" }
-Ton : bienveillant, positif, encourageant. Texte en francais. Reponds UNIQUEMENT avec le JSON.
+<script type="application/json" id="vt-data-tarot">
+  {
+    "majorArcana": [
+      { "number": 0, "name": "Le Mat", "meaning": "Debut, spontaneite, innocence" },
+      { "number": 1, "name": "Le Bateleur", "meaning": "Volonte, creativite, nouveau depart" },
+      { "number": 2, "name": "La Papesse", "meaning": "Intuition, sagesse, mystere" },
+      { "number": 3, "name": "L'Imperatrice", "meaning": "Fertilite, abondance, creativite" },
+      { "number": 4, "name": "L'Empereur", "meaning": "Autorite, structure, stabilite" },
+      { "number": 5, "name": "Le Pape", "meaning": "Tradition, enseignement, conseil" },
+      { "number": 6, "name": "L'Amoureux", "meaning": "Choix, amour, dilemme" },
+      { "number": 7, "name": "Le Chariot", "meaning": "Victoire, determination, triomphe" },
+      { "number": 8, "name": "La Justice", "meaning": "Equilibre, verite, justesse" },
+      { "number": 9, "name": "L'Hermite", "meaning": "Recherche interieure, solitude, sagesse" },
+      { "number": 10, "name": "La Roue de Fortune", "meaning": "Cycles, changement, destiny" },
+      { "number": 11, "name": "La Force", "meaning": "Courage, maitrise, patience" },
+      { "number": 12, "name": "Le Pendu", "meaning": "Lacher prise, sacrifice, vision nouvelle" },
+      { "number": 13, "name": "L'Arcane sans Nom", "meaning": "Transformation, fin, renaissance" },
+      { "number": 14, "name": "Tempérance", "meaning": "Equilibre, patience, harmonie" },
+      { "number": 15, "name": "Le Diable", "meaning": "Attachement, tentation, ombre" },
+      { "number": 16, "name": "La Maison Dieu", "meaning": "Bouleversement, revelation, liberation" },
+      { "number": 17, "name": "L'Etoile", "meaning": "Espoir, inspiration, serenite" },
+      { "number": 18, "name": "La Lune", "meaning": "Illusion, intuition, inconscient" },
+      { "number": 19, "name": "Le Soleil", "meaning": "Joie, succes, vitalite" },
+      { "number": 20, "name": "Le Jugement", "meaning": "Renaissance, appel, transformation" },
+      { "number": 21, "name": "Le Monde", "meaning": "Accomplissement, totalite, achèvement" }
+    ]
+  }
 </script>
 
-<!-- JS -->
+<script type="text/plain" id="vt-prompt-tarot">
+Tu es un expert en tarot de Marseille. A partir de la question posee et des 3 cartes tirees (passe, present, futur), redige une interpretation en JSON uniquement :
+{ "cartePasse": { "nom": "<nom de la carte>", "interpretation": "<interpretation en 2-3 phrases>" }, "cartePresent": { "nom": "<nom de la carte>", "interpretation": "<interpretation en 2-3 phrases>" }, "carteFutur": { "nom": "<nom de la carte>", "interpretation": "<interpretation en 2-3 phrases>" }, "synthese": "<synthese globale de la lecture en 3-4 phrases>" }
+Ton : mystique, profond, bienveillant. Texte en francais. Reponds UNIQUEMENT avec le JSON.
+</script>
+
 <script src="assets/js/core.js"></script>
-<script src="assets/js/compatibilite-amoureuse.js"></script>
+<script src="assets/js/tirage-tarot.js"></script>
 </body>
 </html>

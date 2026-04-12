@@ -204,16 +204,22 @@
       }
     },
 
+    _getNonce: function () {
+      return (window.vtWpConfig && window.vtWpConfig.nonce) || '';
+    },
+
     _callProxy: function (proxyUrl, prompt, systemPrompt) {
+      var payload = { prompt: prompt, systemPrompt: systemPrompt || '', nonce: this._getNonce() };
       return fetch(proxyUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: prompt, systemPrompt: systemPrompt || '' })
+        body: JSON.stringify(payload)
       }).then(function (r) {
         if (!r.ok) throw new Error('Proxy error ' + r.status);
         return r.json();
       }).then(function (data) {
-        return data.content || data.text || data.choices[0].message.content || JSON.stringify(data);
+        if (data.success === false) throw new Error(data.data && data.data.message || 'Erreur proxy');
+        return data.data && data.data.content || data.content || data.text || JSON.stringify(data);
       });
     },
 
@@ -397,6 +403,11 @@
     submit: function (email, listId) {
       if (!this.config.enabled) return Promise.resolve();
 
+      // Si un proxy URL est defini (mode WordPress), toujours passer par le proxy
+      if (this.config.emailProxyUrl) {
+        return this._viaProxy(email);
+      }
+
       var provider = (this.config.provider || 'webhook').toLowerCase();
 
       switch (provider) {
@@ -410,7 +421,35 @@
       }
     },
 
+    _viaProxy: function (email) {
+      var nonce = (window.vtWpConfig && window.vtWpConfig.nonce) || '';
+      return fetch(this.config.emailProxyUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, nonce: nonce })
+      }).then(function (r) {
+        if (!r.ok) throw new Error('Erreur email ' + r.status);
+        return r.json();
+      }).then(function (data) {
+        if (data.success === false) throw new Error(data.data && data.data.message || 'Erreur email');
+      });
+    },
+
     _brevo: function (email, listId) {
+      // Mode WordPress : passer par le proxy PHP (cle API cote serveur)
+      if (this.config.emailProxyUrl) {
+        return fetch(this.config.emailProxyUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, nonce: (window.vtWpConfig && window.vtWpConfig.nonce) || '' })
+        }).then(function (r) {
+          if (!r.ok) throw new Error('Erreur email ' + r.status);
+          return r.json();
+        }).then(function (data) {
+          if (data.success === false) throw new Error(data.data && data.data.message || 'Erreur email');
+        });
+      }
+      // Mode autonome (cle API directe — hors WordPress)
       return fetch('https://api.brevo.com/v3/contacts', {
         method: 'POST',
         headers: {

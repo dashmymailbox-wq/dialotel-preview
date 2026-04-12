@@ -16,8 +16,9 @@ Les apps sont développées en HTML / CSS / JS pur, puis regroupées dans un plu
 
 | Phase | Périmètre | Statut |
 |-------|-----------|--------|
-| **Phase 1** | Apps HTML statiques autonomes, architecture simulant le futur plugin | En cours |
-| **Phase 2** | Plugin WordPress : shortcodes, enqueue CSS/JS, settings admin, thèmes | À venir |
+| **Phase 1** | Socle partagé + apps HTML autonomes (theme mystique pour dev) | En cours |
+| **Phase 1B** | Plugin WordPress Dialotel — adaptation design sobre, livraison specifique | À venir |
+| **Phase 2** | Plugin commercial Code Canyon — catalogue themes/animations, settings admin, customisation | À venir |
 | **Phase 3** | Voix IA premium (ElevenLabs), proxy API côté serveur, Gutenberg widgets | Optionnel |
 
 ---
@@ -85,18 +86,28 @@ Les apps sont développées en HTML / CSS / JS pur, puis regroupées dans un plu
 
 ## Modèle de distribution
 
-- **Version commerciale** — design system complet, tous les thèmes, pour clients futurs (non développée pour l'instant)
-- **Version white label** — mêmes apps, thème custom par client, livré en zip installé par le product owner
-
-### Client actuel : Dialotel
-- Site de livraison : hexagon-voyance
-- Thème : theme-dialotel
-- Palette : #ed8ce6 (rose) / #e2ed77 (jaune) / #ffffff (fond) / #000000 (texte)
-- Ambiance : claire, pas de fond sombre — inverse du thème mystique par défaut
-- Font titres : Catchy Mager (fichier à récupérer auprès du client → clients/dialotel/fonts/)
-- Font corps : héritage du thème WordPress hôte
+### Produit 1 — Plugin Dialotel (sur mesure)
+- Plugin WordPress dédié aux sites Dialotel (hexagon-voyance, etc.)
+- Design avec identité visuelle Dialotel : fond blanc, effets visuels propres, animations dédiées
+- Un set fixe d'animations/effects (transition, loader, reveal, carte) — toujours les mêmes sur toutes les apps
+- Pas de catalogue, pas de choix — les effets sont définis une fois pour toutes
+- Thème Dialotel (Catchy Mager, palette rose/jaune sur blanc)
 - Livraison : zip installé manuellement par le product owner
 - Accès client au code : non
+
+### Produit 2 — Plugin commercial (Code Canyon)
+- Même moteur, livré avec un catalogue exhaustif de designs
+- Thèmes prêts à l'emploi, animations, transitions, polices, palettes au choix
+- L'acheteur choisit, mixe et customise depuis les réglages WP
+- Aucune référence à Dialotel
+
+### Ce qui est partagé
+- Le moteur : core.js, les apps HTML, les données JSON
+
+### Ce qui diffère
+- Les effets visuels et animations (set fixe Dialotel vs catalogue Code Canyon)
+- Les thèmes CSS
+- Les settings admin
 
 ---
 

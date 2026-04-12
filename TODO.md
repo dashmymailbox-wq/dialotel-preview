@@ -11,8 +11,9 @@
 
 | Phase | Avancement |
 |-------|------------|
-| Phase 1 — Apps HTML | En cours |
-| Phase 2 — Plugin WP | Non demarre |
+| Phase 1 — Socle + apps HTML (theme mystique) | En cours |
+| Phase 1B — Plugin Dialotel (design sobre) | Non demarre |
+| Phase 2 — Plugin commercial Code Canyon | Non demarre |
 | Phase 3 — IA premium | Non demarre |
 
 ---
@@ -72,14 +73,57 @@
 
 ### Apps de tirage
 - [x] Compatibilite amoureuse (compatibilite-amoureuse.html)
-- [ ] Compatibilite astrologique (compatibilite-astrologique.html)
-- [ ] Tirage tarot (tirage-tarot.html)
-- [ ] Numerologie (numerologie.html)
+- [x] Compatibilite astrologique (compatibilite-astrologique.html)
+- [x] Tirage tarot (tirage-tarot.html)
+- [x] Numerologie (numerologie.html)
 
 ---
 
-## A faire — Phase 2
+## A faire — Phase 1B — Plugin Dialotel
 
+### Design Dialotel (branding propre, effets cosmiques adaptes au fond blanc)
+- [x] Refondre theme-dialotel.css — palette rose/jaune, fond blanc, effets cosmiques adaptes au clair
+- [x] Adapter global.css pour le theme clair (halos, particules, fissures — version lumineuse)
+- [x] Adapter components.css pour le theme clair (glassmorphism, glow — version lumineuse)
+- [x] Creer le CSS specifique par app pour Dialotel
+
+### Banque d'animations Dialotel (style propre, distinct du catalogue commercial)
+- [x] transition-dialotel.css (1 animation de transition d'etape)
+- [x] loader-dialotel.css (1 animation de chargement)
+- [x] reveal-dialotel.css (1 animation de revelation resultat)
+- [x] card-dialotel.css (1 animation de carte, pour tarot)
+
+### Plugin WordPress
+- [x] Creer voyance-tirages.php (entry point plugin)
+- [x] Creer includes/enqueue.php (chargement conditionnel)
+- [x] Creer includes/shortcodes.php
+- [x] Creer templates/tirages/ pour chaque app
+- [x] Proxy PHP wp-ajax pour masquer les cles API IA
+- [x] Page settings admin minimale (cle API, provider, CTA URL)
+
+### HTML standalone Dialotel
+- [x] compatibilite-amoureuse.html
+- [x] compatibilite-astrologique.html
+- [x] tirage-tarot.html
+- [x] numerologie.html
+
+### Livraison
+- [x] Mettre a jour .build avec les bons fichiers Dialotel
+- [ ] Generer le zip de livraison via .build
+- [ ] Tester sur un WP vierge
+- [ ] Livrer au product owner
+
+---
+
+## A faire — Phase 2 — Plugin commercial Code Canyon
+
+- [ ] Catalogue de themes (mystique, boheme, moderne, art-deco, minimal, etc.)
+- [ ] Catalogue d'animations et transitions selectionnables
+- [ ] Catalogue de palettes de couleurs
+- [ ] Catalogue de polices (Google Fonts integrées)
+- [ ] Settings admin complet (selection themes, customisation couleurs, preview live)
+- [ ] Page settings admin (theme global, provider IA, config email, Google Fonts)
+- [ ] Shortcode avec parametres etendus : [tirage_voyance type="x" theme="y" palette="z"]
 - [ ] Creer voyance-tirages.php (entry point plugin)
 - [ ] Creer includes/enqueue.php
 - [ ] Creer includes/shortcodes.php
@@ -120,4 +164,6 @@
 | Mars 2026 | v0.9 | Ajout modele white label - client Dialotel / hexagon-voyance |
 | Mars 2026 | v1.0 | Systeme de typo 3 niveaux (local, Google Fonts, heritage WP) |
 | 2026-03-31 | v1.1 | Build complet : Git, .gitignore, theme-mystique, theme-dialotel, global.css, components.css, core.js, config Dialotel, 16 animations, donnees JSON, sprite SVG, app compatibilite-amoureuse |
+| 2026-03-31 | v1.2 | Redesign complet : redesign components.css, compatibilite-amoureuse.css, toggle light/dark, assets textures SVG (grain, stars, cosmic-gradient), boost textures cosmiques, suppression grain |
+| 2026-04-01 | v1.3 | 3 apps completes (astro, tarot, numerologie), support proxy WP core.js, theme dialotel complet, 4 animations dialotel, plugin WP (entry point, enqueue, shortcodes, proxy, settings), 4 HTML standalone dialotel, .build mis a jour |
 ```

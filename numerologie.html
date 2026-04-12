@@ -3,21 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Compatibilite Amoureuse — Voyance Tirages</title>
+  <title>Numerologie — Voyance Tirages</title>
 
-  <!-- Google Fonts : Cinzel (titres mystiques) + DM Sans (corps) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Theme (charger EN PREMIER) -->
   <link rel="stylesheet" href="assets/css/themes/theme-mystique.css">
-
-  <!-- CSS global et composants -->
   <link rel="stylesheet" href="assets/css/global.css">
   <link rel="stylesheet" href="assets/css/components.css">
-
-  <!-- Animations -->
   <link rel="stylesheet" href="assets/animations/transitions/fade.css">
   <link rel="stylesheet" href="assets/animations/transitions/slide.css">
   <link rel="stylesheet" href="assets/animations/transitions/scale-reveal.css">
@@ -25,16 +19,12 @@
   <link rel="stylesheet" href="assets/animations/loaders/orbit.css">
   <link rel="stylesheet" href="assets/animations/loaders/dots.css">
   <link rel="stylesheet" href="assets/animations/reveal/glow.css">
-  <link rel="stylesheet" href="assets/animations/reveal/typewriter.css">
-
-  <!-- CSS specifique app -->
-  <link rel="stylesheet" href="assets/css/compatibilite-amoureuse.css">
+  <link rel="stylesheet" href="assets/css/numerologie.css">
 </head>
 <body style="margin:0; background:#0a0012;">
 
 <div class="vt-app">
 
-  <!-- Toggle light/dark -->
   <button class="vt-theme-toggle" type="button" title="Changer de theme">
     <svg class="vt-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor">
       <circle cx="12" cy="12" r="5"/>
@@ -48,12 +38,9 @@
     </svg>
   </button>
 
-  <!-- Etoiles decoratives — halos cosmiques SVG -->
   <div class="vt-stars-layer">
     <img src="assets/textures/cosmic-gradient.svg" alt="" class="vt-stars-img" aria-hidden="true">
   </div>
-
-  <!-- Particules flottantes — poussieres d'etoiles CSS -->
   <div class="vt-particles" aria-hidden="true">
     <span class="vt-particle"></span><span class="vt-particle"></span>
     <span class="vt-particle"></span><span class="vt-particle"></span>
@@ -67,21 +54,17 @@
 
   <div class="vt-container">
 
-    <!-- ===== ETAPE 0 : Introduction — portail d'entree ===== -->
+    <!-- ===== ETAPE 0 : Introduction ===== -->
     <div class="vt-step" data-step="intro">
-      <div class="vt-am-intro vt-anim-fade-in">
-        <h1 class="vt-am-intro-title">Compatibilite Amoureuse</h1>
-
-        <div class="vt-am-intro-line">
+      <div class="vt-numero-intro vt-anim-fade-in">
+        <h1 class="vt-numero-intro-title">Numerologie</h1>
+        <div class="vt-numero-intro-line">
           <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
         </div>
-
-        <p class="vt-am-intro-desc">
-          Plongez dans les mysteres de l'alchimie amoureuse.
-          Notre analyse revele l'harmonie profonde entre deux ames,
-          leurs points de lumiere et leurs zones d'ombre.
+        <p class="vt-numero-intro-desc">
+          Decouvrez votre chemin de vie a travers la magie des nombres.
+          Votre prenom et votre date de naissance recelent un chiffre unique qui guide votre destinee.
         </p>
-
         <div class="vt-counter">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -92,26 +75,24 @@
           <strong><span class="vt-counter-value">0</span></strong>
           <span>tirages ce mois</span>
         </div>
-
         <div style="margin-top: 2rem;">
           <button class="btn-hex" id="vt-btn-start">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
             </svg>
-            Decouvrir ma compatibilite
+            Decouvrir mon chiffre
           </button>
         </div>
-
         <p class="vt-rate-info"></p>
       </div>
     </div>
 
-    <!-- ===== ETAPE 1 : Saisie — parchemin ethere ===== -->
+    <!-- ===== ETAPE 1 : Formulaire ===== -->
     <div class="vt-step" data-step="form">
-      <div class="vt-am-intro vt-anim-fade-in">
-        <h2 style="font-family:var(--theme-font-title); letter-spacing:0.05em; margin-bottom:0.5rem;">Entrez vos informations</h2>
+      <div class="vt-numero-intro vt-anim-fade-in">
+        <h2 style="font-family:var(--theme-font-title); letter-spacing:0.05em; margin-bottom:0.5rem;">Vos informations</h2>
         <p style="color:var(--theme-text-muted); font-size:0.85rem; margin-bottom:2rem;">
-          Deux prenoms, un desti
+          Votre prenom et date de naissance pour calculer votre chemin de vie
         </p>
       </div>
 
@@ -122,76 +103,42 @@
         <p></p>
       </div>
 
-      <form class="vt-am-form" id="vt-am-form" onsubmit="return false;">
-        <div class="vt-am-person-header">Premiere personne</div>
-        <div class="vt-am-field-group">
-          <label for="vt-name1">Prenom</label>
-          <input type="text" id="vt-name1" placeholder="Ex : Marie" required autocomplete="given-name">
+      <form class="vt-numero-form" id="vt-numero-form" onsubmit="return false;">
+        <div class="vt-numero-field-group">
+          <label for="vt-fullname">Prenom complet</label>
+          <input type="text" id="vt-fullname" placeholder="Ex : Marie Dupont" required autocomplete="name">
         </div>
-        <div class="vt-am-field-group">
-          <label for="vt-birth1">Date de naissance (optionnel)</label>
-          <input type="date" id="vt-birth1" autocomplete="bday" value="2000-01-01">
+        <div class="vt-numero-field-group">
+          <label for="vt-birthdate">Date de naissance</label>
+          <input type="date" id="vt-birthdate" required autocomplete="bday" value="2000-01-01">
         </div>
-
-        <div class="vt-am-divider"></div>
-
-        <div class="vt-am-person-header">Deuxieme personne</div>
-        <div class="vt-am-field-group">
-          <label for="vt-name2">Prenom</label>
-          <input type="text" id="vt-name2" placeholder="Ex : Pierre" required autocomplete="given-name">
-        </div>
-        <div class="vt-am-field-group">
-          <label for="vt-birth2">Date de naissance (optionnel)</label>
-          <input type="date" id="vt-birth2" autocomplete="bday" value="2000-01-01">
-        </div>
-
         <div style="text-align:center; margin-top:1.25rem;">
           <button type="button" class="btn-hex" id="vt-btn-tirage">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
             </svg>
-            Lancer le tirage
+            Calculer mon chemin de vie
           </button>
         </div>
       </form>
     </div>
 
-    <!-- ===== ETAPE 2 : Rituel — revelation cosmique ===== -->
+    <!-- ===== ETAPE 2 : Rituel — revelation du chiffre ===== -->
     <div class="vt-step" data-step="ritual">
-      <div class="vt-am-ritual">
-        <div class="vt-am-ritual-names">
-          <span class="vt-am-ritual-name"></span>
-          <span class="vt-am-ritual-heart">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
-          </span>
-          <span class="vt-am-ritual-name"></span>
-        </div>
-
-        <div class="vt-am-ritual-circle">
-          <div class="vt-anim-orbit-container" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;">
-            <div class="vt-anim-orbit"></div>
-          </div>
-        </div>
-
-        <p class="vt-am-ritual-text">Les astres convergent...</p>
+      <div class="vt-numero-ritual">
+        <p class="vt-numero-ritual-text">Votre nombre se revele...</p>
+        <div class="vt-numero-ritual-number" id="vt-numero-ritual-number">?</div>
         <div class="vt-anim-dots"><span></span><span></span><span></span></div>
       </div>
     </div>
 
-    <!-- ===== ETAPE 3 : Resultat — revelation finale ===== -->
+    <!-- ===== ETAPE 3 : Resultat ===== -->
     <div class="vt-step" data-step="result">
-      <div class="vt-result">
+      <div style="text-align:center;">
 
-        <!-- Score principal -->
-        <div class="vt-am-result-score vt-anim-glow" id="vt-result-score">0%</div>
-        <p class="vt-am-result-score-label">de compatibilite amoureuse</p>
-
-        <!-- Barre cosmique -->
-        <div class="vt-am-score-bar">
-          <div class="vt-am-score-bar-fill" style="width:0%"></div>
-        </div>
+        <!-- Chiffre geant -->
+        <div class="vt-numero-result-number vt-anim-glow" id="vt-result-number">0</div>
+        <p class="vt-numero-result-label">Votre chemin de vie</p>
 
         <!-- TTS -->
         <div class="vt-tts-controls" style="margin-bottom:1.5rem;">
@@ -204,58 +151,56 @@
           </button>
         </div>
 
-        <!-- Separateur -->
-        <div class="vt-am-divider"></div>
+        <div class="vt-numero-divider"></div>
 
-        <!-- Resume -->
-        <div class="vt-am-section">
-          <h3 class="vt-am-section-title">
+        <!-- Description -->
+        <div class="vt-numero-section">
+          <h3 class="vt-numero-section-title">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
               <polyline points="14 2 14 8 20 8"/>
             </svg>
-            Resume
+            Votre profil numerologique
           </h3>
-          <p class="vt-am-section-text" id="vt-result-resume"></p>
+          <p class="vt-numero-section-text" id="vt-result-description"></p>
         </div>
 
-        <!-- Points forts -->
-        <div class="vt-am-section">
-          <h3 class="vt-am-section-title">
+        <!-- Forces -->
+        <div class="vt-numero-section">
+          <h3 class="vt-numero-section-title">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
             </svg>
-            Points forts
+            Vos forces
           </h3>
-          <ul class="vt-am-section-text" id="vt-result-strengths"></ul>
+          <ul class="vt-numero-section-text" id="vt-result-forces"></ul>
         </div>
 
-        <!-- Points de tension -->
-        <div class="vt-am-section">
-          <h3 class="vt-am-section-title">
+        <!-- Defis -->
+        <div class="vt-numero-section">
+          <h3 class="vt-numero-section-title">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
               <circle cx="12" cy="12" r="10"/>
               <line x1="12" y1="8" x2="12" y2="12"/>
               <line x1="12" y1="16" x2="12.01" y2="16"/>
             </svg>
-            Points de tension
+            Vos defis
           </h3>
-          <ul class="vt-am-section-text" id="vt-result-tensions"></ul>
+          <ul class="vt-numero-section-text" id="vt-result-defis"></ul>
         </div>
 
         <!-- Conseil -->
-        <div class="vt-am-section">
-          <h3 class="vt-am-section-title">
+        <div class="vt-numero-section">
+          <h3 class="vt-numero-section-title">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
               <path d="M9 18l6-6-6-6"/>
             </svg>
             Conseil
           </h3>
-          <p class="vt-am-section-text" id="vt-result-advice"></p>
+          <p class="vt-numero-section-text" id="vt-result-advice"></p>
         </div>
 
-        <!-- Separateur -->
-        <div class="vt-am-divider"></div>
+        <div class="vt-numero-divider"></div>
 
         <!-- Actions -->
         <div class="vt-result-actions">
@@ -264,7 +209,7 @@
               <polyline points="23 4 23 10 17 10"/>
               <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
             </svg>
-            Refaire un tirage
+            Refaire un calcul
           </button>
 
           <div class="vt-cta-voyants" id="vt-cta-voyants">
@@ -282,7 +227,7 @@
 
   </div><!-- .vt-container -->
 
-  <!-- ===== Modale capture email ===== -->
+  <!-- Modale email -->
   <div class="vt-modal-overlay" id="vt-email-modal">
     <div class="vt-modal">
       <button class="vt-modal-close" onclick="this.closest('.vt-modal-overlay').classList.remove('vt-modal--open'); VT.Analytics.track('vt_email_dismissed');">
@@ -290,9 +235,9 @@
           <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
         </svg>
       </button>
-      <h3>Recevez votre resultat</h3>
+      <h3>Recevez votre analyse</h3>
       <p style="color:var(--theme-text-muted); margin:0.5rem 0 1.25rem; font-size:0.85rem; line-height:1.6;">
-        Entrez votre email pour recevoir votre analyse complete.
+        Entrez votre email pour recevoir votre profil numerologique complet.
       </p>
       <form class="vt-email-form" id="vt-email-form">
         <input type="email" id="vt-email-input" placeholder="Votre adresse email" required autocomplete="email">
@@ -310,12 +255,12 @@
           <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
           <polyline points="22 4 12 14.01 9 11.01"/>
         </svg>
-        <p>Merci ! Votre resultat a ete envoye.</p>
+        <p>Merci ! Votre analyse a ete envoyee.</p>
       </div>
     </div>
   </div>
 
-  <!-- ===== Modale limite atteinte ===== -->
+  <!-- Modale limite -->
   <div class="vt-modal-overlay" id="vt-rate-limit-modal">
     <div class="vt-modal">
       <h3>Limite atteinte</h3>
@@ -325,29 +270,27 @@
       </p>
       <form class="vt-email-form" id="vt-extend-form">
         <input type="email" id="vt-extend-email" placeholder="Votre adresse email" required autocomplete="email">
-        <button type="submit" class="btn-hex" style="width:100%;">
-          Debloquer
-        </button>
+        <button type="submit" class="btn-hex" style="width:100%;">Debloquer</button>
       </form>
     </div>
   </div>
 
 </div><!-- .vt-app -->
 
-<!-- ===== Donnees inline (JSON) ===== -->
-<script type="application/json" id="vt-config-compat-amour">
+<!-- Config -->
+<script type="application/json" id="vt-config-numero">
   {
-    "tirageId": "compat-amour",
+    "tirageId": "numerologie",
     "theme": "mystique",
-    "counterBase": 4200,
+    "counterBase": 3000,
     "ai": {
       "provider": "mistral",
-      "apiKey": "XtsCBn8NEzj7M3d4s3hlUBSYNgH3BHMk",
+      "apiKey": "REMPLACER_ICI",
       "model": "mistral-small-latest"
     },
     "tts": { "enabled": true, "autoplay": false },
     "rateLimit": { "enabled": true, "freePerDay": 3, "extendedPerDay": 8 },
-    "emailCapture": { "enabled": true, "provider": "brevo", "apiKey": "XtsCBn8NEzj7M3d4s3hlUBSYNgH3BHMk" },
+    "emailCapture": { "enabled": true, "provider": "brevo", "apiKey": "REMPLACER_ICI" },
     "ctaVoyants": { "enabled": true, "label": "Consulter un voyant", "url": "#", "position": "after-result" }
   }
 </script>
@@ -356,20 +299,17 @@
   {
     "app": { "loading": "Chargement...", "error": "Une erreur est survenue.", "retry": "Reessayer", "restart": "Refaire un tirage" },
     "counter": { "label": "tirages effectues ce mois" },
-    "rateLimiter": { "remaining": "Il vous reste {count} tirage(s) aujourd'hui" },
-    "compatibility": { "title": "Compatibilite Amoureuse" }
+    "rateLimiter": { "remaining": "Il vous reste {count} tirage(s) aujourd'hui" }
   }
 </script>
 
-<!-- Prompt IA inline -->
-<script type="text/plain" id="vt-prompt-compat-amour">
-Tu es un astrologue et expert en compatibilite amoureuse. Redige une analyse de compatibilite en JSON uniquement :
-{ "score": <1-100>, "resume": "<2-3 phrases>", "pointsFort": ["<1>", "<2>", "<3>"], "tensions": ["<1>", "<2>"], "conseil": "<2-3 phrases>" }
-Ton : bienveillant, positif, encourageant. Texte en francais. Reponds UNIQUEMENT avec le JSON.
+<script type="text/plain" id="vt-prompt-numero">
+Tu es un expert en numerologie. A partir du prenom complet, de la date de naissance et du chiffre de vie calcule, redige une analyse en JSON uniquement :
+{ "chiffreDeVie": <1-9>, "description": "<description detaillee du profil numerologique en 3-4 phrases>", "forces": ["<force 1>", "<force 2>", "<force 3>"], "defis": ["<defi 1>", "<defi 2>"], "conseil": "<conseil personnalise en 2-3 phrases>" }
+Ton : positif, encourageant, revelateur. Texte en francais. Reponds UNIQUEMENT avec le JSON.
 </script>
 
-<!-- JS -->
 <script src="assets/js/core.js"></script>
-<script src="assets/js/compatibilite-amoureuse.js"></script>
+<script src="assets/js/numerologie.js"></script>
 </body>
 </html>
