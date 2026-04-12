@@ -44,7 +44,12 @@
       "Bash(curl -sv http://localhost:8080/wp-login.php)",
       "Bash(curl -v http://localhost:8080/)",
       "Read(//tmp/wp-test-dialotel/**)",
-      "Bash(wp-now start:*)"
+      "Bash(wp-now start:*)",
+      "Bash(curl -sc /tmp/wp-cookies.txt -d 'log=admin&pwd=password&wp-submit=Log+In&redirect_to=%2Fwp-admin%2F&testcookie=1' -b wordpress_test_cookie=WP+Cookie+check http://localhost:8080/wp-login.php -L)",
+      "Bash(curl -sb /tmp/wp-cookies.txt http://localhost:8080/wp-admin/plugins.php)",
+      "Bash(curl -sb /tmp/wp-cookies.txt \"http://localhost:8080/wp-admin/admin.php?page=voyance-tirages\")",
+      "Bash(curl -sb /tmp/wp-cookies.txt \"http://localhost:8080/wp-admin/post-new.php\")",
+      "Bash(wp-now wp:*)"
     ]
   }
 }

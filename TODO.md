@@ -166,4 +166,5 @@
 | 2026-03-31 | v1.1 | Build complet : Git, .gitignore, theme-mystique, theme-dialotel, global.css, components.css, core.js, config Dialotel, 16 animations, donnees JSON, sprite SVG, app compatibilite-amoureuse |
 | 2026-03-31 | v1.2 | Redesign complet : redesign components.css, compatibilite-amoureuse.css, toggle light/dark, assets textures SVG (grain, stars, cosmic-gradient), boost textures cosmiques, suppression grain |
 | 2026-04-01 | v1.3 | 3 apps completes (astro, tarot, numerologie), support proxy WP core.js, theme dialotel complet, 4 animations dialotel, plugin WP (entry point, enqueue, shortcodes, proxy, settings), 4 HTML standalone dialotel, .build mis a jour |
+| 2026-04-12 | v1.4 | Correction bug plugin : ajout CSS/JS manquants (astro, tarot, numerologie) + creation 3 templates PHP manquants. Plugin desormais complet pour les 4 apps. |
 ```
