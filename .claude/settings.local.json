@@ -36,7 +36,15 @@
       "Bash(powershell.exe -Command \"Compress-Archive -Path 'wordpress\\\\*' -DestinationPath 'wordpress.zip' -Force\")",
       "Bash(xxd \"C:/Users/Olivier/Desktop/CLAUDE/Z-AI_PLUGIN_TIRAGES/clients/dialotel/wordpress/includes/shortcodes.php\")",
       "Bash(xxd \"C:/Users/Olivier/Desktop/CLAUDE/Z-AI_PLUGIN_TIRAGES/clients/dialotel/wordpress/templates/tirages/compatibilite-amoureuse.php\")",
-      "Bash(powershell.exe:*)"
+      "Bash(powershell.exe:*)",
+      "Bash(curl -s http://localhost:8080/)",
+      "Bash(curl -s http://localhost:8080/wp-admin/plugins.php)",
+      "Bash(curl -s \"http://localhost:8080/?page_id=2\")",
+      "Bash(curl -s http://localhost:8080/wp-login.php)",
+      "Bash(curl -sv http://localhost:8080/wp-login.php)",
+      "Bash(curl -v http://localhost:8080/)",
+      "Read(//tmp/wp-test-dialotel/**)",
+      "Bash(wp-now start:*)"
     ]
   }
 }
