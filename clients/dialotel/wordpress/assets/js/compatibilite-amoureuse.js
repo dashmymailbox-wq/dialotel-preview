@@ -419,60 +419,52 @@
       var btn = document.getElementById('vt-btn-share');
       if (btn) { btn.disabled = true; btn.style.opacity = '0.5'; }
 
-      // Cloner l'élément — le DOM original n'est jamais modifié
-      var clone = resultEl.cloneNode(true);
-      var toRemove = ['.vt-tts-controls', '.vt-share', '.vt-am-divider', '.vt-email-inline', '.vt-cta-voyants', '.vt-result-actions'];
-      toRemove.forEach(function (sel) {
-        var el = clone.querySelector(sel);
-        if (el) el.parentNode.removeChild(el);
-      });
+      // Style temporaire : force police système pour éviter le taint canvas (Google Fonts = cross-origin)
+      var tmpStyle = document.createElement('style');
+      tmpStyle.id = 'vt-capture-font';
+      tmpStyle.textContent = '.vt-result, .vt-result * { font-family: Georgia, Arial, sans-serif !important; }';
+      document.head.appendChild(tmpStyle);
 
-      // Forcer police système sur tout le clone → évite le chargement de Google Fonts
-      // qui tainte le canvas en file:// (cross-origin)
-      clone.style.fontFamily = 'Georgia, Arial, sans-serif';
-      var cloneEls = clone.querySelectorAll('*');
-      for (var i = 0; i < cloneEls.length; i++) {
-        cloneEls[i].style.fontFamily = 'Georgia, Arial, sans-serif';
+      // Éléments à ignorer pendant la capture (UI, pas contenu résultat)
+      var skipClasses = ['vt-tts-controls', 'vt-share', 'vt-am-divider', 'vt-email-inline', 'vt-cta-voyants', 'vt-result-actions'];
+
+      function cleanup() {
+        var s = document.getElementById('vt-capture-font');
+        if (s) s.parentNode.removeChild(s);
+        if (btn) { btn.disabled = false; btn.style.opacity = ''; }
       }
 
-      // Positionner hors-écran
-      clone.style.position = 'fixed';
-      clone.style.top = '-9999px';
-      clone.style.left = '0';
-      clone.style.width = resultEl.offsetWidth + 'px';
-      clone.style.background = '#ffffff';
-      document.body.appendChild(clone);
-
-      html2canvas(clone, {
+      html2canvas(resultEl, {
         allowTaint: false,
         useCORS: false,
         scale: 2,
         backgroundColor: '#ffffff',
-        logging: false
+        logging: false,
+        ignoreElements: function (el) {
+          return skipClasses.some(function (c) { return el.classList && el.classList.contains(c); });
+        }
       }).then(function (captured) {
-        document.body.removeChild(clone);
-        if (btn) { btn.disabled = false; btn.style.opacity = ''; }
+        cleanup();
 
         var dataURL;
         try {
           dataURL = captured.toDataURL('image/png');
         } catch (e) {
-          alert('Impossible d\'exporter l\'image : ' + e.message);
+          alert('Export bloqué : ' + e.message);
           return;
         }
 
         var modal = document.getElementById('vt-share-modal');
         var preview = document.getElementById('vt-share-preview');
         var dlBtn = document.getElementById('vt-share-download');
-        if (!modal) { alert('Modale introuvable dans le HTML.'); return; }
+        if (!modal) { alert('Modale introuvable.'); return; }
         if (preview) preview.src = dataURL;
         if (dlBtn) dlBtn.href = dataURL;
         modal.style.display = 'flex';
 
         VT.Analytics.track('vt_share', { platform: 'image', type: 'compatibilite-amoureuse' });
       }).catch(function (err) {
-        if (clone.parentNode) document.body.removeChild(clone);
-        if (btn) { btn.disabled = false; btn.style.opacity = ''; }
+        cleanup();
         alert('Erreur capture : ' + err.message);
       });
     }
