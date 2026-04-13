@@ -75,10 +75,8 @@
         self._extendRateLimit();
       });
 
-      // Bouton partage image
-      VT.on('#vt-btn-share', 'click', function () {
-        self._shareImage();
-      });
+      // Exposer _shareImage globalement pour le onclick inline
+      window._vtShareImage = function () { self._shareImage(); };
     },
 
     _checkRateLimit: function () {
