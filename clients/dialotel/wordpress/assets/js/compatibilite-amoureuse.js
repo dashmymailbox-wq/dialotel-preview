@@ -424,8 +424,17 @@
       tmpStyle.id = 'vt-capture-font';
       tmpStyle.textContent = [
         '.vt-result, .vt-result * { font-family: Georgia, Arial, sans-serif !important; }',
-        /* Score : background-clip:text non supporté par html2canvas → forcer couleur solide */
-        '.vt-result .vt-am-result-score { background: none !important; -webkit-background-clip: unset !important; background-clip: unset !important; -webkit-text-fill-color: #ed8ce6 !important; color: #ed8ce6 !important; }'
+        /* Cœur : clip-path:path() et animation non supportés par html2canvas → cercle rose */
+        '.vt-result .vt-am-result-score, .vt-result #vt-result-score {',
+          'clip-path: none !important;',
+          'border-radius: 50% !important;',
+          'opacity: 1 !important;',
+          'transform: scale(1) !important;',
+          'animation: none !important;',
+          '-webkit-text-fill-color: #ffffff !important;',
+          'color: #ffffff !important;',
+          'background: linear-gradient(160deg,#f5a0ef 0%,#ed8ce6 40%,#d66bc8 100%) !important;',
+        '}'
       ].join(' ');
       document.head.appendChild(tmpStyle);
 
