@@ -427,6 +427,14 @@
         if (el) el.parentNode.removeChild(el);
       });
 
+      // Forcer police système sur tout le clone → évite le chargement de Google Fonts
+      // qui tainte le canvas en file:// (cross-origin)
+      clone.style.fontFamily = 'Georgia, Arial, sans-serif';
+      var cloneEls = clone.querySelectorAll('*');
+      for (var i = 0; i < cloneEls.length; i++) {
+        cloneEls[i].style.fontFamily = 'Georgia, Arial, sans-serif';
+      }
+
       // Positionner hors-écran
       clone.style.position = 'fixed';
       clone.style.top = '-9999px';
@@ -436,8 +444,8 @@
       document.body.appendChild(clone);
 
       html2canvas(clone, {
-        allowTaint: true,
-        useCORS: true,
+        allowTaint: false,
+        useCORS: false,
         scale: 2,
         backgroundColor: '#ffffff',
         logging: false
