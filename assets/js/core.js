@@ -656,44 +656,19 @@
       ctx.closePath();
     },
 
-    // Partage l'image via Web Share API (mobile) ou téléchargement (desktop)
-    share: function (canvas, filename) {
-      var self = this;
-      return new Promise(function (resolve, reject) {
-        // Tentative Web Share API avec fichier (mobile Chrome/Safari)
-        if (typeof canvas.toBlob === 'function' && navigator.share && navigator.canShare) {
-          canvas.toBlob(function (blob) {
-            if (!blob) { self._downloadDataURL(canvas, filename); resolve(); return; }
-            var file = new File([blob], filename || 'partage.png', { type: 'image/png' });
-            try {
-              if (navigator.canShare({ files: [file] })) {
-                navigator.share({ files: [file] }).then(resolve).catch(function () {
-                  self._downloadDataURL(canvas, filename);
-                  resolve();
-                });
-                return;
-              }
-            } catch (e) { /* canShare peut lever une exception */ }
-            self._downloadDataURL(canvas, filename);
-            resolve();
-          }, 'image/png');
-        } else {
-          self._downloadDataURL(canvas, filename);
-          resolve();
-        }
-      });
+    // Retourne un dataURL PNG synchrone — à utiliser directement dans un handler de clic
+    toDataURL: function (canvas) {
+      return canvas.toDataURL('image/png');
     },
 
-    // Téléchargement via dataURL — fonctionne en file:// et en http://
-    _downloadDataURL: function (canvas, filename) {
-      var dataURL = canvas.toDataURL('image/png');
-      var a = document.createElement('a');
-      a.href = dataURL;
-      a.download = filename || 'partage.png';
-      a.style.display = 'none';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+    // Retourne un File PNG via Promise — pour Web Share API mobile
+    toFile: function (canvas, filename) {
+      return new Promise(function (resolve, reject) {
+        canvas.toBlob(function (blob) {
+          if (!blob) { reject(new Error('toBlob failed')); return; }
+          resolve(new File([blob], filename || 'partage.png', { type: 'image/png' }));
+        }, 'image/png');
+      });
     }
   };
 

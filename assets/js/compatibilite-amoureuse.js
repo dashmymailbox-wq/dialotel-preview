@@ -408,7 +408,6 @@
     },
 
     _shareImage: function () {
-      console.log('[VT] _shareImage appelé');
       var scoreEl = VT.$('#vt-result-score');
       var score = scoreEl ? scoreEl.textContent.trim() : '?%';
       var canvas = VT.ShareCard.generate({
@@ -417,11 +416,29 @@
         score: score,
         url: window.location.hostname
       });
-      VT.ShareCard.share(canvas, 'compatibilite-amoureuse.png')
-        .then(function () {
-          VT.Analytics.track('vt_share', { platform: 'image', type: 'compatibilite-amoureuse' });
-        })
-        .catch(function (err) { console.error('[VT] Erreur partage :', err); });
+
+      var isMobileHttps = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) && location.protocol === 'https:';
+
+      if (isMobileHttps && navigator.share) {
+        // Mobile sur HTTPS : panneau natif avec le fichier image
+        VT.ShareCard.toFile(canvas, 'compatibilite-amoureuse.png').then(function (file) {
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            return navigator.share({ files: [file] });
+          }
+        }).then(function () {
+          VT.Analytics.track('vt_share', { platform: 'image-mobile', type: 'compatibilite-amoureuse' });
+        }).catch(function () {});
+      } else {
+        // Desktop ou HTTP : téléchargement synchrone immédiat
+        var dataURL = VT.ShareCard.toDataURL(canvas);
+        var a = document.createElement('a');
+        a.href = dataURL;
+        a.download = 'compatibilite-amoureuse.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        VT.Analytics.track('vt_share', { platform: 'image-desktop', type: 'compatibilite-amoureuse' });
+      }
     }
   };
 
