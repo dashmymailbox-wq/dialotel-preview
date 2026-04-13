@@ -407,70 +407,75 @@
 
     _shareImage: function () {
       var resultEl = VT.$('.vt-result');
-      if (!resultEl || typeof html2canvas === 'undefined') return;
+      if (!resultEl || typeof html2canvas === 'undefined') {
+        console.error('[VT] html2canvas non disponible');
+        return;
+      }
 
-      // Masquer les éléments UI qui ne font pas partie du résultat
+      // Masquer les éléments UI hors contenu résultat
       var toHide = ['.vt-tts-controls', '.vt-share', '.vt-email-inline', '.vt-cta-voyants', '.vt-result-actions'];
       var hidden = [];
       toHide.forEach(function (sel) {
         VT.$$(sel).forEach(function (el) {
-          if (el.style.display !== 'none') {
-            el.style.display = 'none';
-            hidden.push(el);
-          }
+          hidden.push({ el: el, prev: el.style.visibility });
+          el.style.visibility = 'hidden';
         });
       });
+
+      var scrollY = window.scrollY;
 
       html2canvas(resultEl, {
         allowTaint: true,
         useCORS: true,
         scale: 2,
         backgroundColor: '#ffffff',
-        logging: false
+        logging: false,
+        scrollX: 0,
+        scrollY: -window.scrollY
       }).then(function (captured) {
-        // Restaurer les éléments masqués
-        hidden.forEach(function (el) { el.style.display = ''; });
-
-        var logoHeight = 60;
-        var padding = 24;
-        var finalCanvas = document.createElement('canvas');
-        finalCanvas.width = captured.width;
-        finalCanvas.height = captured.height + logoHeight + padding;
-
-        var ctx = finalCanvas.getContext('2d');
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
-        ctx.drawImage(captured, 0, 0);
+        // Restaurer
+        hidden.forEach(function (o) { o.el.style.visibility = o.prev; });
+        window.scrollTo(0, scrollY);
 
         // Logo en bas à droite
+        var logoH = 48;
+        var pad = 20;
+        var final = document.createElement('canvas');
+        final.width = captured.width;
+        final.height = captured.height + logoH + pad;
+        var ctx = final.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, final.width, final.height);
+        ctx.drawImage(captured, 0, 0);
+
+        function showModal(dataURL) {
+          var modal = document.getElementById('vt-share-modal');
+          var preview = document.getElementById('vt-share-preview');
+          var dlBtn = document.getElementById('vt-share-download');
+          if (!modal || !preview || !dlBtn) return;
+          preview.src = dataURL;
+          dlBtn.href = dataURL;
+          modal.style.display = 'flex';
+        }
+
         var logo = new Image();
         logo.onload = function () {
           var ratio = logo.naturalWidth / logo.naturalHeight;
-          var lh = logoHeight - 16;
-          var lw = Math.round(lh * ratio);
-          ctx.drawImage(logo, finalCanvas.width - lw - padding, captured.height + 8, lw, lh);
-          _vtDownload(finalCanvas);
+          var lw = Math.round((logoH - 8) * ratio);
+          ctx.drawImage(logo, final.width - lw - pad, captured.height + 4, lw, logoH - 8);
+          showModal(final.toDataURL('image/png'));
         };
         logo.onerror = function () {
-          _vtDownload(finalCanvas);
+          showModal(final.toDataURL('image/png'));
         };
         logo.src = '../wordpress/assets/logo-hexagon-voyance.webp';
 
         VT.Analytics.track('vt_share', { platform: 'image', type: 'compatibilite-amoureuse' });
       }).catch(function (err) {
-        // Restaurer en cas d'erreur
-        hidden.forEach(function (el) { el.style.display = ''; });
+        hidden.forEach(function (o) { o.el.style.visibility = o.prev; });
+        window.scrollTo(0, scrollY);
         console.error('[VT] html2canvas erreur :', err);
       });
-
-      function _vtDownload(canvas) {
-        var a = document.createElement('a');
-        a.href = canvas.toDataURL('image/png');
-        a.download = 'compatibilite-amoureuse.png';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      }
     }
   };
 
