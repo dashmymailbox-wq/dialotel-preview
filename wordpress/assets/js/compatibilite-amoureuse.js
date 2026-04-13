@@ -407,10 +407,17 @@
 
     _shareImage: function () {
       var resultEl = VT.$('.vt-result');
-      if (!resultEl || typeof html2canvas === 'undefined') {
-        console.error('[VT] html2canvas non disponible');
+      if (typeof html2canvas === 'undefined') {
+        alert('Connexion internet requise pour générer l\'image (chargement de html2canvas).');
         return;
       }
+      if (!resultEl) {
+        alert('Bloc résultat introuvable.');
+        return;
+      }
+
+      var btn = document.getElementById('vt-btn-share');
+      if (btn) { btn.disabled = true; btn.style.opacity = '0.5'; }
 
       // Cloner l'élément — le DOM original n'est jamais modifié
       var clone = resultEl.cloneNode(true);
@@ -469,9 +476,11 @@
         logo.src = '../wordpress/assets/logo-hexagon-voyance.webp';
 
         VT.Analytics.track('vt_share', { platform: 'image', type: 'compatibilite-amoureuse' });
+        if (btn) { btn.disabled = false; btn.style.opacity = ''; }
       }).catch(function (err) {
         if (clone.parentNode) document.body.removeChild(clone);
-        console.error('[VT] html2canvas erreur :', err);
+        if (btn) { btn.disabled = false; btn.style.opacity = ''; }
+        alert('Erreur lors de la capture : ' + err.message);
       });
     }
   };
