@@ -412,32 +412,32 @@
         return;
       }
 
-      // Masquer les éléments UI hors contenu résultat
-      var toHide = ['.vt-tts-controls', '.vt-share', '.vt-email-inline', '.vt-cta-voyants', '.vt-result-actions'];
-      var hidden = [];
-      toHide.forEach(function (sel) {
-        VT.$$(sel).forEach(function (el) {
-          hidden.push({ el: el, prev: el.style.visibility });
-          el.style.visibility = 'hidden';
-        });
+      // Cloner l'élément — le DOM original n'est jamais modifié
+      var clone = resultEl.cloneNode(true);
+      var toRemove = ['.vt-tts-controls', '.vt-share', '.vt-am-divider', '.vt-email-inline', '.vt-cta-voyants', '.vt-result-actions'];
+      toRemove.forEach(function (sel) {
+        var el = clone.querySelector(sel);
+        if (el) el.parentNode.removeChild(el);
       });
 
-      var scrollY = window.scrollY;
+      // Positionner hors-écran
+      clone.style.position = 'fixed';
+      clone.style.top = '-9999px';
+      clone.style.left = '0';
+      clone.style.width = resultEl.offsetWidth + 'px';
+      clone.style.background = '#ffffff';
+      document.body.appendChild(clone);
 
-      html2canvas(resultEl, {
+      html2canvas(clone, {
         allowTaint: true,
         useCORS: true,
         scale: 2,
         backgroundColor: '#ffffff',
-        logging: false,
-        scrollX: 0,
-        scrollY: -window.scrollY
+        logging: false
       }).then(function (captured) {
-        // Restaurer
-        hidden.forEach(function (o) { o.el.style.visibility = o.prev; });
-        window.scrollTo(0, scrollY);
+        document.body.removeChild(clone);
 
-        // Logo en bas à droite
+        // Ajouter le logo en bas
         var logoH = 48;
         var pad = 20;
         var final = document.createElement('canvas');
@@ -452,9 +452,9 @@
           var modal = document.getElementById('vt-share-modal');
           var preview = document.getElementById('vt-share-preview');
           var dlBtn = document.getElementById('vt-share-download');
-          if (!modal || !preview || !dlBtn) return;
-          preview.src = dataURL;
-          dlBtn.href = dataURL;
+          if (!modal) return;
+          if (preview) preview.src = dataURL;
+          if (dlBtn) dlBtn.href = dataURL;
           modal.style.display = 'flex';
         }
 
@@ -465,15 +465,12 @@
           ctx.drawImage(logo, final.width - lw - pad, captured.height + 4, lw, logoH - 8);
           showModal(final.toDataURL('image/png'));
         };
-        logo.onerror = function () {
-          showModal(final.toDataURL('image/png'));
-        };
+        logo.onerror = function () { showModal(final.toDataURL('image/png')); };
         logo.src = '../wordpress/assets/logo-hexagon-voyance.webp';
 
         VT.Analytics.track('vt_share', { platform: 'image', type: 'compatibilite-amoureuse' });
       }).catch(function (err) {
-        hidden.forEach(function (o) { o.el.style.visibility = o.prev; });
-        window.scrollTo(0, scrollY);
+        if (clone.parentNode) document.body.removeChild(clone);
         console.error('[VT] html2canvas erreur :', err);
       });
     }
