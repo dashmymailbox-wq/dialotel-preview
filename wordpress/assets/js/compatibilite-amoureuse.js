@@ -422,7 +422,11 @@
       // Style temporaire : force police système pour éviter le taint canvas (Google Fonts = cross-origin)
       var tmpStyle = document.createElement('style');
       tmpStyle.id = 'vt-capture-font';
-      tmpStyle.textContent = '.vt-result, .vt-result * { font-family: Georgia, Arial, sans-serif !important; }';
+      tmpStyle.textContent = [
+        '.vt-result, .vt-result * { font-family: Georgia, Arial, sans-serif !important; }',
+        /* Score : background-clip:text non supporté par html2canvas → forcer couleur solide */
+        '.vt-result .vt-am-result-score { background: none !important; -webkit-background-clip: unset !important; background-clip: unset !important; -webkit-text-fill-color: #ed8ce6 !important; color: #ed8ce6 !important; }'
+      ].join(' ');
       document.head.appendChild(tmpStyle);
 
       // Éléments à ignorer pendant la capture (UI, pas contenu résultat)
