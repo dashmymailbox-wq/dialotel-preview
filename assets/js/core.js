@@ -613,7 +613,7 @@
       // fond barre
       ctx.fillStyle = colorMuted;
       ctx.beginPath();
-      ctx.roundRect(barX, barY, barW, barH, barH / 2);
+      this._roundRect(ctx, barX, barY, barW, barH, barH / 2);
       ctx.fill();
       // remplissage barre (dégradé rose→jaune)
       var scoreNum = parseInt((data.score || '0').replace('%', ''), 10) || 0;
@@ -624,7 +624,7 @@
         grad.addColorStop(1, colorSecondary);
         ctx.fillStyle = grad;
         ctx.beginPath();
-        ctx.roundRect(barX, barY, fillW, barH, barH / 2);
+        this._roundRect(ctx, barX, barY, fillW, barH, barH / 2);
         ctx.fill();
       }
 
@@ -639,6 +639,21 @@
       ctx.fillText(data.url || '', W / 2, 980);
 
       return canvas;
+    },
+
+    // Tracé d'un rectangle arrondi compatible tous navigateurs
+    _roundRect: function (ctx, x, y, w, h, r) {
+      r = Math.min(r, w / 2, h / 2);
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.arcTo(x + w, y, x + w, y + r, r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+      ctx.lineTo(x + r, y + h);
+      ctx.arcTo(x, y + h, x, y + h - r, r);
+      ctx.lineTo(x, y + r);
+      ctx.arcTo(x, y, x + r, y, r);
+      ctx.closePath();
     },
 
     // Partage l'image via Web Share API (mobile) ou téléchargement (desktop)

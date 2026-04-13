@@ -420,7 +420,7 @@
         .then(function () {
           VT.Analytics.track('vt_share', { platform: 'image', type: 'compatibilite-amoureuse' });
         })
-        .catch(function () { /* annulation ou erreur silencieuse */ });
+        .catch(function (err) { console.error('[VT] Erreur partage :', err); });
     }
   };
 
