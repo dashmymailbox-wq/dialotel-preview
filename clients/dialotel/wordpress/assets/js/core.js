@@ -209,11 +209,14 @@
     },
 
     _callProxy: function (proxyUrl, prompt, systemPrompt) {
-      var payload = { prompt: prompt, systemPrompt: systemPrompt || '', nonce: this._getNonce() };
+      var params = new URLSearchParams();
+      params.append('prompt', prompt);
+      params.append('systemPrompt', systemPrompt || '');
+      params.append('nonce', this._getNonce());
       return fetch(proxyUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString()
       }).then(function (r) {
         if (!r.ok) throw new Error('Proxy error ' + r.status);
         return r.json();
@@ -423,10 +426,13 @@
 
     _viaProxy: function (email) {
       var nonce = (window.vtWpConfig && window.vtWpConfig.nonce) || '';
+      var params = new URLSearchParams();
+      params.append('email', email);
+      params.append('nonce', nonce);
       return fetch(this.config.emailProxyUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email, nonce: nonce })
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString()
       }).then(function (r) {
         if (!r.ok) throw new Error('Erreur email ' + r.status);
         return r.json();
@@ -438,10 +444,13 @@
     _brevo: function (email, listId) {
       // Mode WordPress : passer par le proxy PHP (cle API cote serveur)
       if (this.config.emailProxyUrl) {
+        var brevoParams = new URLSearchParams();
+        brevoParams.append('email', email);
+        brevoParams.append('nonce', (window.vtWpConfig && window.vtWpConfig.nonce) || '');
         return fetch(this.config.emailProxyUrl, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: email, nonce: (window.vtWpConfig && window.vtWpConfig.nonce) || '' })
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: brevoParams.toString()
         }).then(function (r) {
           if (!r.ok) throw new Error('Erreur email ' + r.status);
           return r.json();
