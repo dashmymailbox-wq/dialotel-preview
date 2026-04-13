@@ -451,44 +451,29 @@
         logging: false
       }).then(function (captured) {
         document.body.removeChild(clone);
+        if (btn) { btn.disabled = false; btn.style.opacity = ''; }
 
-        // Ajouter le logo en bas
-        var logoH = 48;
-        var pad = 20;
-        var final = document.createElement('canvas');
-        final.width = captured.width;
-        final.height = captured.height + logoH + pad;
-        var ctx = final.getContext('2d');
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, final.width, final.height);
-        ctx.drawImage(captured, 0, 0);
-
-        function showModal(dataURL) {
-          var modal = document.getElementById('vt-share-modal');
-          var preview = document.getElementById('vt-share-preview');
-          var dlBtn = document.getElementById('vt-share-download');
-          if (!modal) return;
-          if (preview) preview.src = dataURL;
-          if (dlBtn) dlBtn.href = dataURL;
-          modal.style.display = 'flex';
+        var dataURL;
+        try {
+          dataURL = captured.toDataURL('image/png');
+        } catch (e) {
+          alert('Impossible d\'exporter l\'image : ' + e.message);
+          return;
         }
 
-        var logo = new Image();
-        logo.onload = function () {
-          var ratio = logo.naturalWidth / logo.naturalHeight;
-          var lw = Math.round((logoH - 8) * ratio);
-          ctx.drawImage(logo, final.width - lw - pad, captured.height + 4, lw, logoH - 8);
-          showModal(final.toDataURL('image/png'));
-        };
-        logo.onerror = function () { showModal(final.toDataURL('image/png')); };
-        logo.src = '../wordpress/assets/logo-hexagon-voyance.webp';
+        var modal = document.getElementById('vt-share-modal');
+        var preview = document.getElementById('vt-share-preview');
+        var dlBtn = document.getElementById('vt-share-download');
+        if (!modal) { alert('Modale introuvable dans le HTML.'); return; }
+        if (preview) preview.src = dataURL;
+        if (dlBtn) dlBtn.href = dataURL;
+        modal.style.display = 'flex';
 
         VT.Analytics.track('vt_share', { platform: 'image', type: 'compatibilite-amoureuse' });
-        if (btn) { btn.disabled = false; btn.style.opacity = ''; }
       }).catch(function (err) {
         if (clone.parentNode) document.body.removeChild(clone);
         if (btn) { btn.disabled = false; btn.style.opacity = ''; }
-        alert('Erreur lors de la capture : ' + err.message);
+        alert('Erreur capture : ' + err.message);
       });
     }
   };
