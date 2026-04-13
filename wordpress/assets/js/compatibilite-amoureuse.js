@@ -424,219 +424,269 @@
         libra:'♎', scorpio:'♏', sagittarius:'♐', capricorn:'♑', aquarius:'♒', pisces:'♓'
       };
 
-      /* --- Mise en page --- */
-      var SC = 2, W = 800, PAD = 40, CW = W - PAD * 2;
+      /* --- Dimensions 9:16 --- */
+      var SC = 2, W = 630, H = 1120, PAD = 32, CW = W - PAD * 2;
 
-      /* roundRect avec fallback pour anciens navigateurs */
+      /* roundRect avec fallback */
       function rr(ctx, x, y, w, h, r) {
         ctx.beginPath();
         if (ctx.roundRect) { ctx.roundRect(x, y, w, h, r); return; }
-        ctx.moveTo(x+r, y); ctx.lineTo(x+w-r, y);
-        ctx.quadraticCurveTo(x+w, y, x+w, y+r);
-        ctx.lineTo(x+w, y+h-r);
-        ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
-        ctx.lineTo(x+r, y+h);
-        ctx.quadraticCurveTo(x, y+h, x, y+h-r);
-        ctx.lineTo(x, y+r);
-        ctx.quadraticCurveTo(x, y, x+r, y);
-        ctx.closePath();
+        ctx.moveTo(x+r, y); ctx.lineTo(x+w-r, y); ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+        ctx.lineTo(x+w, y+h-r); ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+        ctx.lineTo(x+r, y+h); ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+        ctx.lineTo(x, y+r); ctx.quadraticCurveTo(x, y, x+r, y); ctx.closePath();
       }
 
-      /* --- Fonction de rendu sur contexte 2D --- */
-      function render(ctx) {
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(0, 0, W, 3000);
+      /* --- Rendu principal (async après chargement logo) --- */
+      function doRender(logo) {
+        var canvas = document.createElement('canvas');
+        canvas.width  = W * SC;
+        canvas.height = H * SC;
+        var ctx = canvas.getContext('2d');
+        ctx.scale(SC, SC);
 
-        var y = PAD;
+        /* Étoiles pseudo-aléatoires seeded par le score */
+        var seed = score + 1;
+        function rng() { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }
+        var stars = [];
+        for (var i = 0; i < 90; i++) {
+          stars.push({ x: rng()*W, y: rng()*H, r: rng()*1.1+0.4, a: rng()*0.25+0.15 });
+        }
+
+        /* Fond dégradé radial clair */
+        var bg = ctx.createRadialGradient(W/2, H*0.38, 0, W/2, H*0.38, H*0.8);
+        bg.addColorStop(0, '#ffffff');
+        bg.addColorStop(1, '#f0e6f8');
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, W, H);
+
+        /* Étoiles violet doux */
+        stars.forEach(function (s) {
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+          ctx.fillStyle = 'rgba(192,132,252,' + s.a + ')';
+          ctx.fill();
+        });
+
+        /* Halo rose pâle derrière le logo */
+        var topHalo = ctx.createRadialGradient(W/2, 55, 0, W/2, 55, 190);
+        topHalo.addColorStop(0, 'rgba(237,140,230,0.14)');
+        topHalo.addColorStop(1, 'rgba(237,140,230,0)');
+        ctx.fillStyle = topHalo;
+        ctx.fillRect(W/2-190, 0, 380, 250);
+
+        var y = 28;
+
+        /* Logo */
+        if (logo) {
+          ctx.drawImage(logo, W/2-22, y, 44, 44);
+        } else {
+          /* Fallback : hexagone dessiné en code */
+          ctx.save();
+          ctx.beginPath();
+          var hcx = W/2, hcy = y+22, hcr = 22;
+          for (var k = 0; k < 6; k++) {
+            var ang = Math.PI/180*(60*k-30);
+            if (k===0) ctx.moveTo(hcx+hcr*Math.cos(ang), hcy+hcr*Math.sin(ang));
+            else        ctx.lineTo(hcx+hcr*Math.cos(ang), hcy+hcr*Math.sin(ang));
+          }
+          ctx.closePath();
+          var hexG = ctx.createLinearGradient(hcx-hcr, hcy-hcr, hcx+hcr, hcy+hcr);
+          hexG.addColorStop(0, '#c084fc'); hexG.addColorStop(1, '#7c3aed');
+          ctx.fillStyle = hexG; ctx.fill();
+          ctx.fillStyle = '#fff'; ctx.font = 'bold 13px Arial, sans-serif';
+          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          ctx.fillText('HV', hcx, hcy);
+          ctx.restore();
+        }
+        y += 58;
 
         /* Titre site */
         ctx.save();
-        ctx.fillStyle = '#7c3aed';
-        ctx.font = 'bold 20px Arial, sans-serif';
-        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.fillText('Hexagon Voyance', W / 2, y + 14);
+        ctx.fillStyle = '#2d1b3d'; ctx.font = 'bold 18px Arial, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+        ctx.fillText('Hexagon Voyance', W/2, y);
         ctx.restore();
-        y += 44;
+        y += 26;
 
-        /* Séparateur */
+        /* Sous-titre */
         ctx.save();
-        ctx.strokeStyle = '#ede9fe'; ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - PAD, y); ctx.stroke();
+        ctx.fillStyle = '#8a6fa0'; ctx.font = '13px Arial, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+        ctx.fillText('Compatibilité Amoureuse', W/2, y);
         ctx.restore();
         y += 22;
 
-        /* --- Zone personnes + cœur --- */
-        var HW = 120, HH = Math.round(HW * 145 / 160); /* 109 px */
-        var BR = 30;   /* rayon badge */
-        var midY = y + Math.round(HH / 2);
-        var bx1 = PAD + 75, bx2 = W - PAD - 75;
-
-        /* Cœur en Path2D */
+        /* Séparateur */
         ctx.save();
-        ctx.translate(W / 2 - HW / 2, y);
-        ctx.scale(HW / 160, HH / 145);
+        ctx.strokeStyle = 'rgba(237,140,230,0.35)'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W-PAD, y); ctx.stroke();
+        ctx.restore();
+        y += 18;
+
+        /* --- Zone cœur + personnes (hauteur fixe 180px) --- */
+        var HW = 130, HH = Math.round(HW * 145 / 160); /* 118 */
+        var BR = 34;
+        var heartTopY = y;
+        var midY = heartTopY + Math.round(HH / 2);
+        var bx1 = 88, bx2 = W - 88;
+
+        /* Halo rose derrière le cœur */
+        var halo = ctx.createRadialGradient(W/2, heartTopY+HH*0.5, 0, W/2, heartTopY+HH*0.5, 110);
+        halo.addColorStop(0, 'rgba(237,140,230,0.32)');
+        halo.addColorStop(1, 'rgba(237,140,230,0)');
+        ctx.fillStyle = halo;
+        ctx.fillRect(W/2-110, heartTopY-20, 220, HH+40);
+
+        /* Cœur Path2D */
+        ctx.save();
+        ctx.translate(W/2 - HW/2, heartTopY);
+        ctx.scale(HW/160, HH/145);
         var hPath = new Path2D('M80 140 C80 140 5 95 5 52 C5 25 25 5 50 5 C63 5 74 12 80 24 C86 12 97 5 110 5 C135 5 155 25 155 52 C155 95 80 140 80 140Z');
         var hGrad = ctx.createLinearGradient(0, 0, 0, 145);
-        hGrad.addColorStop(0,   '#f5a0ef');
-        hGrad.addColorStop(0.4, '#ed8ce6');
-        hGrad.addColorStop(1,   '#d66bc8');
-        ctx.fillStyle = hGrad;
-        ctx.fill(hPath);
+        hGrad.addColorStop(0, '#f5a0ef'); hGrad.addColorStop(0.4, '#ed8ce6'); hGrad.addColorStop(1, '#d66bc8');
+        ctx.fillStyle = hGrad; ctx.fill(hPath);
         ctx.restore();
 
-        /* Score centré dans le cœur */
+        /* Score dans le cœur */
         ctx.save();
-        ctx.fillStyle = '#fff';
-        ctx.font = 'bold 26px Arial, sans-serif';
+        ctx.fillStyle = '#fff'; ctx.font = 'bold 28px Arial, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.fillText(score + '%', W / 2, y + Math.round(HH * 0.58));
+        ctx.fillText(score + '%', W/2, heartTopY + Math.round(HH * 0.58));
         ctx.restore();
 
         /* Badges zodiaque */
         function drawBadge(bx, signData) {
           ctx.save();
-          ctx.beginPath(); ctx.arc(bx, midY, BR, 0, Math.PI * 2);
-          var g = ctx.createRadialGradient(bx, midY - 8, 4, bx, midY, BR);
+          ctx.beginPath(); ctx.arc(bx, midY, BR, 0, Math.PI*2);
+          var g = ctx.createRadialGradient(bx, midY-8, 4, bx, midY, BR);
           g.addColorStop(0, '#c084fc'); g.addColorStop(1, '#7c3aed');
           ctx.fillStyle = g; ctx.fill();
-          ctx.fillStyle = '#fff';
-          ctx.font = '22px Arial, sans-serif';
+          ctx.fillStyle = '#fff'; ctx.font = '22px Arial, sans-serif';
           ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-          var sym = (signData && ZODIAC[signData.key]) ? ZODIAC[signData.key] : '★';
-          ctx.fillText(sym, bx, midY);
+          ctx.fillText((signData && ZODIAC[signData.key]) ? ZODIAC[signData.key] : '★', bx, midY);
           ctx.restore();
         }
-        drawBadge(bx1, sign1);
-        drawBadge(bx2, sign2);
 
-        /* Noms + signes sous les badges */
         function personLabel(bx, name, sign) {
           ctx.save();
           ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-          ctx.fillStyle = '#1f2937';
-          ctx.font = 'bold 14px Arial, sans-serif';
+          ctx.fillStyle = '#2d1b3d'; ctx.font = 'bold 13px Arial, sans-serif';
           ctx.fillText(name, bx, midY + BR + 10);
           if (sign) {
-            ctx.fillStyle = '#a855f7';
-            ctx.font = '12px Arial, sans-serif';
-            ctx.fillText(sign.name, bx, midY + BR + 28);
+            ctx.fillStyle = '#a855f7'; ctx.font = '11px Arial, sans-serif';
+            ctx.fillText(sign.name, bx, midY + BR + 27);
           }
           ctx.restore();
         }
-        personLabel(bx1, name1, sign1);
-        personLabel(bx2, name2, sign2);
 
-        y += HH + 58; /* 167 — noms à midY+BR+28 = y_zone+112 < 167 ✓ */
+        drawBadge(bx1, sign1); personLabel(bx1, name1, sign1);
+        drawBadge(bx2, sign2); personLabel(bx2, name2, sign2);
 
-        /* Label "de compatibilité" */
+        /* Fixer y à la position du score label (position fixe) */
+        y = 320;
+
+        /* Score label */
         ctx.save();
-        ctx.fillStyle = '#9ca3af'; ctx.font = '13px Arial, sans-serif';
+        ctx.fillStyle = '#8a6fa0'; ctx.font = '13px Arial, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-        ctx.fillText('de compatibilité', W / 2, y);
+        ctx.fillText(score + '% de compatibilité', W/2, y);
         ctx.restore();
-        y += 26;
+        y += 28;
 
         /* Barre de score */
-        rr(ctx, PAD, y, CW, 10, 5);
-        ctx.fillStyle = '#f3e8ff'; ctx.fill();
+        rr(ctx, PAD, y, CW, 8, 4); ctx.fillStyle = '#f3e8ff'; ctx.fill();
         if (score > 0) {
-          rr(ctx, PAD, y, CW * score / 100, 10, 5);
-          var barGrad = ctx.createLinearGradient(PAD, 0, PAD + CW, 0);
-          barGrad.addColorStop(0, '#f5a0ef'); barGrad.addColorStop(1, '#d66bc8');
-          ctx.fillStyle = barGrad; ctx.fill();
+          rr(ctx, PAD, y, CW * score / 100, 8, 4);
+          var barG = ctx.createLinearGradient(PAD, 0, PAD+CW, 0);
+          barG.addColorStop(0, '#f5a0ef'); barG.addColorStop(1, '#d66bc8');
+          ctx.fillStyle = barG; ctx.fill();
         }
-        y += 30;
+        y += 24;
 
-        /* --- Cartes de contenu --- */
-        var CP = 16, LH = 22, IH = 26;
+        /* --- Cartes à hauteur fixe pour remplir exactement le 9:16 --- */
+        var FOOTER_ZONE = 58, CARD_GAP = 10;
+        var CARD_H = Math.floor((H - y - FOOTER_ZONE - 3 * CARD_GAP) / 4); /* ≈ 165 */
+        var CP = 14, LH = 20, IH = 24;
 
-        function card(title, icon, accent, content, isArr, italic) {
-          if (!content || (isArr && !content.length) || (!isArr && !content.trim())) return;
-          ctx.font = '14px Arial, sans-serif';
-          var innerW = CW - CP * 2;
-          var contentH;
-          if (isArr) {
-            contentH = content.length * IH;
-          } else {
-            var wds = content.split(' '), l = '', n = 1;
-            wds.forEach(function (w) {
-              var t = l + w + ' ';
-              if (l && ctx.measureText(t).width > innerW) { n++; l = w + ' '; } else l = t;
-            });
-            contentH = n * LH;
-          }
-          var cH = CP + 28 + 6 + contentH + CP;
+        var cardDefs = [
+          { title: 'En résumé',           icon: '♥', accent: '#d66bc8', content: resume,  isArr: false, italic: true  },
+          { title: 'Points forts',        icon: '✦', accent: '#9333ea', content: pfArr,   isArr: true,  italic: false },
+          { title: 'Points de tension',   icon: '⚡', accent: '#f59e0b', content: tArr,    isArr: true,  italic: false },
+          { title: 'Conseil des étoiles', icon: '✧', accent: '#059669', content: conseil, isArr: false, italic: true  }
+        ];
 
+        cardDefs.forEach(function (def) {
+          /* Ombre simulée */
           ctx.save();
-          ctx.fillStyle = '#faf5ff'; rr(ctx, PAD, y, CW, cH, 8); ctx.fill();
-          ctx.fillStyle = accent;    ctx.fillRect(PAD, y, 4, cH);
-          ctx.fillStyle = accent;
-          ctx.font = 'bold 13px Arial, sans-serif';
-          ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-          ctx.fillText(icon + ' ' + title, PAD + CP, y + CP + 14);
-          ctx.fillStyle = '#374151';
-          ctx.font = (italic ? 'italic ' : '') + '14px Arial, sans-serif';
-          ctx.textBaseline = 'top';
-          var ty = y + CP + 28 + 6;
-          if (isArr) {
-            content.forEach(function (item, i) {
-              ctx.fillText('• ' + item, PAD + CP, ty + i * IH);
+          ctx.fillStyle = 'rgba(180,100,220,0.08)';
+          rr(ctx, PAD+1, y+2, CW, CARD_H, 10); ctx.fill();
+          /* Fond blanc */
+          ctx.fillStyle = '#ffffff';
+          rr(ctx, PAD, y, CW, CARD_H, 10); ctx.fill();
+          /* Bordure */
+          ctx.strokeStyle = 'rgba(237,140,230,0.40)'; ctx.lineWidth = 1;
+          rr(ctx, PAD, y, CW, CARD_H, 10); ctx.stroke();
+          /* Barre accent */
+          var barG2 = ctx.createLinearGradient(0, y, 0, y+CARD_H);
+          barG2.addColorStop(0, def.accent); barG2.addColorStop(1, def.accent + '88');
+          ctx.fillStyle = barG2; ctx.fillRect(PAD, y+10, 3, CARD_H-20);
+          /* Titre */
+          ctx.fillStyle = def.accent; ctx.font = 'bold 12px Arial, sans-serif';
+          ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+          ctx.fillText(def.icon + ' ' + def.title, PAD+CP, y+CP);
+          /* Contenu */
+          ctx.fillStyle = '#2d1b3d';
+          ctx.font = (def.italic ? 'italic ' : '') + '13px Arial, sans-serif';
+          var innerW = CW - CP * 2;
+          var ty = y + CP + 24;
+          var maxContentH = CARD_H - CP - 24 - CP;
+          if (def.isArr) {
+            var maxItems = Math.floor(maxContentH / IH);
+            def.content.slice(0, maxItems).forEach(function (item, i) {
+              ctx.fillText('• ' + item, PAD+CP, ty + i*IH);
             });
           } else {
-            var wds2 = content.split(' '), l2 = '', li2 = 0;
-            wds2.forEach(function (w) {
-              var t2 = l2 + w + ' ';
-              if (l2 && ctx.measureText(t2).width > innerW) {
-                ctx.fillText(l2.trim(), PAD + CP, ty + li2 * LH); li2++; l2 = w + ' ';
-              } else l2 = t2;
+            var wds = (def.content || '').split(' '), l = '', li = 0;
+            var maxLines = Math.floor(maxContentH / LH);
+            wds.forEach(function (w) {
+              if (li >= maxLines) return;
+              var t = l + w + ' ';
+              if (l && ctx.measureText(t).width > innerW) {
+                ctx.fillText(l.trim(), PAD+CP, ty + li*LH); li++; l = w + ' ';
+              } else l = t;
             });
-            ctx.fillText(l2.trim(), PAD + CP, ty + li2 * LH);
+            if (li < maxLines) ctx.fillText(l.trim(), PAD+CP, ty + li*LH);
           }
           ctx.restore();
-          y += cH + 12;
-        }
+          y += CARD_H + CARD_GAP;
+        });
 
-        card('En résumé',          '♥', '#d66bc8', resume,  false, true);
-        card('Points forts',       '✦', '#7c3aed', pfArr,   true,  false);
-        card('Points de tension',  '⚡', '#f59e0b', tArr,    true,  false);
-        card('Conseil des étoiles','✧', '#059669', conseil, false, true);
-
-        /* Pied de page */
-        y += 8;
+        /* Footer URL */
         ctx.save();
-        ctx.fillStyle = '#c084fc'; ctx.font = '12px Arial, sans-serif';
+        ctx.fillStyle = '#a855f7'; ctx.font = '12px Arial, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-        ctx.fillText('hexagon-voyance.com', W / 2, y);
+        ctx.fillText('hexagon-voyance.com', W/2, H - 34);
         ctx.restore();
-        y += 38;
 
-        return y;
+        /* Affichage dans la modale */
+        var dataURL = canvas.toDataURL('image/png');
+        var modal   = document.getElementById('vt-share-modal');
+        var preview = document.getElementById('vt-share-preview');
+        var dlBtn   = document.getElementById('vt-share-download');
+        if (!modal) return;
+        if (preview) preview.src  = dataURL;
+        if (dlBtn)   dlBtn.href   = dataURL;
+        modal.style.display = 'flex';
+
+        VT.Analytics.track('vt_share', { platform: 'image', type: 'compatibilite-amoureuse' });
       }
 
-      /* Rendu sur canvas de travail (hauteur généreuse) */
-      var wk = document.createElement('canvas');
-      wk.width = W * SC; wk.height = 3000;
-      var wkCtx = wk.getContext('2d');
-      wkCtx.scale(SC, SC);
-      var endY = render(wkCtx);
-
-      /* Canvas final rogné à la hauteur réelle */
-      var out = document.createElement('canvas');
-      out.width  = W * SC;
-      out.height = Math.ceil(endY * SC);
-      out.getContext('2d').drawImage(wk, 0, 0);
-
-      /* Affichage dans la modale */
-      var dataURL = out.toDataURL('image/png');
-      var modal   = document.getElementById('vt-share-modal');
-      var preview = document.getElementById('vt-share-preview');
-      var dlBtn   = document.getElementById('vt-share-download');
-      if (!modal) return;
-      if (preview) preview.src  = dataURL;
-      if (dlBtn)   dlBtn.href   = dataURL;
-      modal.style.display = 'flex';
-
-      VT.Analytics.track('vt_share', { platform: 'image', type: 'compatibilite-amoureuse' });
+      /* Chargement logo (async) — fallback hexagone si erreur file:// */
+      var logoImg = new Image();
+      logoImg.onload  = function () { doRender(logoImg); };
+      logoImg.onerror = function () { doRender(null); };
+      logoImg.src = '../wordpress/assets/logo-hexagon-voyance.webp';
     }
   };
 
