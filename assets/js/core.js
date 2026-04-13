@@ -555,6 +555,121 @@
   };
 
   /* ============================================================
+     12. PARTAGE IMAGE (Canvas → Web Share API / téléchargement)
+     ============================================================ */
+  VT.ShareCard = {
+    // Génère un canvas 1080×1080 avec le score et les données passées
+    // data : { title, names, score, url }
+    generate: function (data) {
+      var canvas = document.createElement('canvas');
+      canvas.width = 1080;
+      canvas.height = 1080;
+      var ctx = canvas.getContext('2d');
+
+      // Lire les couleurs depuis les variables CSS actives (thème Dialotel ou autre)
+      var styles = getComputedStyle(document.documentElement);
+      var appEl = document.querySelector('.vt-app');
+      if (appEl) styles = getComputedStyle(appEl);
+      var colorBg      = (styles.getPropertyValue('--theme-bg') || '#ffffff').trim();
+      var colorPrimary = (styles.getPropertyValue('--theme-primary') || '#ed8ce6').trim();
+      var colorSecondary = (styles.getPropertyValue('--theme-secondary') || '#e2ed77').trim();
+      var colorText    = (styles.getPropertyValue('--theme-text') || '#000000').trim();
+      var colorMuted   = (styles.getPropertyValue('--theme-text-muted') || '#666666').trim();
+
+      var W = 1080, H = 1080;
+
+      // Fond
+      ctx.fillStyle = colorBg;
+      ctx.fillRect(0, 0, W, H);
+
+      // Bordure décorative (rose, 8px)
+      ctx.strokeStyle = colorPrimary;
+      ctx.lineWidth = 8;
+      ctx.strokeRect(24, 24, W - 48, H - 48);
+
+      // Ligne décorative secondaire intérieure (jaune, 2px)
+      ctx.strokeStyle = colorSecondary;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(36, 36, W - 72, H - 72);
+
+      // Titre de l'app
+      ctx.fillStyle = colorPrimary;
+      ctx.font = 'bold 44px Georgia, serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(data.title || '', W / 2, 160);
+
+      // Noms
+      ctx.fillStyle = colorText;
+      ctx.font = '500 56px Georgia, serif';
+      ctx.fillText(data.names || '', W / 2, 290);
+
+      // Score — très grand
+      ctx.fillStyle = colorPrimary;
+      ctx.font = 'bold 260px Georgia, serif';
+      ctx.fillText(data.score || '', W / 2, 600);
+
+      // Barre de score
+      var barW = 560, barH = 22, barX = (W - barW) / 2, barY = 660;
+      // fond barre
+      ctx.fillStyle = colorMuted;
+      ctx.beginPath();
+      ctx.roundRect(barX, barY, barW, barH, barH / 2);
+      ctx.fill();
+      // remplissage barre (dégradé rose→jaune)
+      var scoreNum = parseInt((data.score || '0').replace('%', ''), 10) || 0;
+      var fillW = Math.round(barW * scoreNum / 100);
+      if (fillW > 0) {
+        var grad = ctx.createLinearGradient(barX, 0, barX + barW, 0);
+        grad.addColorStop(0, colorPrimary);
+        grad.addColorStop(1, colorSecondary);
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.roundRect(barX, barY, fillW, barH, barH / 2);
+        ctx.fill();
+      }
+
+      // Label sous la barre
+      ctx.fillStyle = colorMuted;
+      ctx.font = '32px Georgia, serif';
+      ctx.fillText('compatibilite amoureuse', W / 2, 740);
+
+      // URL / branding
+      ctx.fillStyle = colorPrimary;
+      ctx.font = '28px Georgia, serif';
+      ctx.fillText(data.url || '', W / 2, 980);
+
+      return canvas;
+    },
+
+    // Partage l'image via Web Share API (mobile) ou téléchargement (desktop)
+    share: function (canvas, filename) {
+      return new Promise(function (resolve, reject) {
+        canvas.toBlob(function (blob) {
+          if (!blob) { reject(new Error('Canvas toBlob failed')); return; }
+          var file = new File([blob], filename || 'partage.png', { type: 'image/png' });
+          if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+            navigator.share({ files: [file] }).then(resolve).catch(reject);
+          } else {
+            // Fallback : téléchargement direct
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = filename || 'partage.png';
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function () {
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+              resolve();
+            }, 100);
+          }
+        }, 'image/png');
+      });
+    }
+  };
+
+  /* ============================================================
      EXPORT
      ============================================================ */
   window.VT = VT;

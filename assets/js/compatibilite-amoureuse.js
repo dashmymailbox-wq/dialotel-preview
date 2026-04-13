@@ -75,12 +75,9 @@
         self._extendRateLimit();
       });
 
-      // Share buttons
-      VT.$$('.vt-share-btn').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          var platform = btn.getAttribute('data-platform');
-          if (platform) self._share(platform);
-        });
+      // Bouton partage image
+      VT.on('#vt-btn-share', 'click', function () {
+        self._shareImage();
       });
     },
 
@@ -410,56 +407,20 @@
       VT.StepEngine.goTo(0);
     },
 
-    _share: function (platform) {
-      var n1 = this._name1 || '';
-      var n2 = this._name2 || '';
+    _shareImage: function () {
       var scoreEl = VT.$('#vt-result-score');
-      var score = scoreEl ? scoreEl.textContent : '';
-      var text = n1 + ' & ' + n2 + ' : ' + score + ' de compatibilite amoureuse !';
-      var url = window.location.href;
-      var fullText = text + ' ' + url;
-
-      switch (platform) {
-        case 'facebook':
-          window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url) + '&quote=' + encodeURIComponent(text), '_blank', 'width=600,height=400');
-          break;
-        case 'whatsapp':
-          window.open('https://wa.me/?text=' + encodeURIComponent(fullText), '_blank');
-          break;
-        case 'tiktok':
-        case 'instagram':
-        case 'snapchat':
-          this._copyToClipboard(fullText);
-          return;
-      }
-
-      VT.Analytics.track('vt_share', { platform: platform, type: 'compatibilite-amoureuse' });
-    },
-
-    _copyToClipboard: function (text) {
-      var self = this;
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(function () {
-          self._showShareToast();
-        });
-      } else {
-        var ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        try { document.execCommand('copy'); self._showShareToast(); } catch (e) { /* ignore */ }
-        document.body.removeChild(ta);
-      }
-    },
-
-    _showShareToast: function () {
-      var toast = VT.$('#vt-share-toast');
-      if (!toast) return;
-      toast.classList.add('vt-share-toast--visible');
-      setTimeout(function () { toast.classList.remove('vt-share-toast--visible'); }, 2500);
-      VT.Analytics.track('vt_share', { platform: 'clipboard', type: 'compatibilite-amoureuse' });
+      var score = scoreEl ? scoreEl.textContent.trim() : '?%';
+      var canvas = VT.ShareCard.generate({
+        title: 'Compatibilite Amoureuse',
+        names: (this._name1 || '') + ' & ' + (this._name2 || ''),
+        score: score,
+        url: window.location.hostname
+      });
+      VT.ShareCard.share(canvas, 'compatibilite-amoureuse.png')
+        .then(function () {
+          VT.Analytics.track('vt_share', { platform: 'image', type: 'compatibilite-amoureuse' });
+        })
+        .catch(function () { /* annulation ou erreur silencieuse */ });
     }
   };
 
