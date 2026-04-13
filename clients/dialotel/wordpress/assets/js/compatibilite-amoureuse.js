@@ -406,80 +406,237 @@
     },
 
     _shareImage: function () {
-      var resultEl = VT.$('.vt-result');
-      if (typeof html2canvas === 'undefined') {
-        alert('Connexion internet requise pour générer l\'image (chargement de html2canvas).');
-        return;
-      }
-      if (!resultEl) {
-        alert('Bloc résultat introuvable.');
-        return;
-      }
+      var self = this;
 
-      var btn = document.getElementById('vt-btn-share');
-      if (btn) { btn.disabled = true; btn.style.opacity = '0.5'; }
+      /* --- Collecte des données du résultat --- */
+      var scoreText = (VT.$('#vt-result-score') || {}).textContent || '0%';
+      var score   = parseInt(scoreText, 10) || 0;
+      var resume  = (VT.$('#vt-result-resume') || {}).textContent || '';
+      var conseil = (VT.$('#vt-result-advice') || {}).textContent || '';
+      var pfArr = [], tArr = [];
+      VT.$$('#vt-result-strengths li').forEach(function (li) { pfArr.push(li.textContent.trim()); });
+      VT.$$('#vt-result-tensions  li').forEach(function (li) { tArr .push(li.textContent.trim()); });
+      var name1 = this._name1 || '', name2 = this._name2 || '';
+      var sign1 = this._sign1, sign2 = this._sign2;
 
-      // Style temporaire : force police système pour éviter le taint canvas (Google Fonts = cross-origin)
-      var tmpStyle = document.createElement('style');
-      tmpStyle.id = 'vt-capture-font';
-      tmpStyle.textContent = [
-        '.vt-result, .vt-result * { font-family: Georgia, Arial, sans-serif !important; }',
-        /* Cœur : clip-path:path() et animation non supportés par html2canvas → cercle rose */
-        '.vt-result .vt-am-result-score, .vt-result #vt-result-score {',
-          'clip-path: none !important;',
-          'border-radius: 50% !important;',
-          'opacity: 1 !important;',
-          'transform: scale(1) !important;',
-          'animation: none !important;',
-          '-webkit-text-fill-color: #ffffff !important;',
-          'color: #ffffff !important;',
-          'background: linear-gradient(160deg,#f5a0ef 0%,#ed8ce6 40%,#d66bc8 100%) !important;',
-        '}'
-      ].join(' ');
-      document.head.appendChild(tmpStyle);
+      var ZODIAC = {
+        aries:'♈', taurus:'♉', gemini:'♊', cancer:'♋', leo:'♌',    virgo:'♍',
+        libra:'♎', scorpio:'♏', sagittarius:'♐', capricorn:'♑', aquarius:'♒', pisces:'♓'
+      };
 
-      // Éléments à ignorer pendant la capture (UI, pas contenu résultat)
-      var skipClasses = ['vt-tts-controls', 'vt-share', 'vt-am-divider', 'vt-email-inline', 'vt-cta-voyants', 'vt-result-actions'];
+      /* --- Mise en page --- */
+      var SC = 2, W = 800, PAD = 40, CW = W - PAD * 2;
 
-      function cleanup() {
-        var s = document.getElementById('vt-capture-font');
-        if (s) s.parentNode.removeChild(s);
-        if (btn) { btn.disabled = false; btn.style.opacity = ''; }
+      /* roundRect avec fallback pour anciens navigateurs */
+      function rr(ctx, x, y, w, h, r) {
+        ctx.beginPath();
+        if (ctx.roundRect) { ctx.roundRect(x, y, w, h, r); return; }
+        ctx.moveTo(x+r, y); ctx.lineTo(x+w-r, y);
+        ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+        ctx.lineTo(x+w, y+h-r);
+        ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+        ctx.lineTo(x+r, y+h);
+        ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+        ctx.lineTo(x, y+r);
+        ctx.quadraticCurveTo(x, y, x+r, y);
+        ctx.closePath();
       }
 
-      html2canvas(resultEl, {
-        allowTaint: false,
-        useCORS: false,
-        scale: 2,
-        backgroundColor: '#ffffff',
-        logging: false,
-        ignoreElements: function (el) {
-          return skipClasses.some(function (c) { return el.classList && el.classList.contains(c); });
+      /* --- Fonction de rendu sur contexte 2D --- */
+      function render(ctx) {
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, W, 3000);
+
+        var y = PAD;
+
+        /* Titre site */
+        ctx.save();
+        ctx.fillStyle = '#7c3aed';
+        ctx.font = 'bold 20px Arial, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('Hexagon Voyance', W / 2, y + 14);
+        ctx.restore();
+        y += 44;
+
+        /* Séparateur */
+        ctx.save();
+        ctx.strokeStyle = '#ede9fe'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - PAD, y); ctx.stroke();
+        ctx.restore();
+        y += 22;
+
+        /* --- Zone personnes + cœur --- */
+        var HW = 120, HH = Math.round(HW * 145 / 160); /* 109 px */
+        var BR = 30;   /* rayon badge */
+        var midY = y + Math.round(HH / 2);
+        var bx1 = PAD + 75, bx2 = W - PAD - 75;
+
+        /* Cœur en Path2D */
+        ctx.save();
+        ctx.translate(W / 2 - HW / 2, y);
+        ctx.scale(HW / 160, HH / 145);
+        var hPath = new Path2D('M80 140 C80 140 5 95 5 52 C5 25 25 5 50 5 C63 5 74 12 80 24 C86 12 97 5 110 5 C135 5 155 25 155 52 C155 95 80 140 80 140Z');
+        var hGrad = ctx.createLinearGradient(0, 0, 0, 145);
+        hGrad.addColorStop(0,   '#f5a0ef');
+        hGrad.addColorStop(0.4, '#ed8ce6');
+        hGrad.addColorStop(1,   '#d66bc8');
+        ctx.fillStyle = hGrad;
+        ctx.fill(hPath);
+        ctx.restore();
+
+        /* Score centré dans le cœur */
+        ctx.save();
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 26px Arial, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(score + '%', W / 2, y + Math.round(HH * 0.58));
+        ctx.restore();
+
+        /* Badges zodiaque */
+        function drawBadge(bx, signData) {
+          ctx.save();
+          ctx.beginPath(); ctx.arc(bx, midY, BR, 0, Math.PI * 2);
+          var g = ctx.createRadialGradient(bx, midY - 8, 4, bx, midY, BR);
+          g.addColorStop(0, '#c084fc'); g.addColorStop(1, '#7c3aed');
+          ctx.fillStyle = g; ctx.fill();
+          ctx.fillStyle = '#fff';
+          ctx.font = '22px Arial, sans-serif';
+          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          var sym = (signData && ZODIAC[signData.key]) ? ZODIAC[signData.key] : '★';
+          ctx.fillText(sym, bx, midY);
+          ctx.restore();
         }
-      }).then(function (captured) {
-        cleanup();
+        drawBadge(bx1, sign1);
+        drawBadge(bx2, sign2);
 
-        var dataURL;
-        try {
-          dataURL = captured.toDataURL('image/png');
-        } catch (e) {
-          alert('Export bloqué : ' + e.message);
-          return;
+        /* Noms + signes sous les badges */
+        function personLabel(bx, name, sign) {
+          ctx.save();
+          ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+          ctx.fillStyle = '#1f2937';
+          ctx.font = 'bold 14px Arial, sans-serif';
+          ctx.fillText(name, bx, midY + BR + 10);
+          if (sign) {
+            ctx.fillStyle = '#a855f7';
+            ctx.font = '12px Arial, sans-serif';
+            ctx.fillText(sign.name, bx, midY + BR + 28);
+          }
+          ctx.restore();
+        }
+        personLabel(bx1, name1, sign1);
+        personLabel(bx2, name2, sign2);
+
+        y += HH + 58; /* 167 — noms à midY+BR+28 = y_zone+112 < 167 ✓ */
+
+        /* Label "de compatibilité" */
+        ctx.save();
+        ctx.fillStyle = '#9ca3af'; ctx.font = '13px Arial, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+        ctx.fillText('de compatibilité', W / 2, y);
+        ctx.restore();
+        y += 26;
+
+        /* Barre de score */
+        rr(ctx, PAD, y, CW, 10, 5);
+        ctx.fillStyle = '#f3e8ff'; ctx.fill();
+        if (score > 0) {
+          rr(ctx, PAD, y, CW * score / 100, 10, 5);
+          var barGrad = ctx.createLinearGradient(PAD, 0, PAD + CW, 0);
+          barGrad.addColorStop(0, '#f5a0ef'); barGrad.addColorStop(1, '#d66bc8');
+          ctx.fillStyle = barGrad; ctx.fill();
+        }
+        y += 30;
+
+        /* --- Cartes de contenu --- */
+        var CP = 16, LH = 22, IH = 26;
+
+        function card(title, icon, accent, content, isArr, italic) {
+          if (!content || (isArr && !content.length) || (!isArr && !content.trim())) return;
+          ctx.font = '14px Arial, sans-serif';
+          var innerW = CW - CP * 2;
+          var contentH;
+          if (isArr) {
+            contentH = content.length * IH;
+          } else {
+            var wds = content.split(' '), l = '', n = 1;
+            wds.forEach(function (w) {
+              var t = l + w + ' ';
+              if (l && ctx.measureText(t).width > innerW) { n++; l = w + ' '; } else l = t;
+            });
+            contentH = n * LH;
+          }
+          var cH = CP + 28 + 6 + contentH + CP;
+
+          ctx.save();
+          ctx.fillStyle = '#faf5ff'; rr(ctx, PAD, y, CW, cH, 8); ctx.fill();
+          ctx.fillStyle = accent;    ctx.fillRect(PAD, y, 4, cH);
+          ctx.fillStyle = accent;
+          ctx.font = 'bold 13px Arial, sans-serif';
+          ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+          ctx.fillText(icon + ' ' + title, PAD + CP, y + CP + 14);
+          ctx.fillStyle = '#374151';
+          ctx.font = (italic ? 'italic ' : '') + '14px Arial, sans-serif';
+          ctx.textBaseline = 'top';
+          var ty = y + CP + 28 + 6;
+          if (isArr) {
+            content.forEach(function (item, i) {
+              ctx.fillText('• ' + item, PAD + CP, ty + i * IH);
+            });
+          } else {
+            var wds2 = content.split(' '), l2 = '', li2 = 0;
+            wds2.forEach(function (w) {
+              var t2 = l2 + w + ' ';
+              if (l2 && ctx.measureText(t2).width > innerW) {
+                ctx.fillText(l2.trim(), PAD + CP, ty + li2 * LH); li2++; l2 = w + ' ';
+              } else l2 = t2;
+            });
+            ctx.fillText(l2.trim(), PAD + CP, ty + li2 * LH);
+          }
+          ctx.restore();
+          y += cH + 12;
         }
 
-        var modal = document.getElementById('vt-share-modal');
-        var preview = document.getElementById('vt-share-preview');
-        var dlBtn = document.getElementById('vt-share-download');
-        if (!modal) { alert('Modale introuvable.'); return; }
-        if (preview) preview.src = dataURL;
-        if (dlBtn) dlBtn.href = dataURL;
-        modal.style.display = 'flex';
+        card('En résumé',          '♥', '#d66bc8', resume,  false, true);
+        card('Points forts',       '✦', '#7c3aed', pfArr,   true,  false);
+        card('Points de tension',  '⚡', '#f59e0b', tArr,    true,  false);
+        card('Conseil des étoiles','✧', '#059669', conseil, false, true);
 
-        VT.Analytics.track('vt_share', { platform: 'image', type: 'compatibilite-amoureuse' });
-      }).catch(function (err) {
-        cleanup();
-        alert('Erreur capture : ' + err.message);
-      });
+        /* Pied de page */
+        y += 8;
+        ctx.save();
+        ctx.fillStyle = '#c084fc'; ctx.font = '12px Arial, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+        ctx.fillText('hexagon-voyance.com', W / 2, y);
+        ctx.restore();
+        y += 38;
+
+        return y;
+      }
+
+      /* Rendu sur canvas de travail (hauteur généreuse) */
+      var wk = document.createElement('canvas');
+      wk.width = W * SC; wk.height = 3000;
+      var wkCtx = wk.getContext('2d');
+      wkCtx.scale(SC, SC);
+      var endY = render(wkCtx);
+
+      /* Canvas final rogné à la hauteur réelle */
+      var out = document.createElement('canvas');
+      out.width  = W * SC;
+      out.height = Math.ceil(endY * SC);
+      out.getContext('2d').drawImage(wk, 0, 0);
+
+      /* Affichage dans la modale */
+      var dataURL = out.toDataURL('image/png');
+      var modal   = document.getElementById('vt-share-modal');
+      var preview = document.getElementById('vt-share-preview');
+      var dlBtn   = document.getElementById('vt-share-download');
+      if (!modal) return;
+      if (preview) preview.src  = dataURL;
+      if (dlBtn)   dlBtn.href   = dataURL;
+      modal.style.display = 'flex';
+
+      VT.Analytics.track('vt_share', { platform: 'image', type: 'compatibilite-amoureuse' });
     }
   };
 
