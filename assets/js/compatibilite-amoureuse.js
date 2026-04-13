@@ -408,6 +408,7 @@
     },
 
     _shareImage: function () {
+      console.log('[VT] _shareImage appelé');
       var scoreEl = VT.$('#vt-result-score');
       var score = scoreEl ? scoreEl.textContent.trim() : '?%';
       var canvas = VT.ShareCard.generate({
