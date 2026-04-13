@@ -361,11 +361,11 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  position: fixed !important;
+  position: absolute !important;
   top: 0.75rem !important;
   left: auto !important;
-  right: max(0.75rem, calc(50vw - 308px)) !important;
-  z-index: 9999 !important;
+  right: max(0.75rem, calc(50% - 308px)) !important;
+  z-index: 99 !important;
   width: 44px;
   height: 44px;
   border-radius: 50%;
