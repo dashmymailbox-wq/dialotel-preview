@@ -430,55 +430,97 @@
         if (score <= phrases[pi].max) { phrase = phrases[pi].text; break; }
       }
 
+      /* Mandala SVG data URI (extrait de theme-dialotel.css) */
+      var mandalaSrc = 'data:image/svg+xml,' + encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">' +
+        '<defs><style>' +
+        '.ce{fill:none;stroke:rgba(237,140,230,0.45);stroke-width:.15}' +
+        '.cf{fill:rgba(226,237,119,0.06);stroke:rgba(226,237,119,0.3);stroke-width:.18}' +
+        '.cg{fill:none;stroke:rgba(226,237,119,0.4);stroke-width:.12}' +
+        '.ch{fill:rgba(237,140,230,0.06);stroke:rgba(237,140,230,0.35);stroke-width:.14}' +
+        '.ci{fill:none;stroke:rgba(226,237,119,0.38);stroke-width:.1}' +
+        '.c5{fill:none;stroke:rgba(226,237,119,0.6);stroke-width:.035}' +
+        '.c6{fill:rgba(237,140,230,0.1);stroke:rgba(237,140,230,0.5);stroke-width:.07}' +
+        '.c7{fill:none;stroke:rgba(237,140,230,0.6);stroke-width:.03}' +
+        '.c8{fill:rgba(226,237,119,0.08);stroke:rgba(226,237,119,0.5);stroke-width:.06}' +
+        '.c9{fill:none;stroke:rgba(237,140,230,0.55);stroke-width:.04}' +
+        '.ca{fill:rgba(226,237,119,0.06);stroke:rgba(226,237,119,0.4);stroke-width:.09}' +
+        '.cb{fill:none;stroke:rgba(226,237,119,0.55);stroke-width:.025}' +
+        '.cc{fill:rgba(237,140,230,0.08);stroke:rgba(237,140,230,0.45);stroke-width:.05}' +
+        '.cd{fill:none;stroke:rgba(226,237,119,0.45);stroke-width:.04}' +
+        '</style>' +
+        '<polygon id="h" points="1,0 .5,.866 -.5,.866 -1,0 -.5,-.866 .5,-.866"/>' +
+        '</defs>' +
+        '<g transform="translate(300,300)">' +
+        '<use href="#h" transform="scale(1.5)" class="ce"/>' +
+        '<g class="ce"><use href="#h" transform="rotate(0) translate(10,0) scale(2)"/><use href="#h" transform="rotate(60) translate(10,0) scale(2)"/><use href="#h" transform="rotate(120) translate(10,0) scale(2)"/><use href="#h" transform="rotate(180) translate(10,0) scale(2)"/><use href="#h" transform="rotate(240) translate(10,0) scale(2)"/><use href="#h" transform="rotate(300) translate(10,0) scale(2)"/></g>' +
+        '<g class="cf"><use href="#h" transform="rotate(30) translate(22,0) scale(3)"/><use href="#h" transform="rotate(90) translate(22,0) scale(3)"/><use href="#h" transform="rotate(150) translate(22,0) scale(3)"/><use href="#h" transform="rotate(210) translate(22,0) scale(3)"/><use href="#h" transform="rotate(270) translate(22,0) scale(3)"/><use href="#h" transform="rotate(330) translate(22,0) scale(3)"/></g>' +
+        '<g class="cg"><use href="#h" transform="rotate(0) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(30) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(60) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(90) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(120) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(150) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(180) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(210) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(240) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(270) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(300) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(330) translate(35,0) scale(3.5)"/></g>' +
+        '<g class="ch"><use href="#h" transform="rotate(15) translate(50,0) scale(5)"/><use href="#h" transform="rotate(45) translate(50,0) scale(5)"/><use href="#h" transform="rotate(75) translate(50,0) scale(5)"/><use href="#h" transform="rotate(105) translate(50,0) scale(5)"/><use href="#h" transform="rotate(135) translate(50,0) scale(5)"/><use href="#h" transform="rotate(165) translate(50,0) scale(5)"/><use href="#h" transform="rotate(195) translate(50,0) scale(5)"/><use href="#h" transform="rotate(225) translate(50,0) scale(5)"/><use href="#h" transform="rotate(255) translate(50,0) scale(5)"/><use href="#h" transform="rotate(285) translate(50,0) scale(5)"/><use href="#h" transform="rotate(315) translate(50,0) scale(5)"/><use href="#h" transform="rotate(345) translate(50,0) scale(5)"/></g>' +
+        '<g class="ci"><use href="#h" transform="rotate(0) translate(60,0) scale(4)"/><use href="#h" transform="rotate(30) translate(60,0) scale(4)"/><use href="#h" transform="rotate(60) translate(60,0) scale(4)"/><use href="#h" transform="rotate(90) translate(60,0) scale(4)"/><use href="#h" transform="rotate(120) translate(60,0) scale(4)"/><use href="#h" transform="rotate(150) translate(60,0) scale(4)"/><use href="#h" transform="rotate(180) translate(60,0) scale(4)"/><use href="#h" transform="rotate(210) translate(60,0) scale(4)"/><use href="#h" transform="rotate(240) translate(60,0) scale(4)"/><use href="#h" transform="rotate(270) translate(60,0) scale(4)"/><use href="#h" transform="rotate(300) translate(60,0) scale(4)"/><use href="#h" transform="rotate(330) translate(60,0) scale(4)"/></g>' +
+        '<g class="c5"><use href="#h" transform="rotate(0) translate(72,0) scale(16)"/><use href="#h" transform="rotate(30) translate(72,0) scale(16)"/><use href="#h" transform="rotate(60) translate(72,0) scale(16)"/><use href="#h" transform="rotate(90) translate(72,0) scale(16)"/><use href="#h" transform="rotate(120) translate(72,0) scale(16)"/><use href="#h" transform="rotate(150) translate(72,0) scale(16)"/><use href="#h" transform="rotate(180) translate(72,0) scale(16)"/><use href="#h" transform="rotate(210) translate(72,0) scale(16)"/><use href="#h" transform="rotate(240) translate(72,0) scale(16)"/><use href="#h" transform="rotate(270) translate(72,0) scale(16)"/><use href="#h" transform="rotate(300) translate(72,0) scale(16)"/><use href="#h" transform="rotate(330) translate(72,0) scale(16)"/></g>' +
+        '<g class="c6"><use href="#h" transform="rotate(0) translate(72,0) scale(6)"/><use href="#h" transform="rotate(30) translate(72,0) scale(6)"/><use href="#h" transform="rotate(60) translate(72,0) scale(6)"/><use href="#h" transform="rotate(90) translate(72,0) scale(6)"/><use href="#h" transform="rotate(120) translate(72,0) scale(6)"/><use href="#h" transform="rotate(150) translate(72,0) scale(6)"/><use href="#h" transform="rotate(180) translate(72,0) scale(6)"/><use href="#h" transform="rotate(210) translate(72,0) scale(6)"/><use href="#h" transform="rotate(240) translate(72,0) scale(6)"/><use href="#h" transform="rotate(270) translate(72,0) scale(6)"/><use href="#h" transform="rotate(300) translate(72,0) scale(6)"/><use href="#h" transform="rotate(330) translate(72,0) scale(6)"/></g>' +
+        '<g class="c7"><use href="#h" transform="rotate(15) translate(115,0) scale(22)"/><use href="#h" transform="rotate(45) translate(115,0) scale(22)"/><use href="#h" transform="rotate(75) translate(115,0) scale(22)"/><use href="#h" transform="rotate(105) translate(115,0) scale(22)"/><use href="#h" transform="rotate(135) translate(115,0) scale(22)"/><use href="#h" transform="rotate(165) translate(115,0) scale(22)"/><use href="#h" transform="rotate(195) translate(115,0) scale(22)"/><use href="#h" transform="rotate(225) translate(115,0) scale(22)"/><use href="#h" transform="rotate(255) translate(115,0) scale(22)"/><use href="#h" transform="rotate(285) translate(115,0) scale(22)"/><use href="#h" transform="rotate(315) translate(115,0) scale(22)"/><use href="#h" transform="rotate(345) translate(115,0) scale(22)"/></g>' +
+        '<g class="c8"><use href="#h" transform="rotate(15) translate(115,0) scale(8)"/><use href="#h" transform="rotate(45) translate(115,0) scale(8)"/><use href="#h" transform="rotate(75) translate(115,0) scale(8)"/><use href="#h" transform="rotate(105) translate(115,0) scale(8)"/><use href="#h" transform="rotate(135) translate(115,0) scale(8)"/><use href="#h" transform="rotate(165) translate(115,0) scale(8)"/><use href="#h" transform="rotate(195) translate(115,0) scale(8)"/><use href="#h" transform="rotate(225) translate(115,0) scale(8)"/><use href="#h" transform="rotate(255) translate(115,0) scale(8)"/><use href="#h" transform="rotate(285) translate(115,0) scale(8)"/><use href="#h" transform="rotate(315) translate(115,0) scale(8)"/><use href="#h" transform="rotate(345) translate(115,0) scale(8)"/></g>' +
+        '<g class="c9"><use href="#h" transform="rotate(0) translate(158,0) scale(14)"/><use href="#h" transform="rotate(30) translate(158,0) scale(14)"/><use href="#h" transform="rotate(60) translate(158,0) scale(14)"/><use href="#h" transform="rotate(90) translate(158,0) scale(14)"/><use href="#h" transform="rotate(120) translate(158,0) scale(14)"/><use href="#h" transform="rotate(150) translate(158,0) scale(14)"/><use href="#h" transform="rotate(180) translate(158,0) scale(14)"/><use href="#h" transform="rotate(210) translate(158,0) scale(14)"/><use href="#h" transform="rotate(240) translate(158,0) scale(14)"/><use href="#h" transform="rotate(270) translate(158,0) scale(14)"/><use href="#h" transform="rotate(300) translate(158,0) scale(14)"/><use href="#h" transform="rotate(330) translate(158,0) scale(14)"/></g>' +
+        '<g class="ca"><use href="#h" transform="rotate(0) translate(158,0) scale(5)"/><use href="#h" transform="rotate(30) translate(158,0) scale(5)"/><use href="#h" transform="rotate(60) translate(158,0) scale(5)"/><use href="#h" transform="rotate(90) translate(158,0) scale(5)"/><use href="#h" transform="rotate(120) translate(158,0) scale(5)"/><use href="#h" transform="rotate(150) translate(158,0) scale(5)"/><use href="#h" transform="rotate(180) translate(158,0) scale(5)"/><use href="#h" transform="rotate(210) translate(158,0) scale(5)"/><use href="#h" transform="rotate(240) translate(158,0) scale(5)"/><use href="#h" transform="rotate(270) translate(158,0) scale(5)"/><use href="#h" transform="rotate(300) translate(158,0) scale(5)"/><use href="#h" transform="rotate(330) translate(158,0) scale(5)"/></g>' +
+        '<g class="cb"><use href="#h" transform="rotate(15) translate(200,0) scale(26)"/><use href="#h" transform="rotate(45) translate(200,0) scale(26)"/><use href="#h" transform="rotate(75) translate(200,0) scale(26)"/><use href="#h" transform="rotate(105) translate(200,0) scale(26)"/><use href="#h" transform="rotate(135) translate(200,0) scale(26)"/><use href="#h" transform="rotate(165) translate(200,0) scale(26)"/><use href="#h" transform="rotate(195) translate(200,0) scale(26)"/><use href="#h" transform="rotate(225) translate(200,0) scale(26)"/><use href="#h" transform="rotate(255) translate(200,0) scale(26)"/><use href="#h" transform="rotate(285) translate(200,0) scale(26)"/><use href="#h" transform="rotate(315) translate(200,0) scale(26)"/><use href="#h" transform="rotate(345) translate(200,0) scale(26)"/></g>' +
+        '<g class="cc"><use href="#h" transform="rotate(15) translate(200,0) scale(10)"/><use href="#h" transform="rotate(45) translate(200,0) scale(10)"/><use href="#h" transform="rotate(75) translate(200,0) scale(10)"/><use href="#h" transform="rotate(105) translate(200,0) scale(10)"/><use href="#h" transform="rotate(135) translate(200,0) scale(10)"/><use href="#h" transform="rotate(165) translate(200,0) scale(10)"/><use href="#h" transform="rotate(195) translate(200,0) scale(10)"/><use href="#h" transform="rotate(225) translate(200,0) scale(10)"/><use href="#h" transform="rotate(255) translate(200,0) scale(10)"/><use href="#h" transform="rotate(285) translate(200,0) scale(10)"/><use href="#h" transform="rotate(315) translate(200,0) scale(10)"/><use href="#h" transform="rotate(345) translate(200,0) scale(10)"/></g>' +
+        '<g class="c9"><use href="#h" transform="rotate(0) translate(242,0) scale(14)"/><use href="#h" transform="rotate(30) translate(242,0) scale(14)"/><use href="#h" transform="rotate(60) translate(242,0) scale(14)"/><use href="#h" transform="rotate(90) translate(242,0) scale(14)"/><use href="#h" transform="rotate(120) translate(242,0) scale(14)"/><use href="#h" transform="rotate(150) translate(242,0) scale(14)"/><use href="#h" transform="rotate(180) translate(242,0) scale(14)"/><use href="#h" transform="rotate(210) translate(242,0) scale(14)"/><use href="#h" transform="rotate(240) translate(242,0) scale(14)"/><use href="#h" transform="rotate(270) translate(242,0) scale(14)"/><use href="#h" transform="rotate(300) translate(242,0) scale(14)"/><use href="#h" transform="rotate(330) translate(242,0) scale(14)"/></g>' +
+        '<g class="ca"><use href="#h" transform="rotate(0) translate(242,0) scale(5)"/><use href="#h" transform="rotate(30) translate(242,0) scale(5)"/><use href="#h" transform="rotate(60) translate(242,0) scale(5)"/><use href="#h" transform="rotate(90) translate(242,0) scale(5)"/><use href="#h" transform="rotate(120) translate(242,0) scale(5)"/><use href="#h" transform="rotate(150) translate(242,0) scale(5)"/><use href="#h" transform="rotate(180) translate(242,0) scale(5)"/><use href="#h" transform="rotate(210) translate(242,0) scale(5)"/><use href="#h" transform="rotate(240) translate(242,0) scale(5)"/><use href="#h" transform="rotate(270) translate(242,0) scale(5)"/><use href="#h" transform="rotate(300) translate(242,0) scale(5)"/><use href="#h" transform="rotate(330) translate(242,0) scale(5)"/></g>' +
+        '<g class="cd"><use href="#h" transform="rotate(15) translate(280,0) scale(10)"/><use href="#h" transform="rotate(45) translate(280,0) scale(10)"/><use href="#h" transform="rotate(75) translate(280,0) scale(10)"/><use href="#h" transform="rotate(105) translate(280,0) scale(10)"/><use href="#h" transform="rotate(135) translate(280,0) scale(10)"/><use href="#h" transform="rotate(165) translate(280,0) scale(10)"/><use href="#h" transform="rotate(195) translate(280,0) scale(10)"/><use href="#h" transform="rotate(225) translate(280,0) scale(10)"/><use href="#h" transform="rotate(255) translate(280,0) scale(10)"/><use href="#h" transform="rotate(285) translate(280,0) scale(10)"/><use href="#h" transform="rotate(315) translate(280,0) scale(10)"/><use href="#h" transform="rotate(345) translate(280,0) scale(10)"/></g>' +
+        '</g></svg>'
+      );
+
       /* --- Dimensions 9:16 --- */
-      var SC = 2, W = 630, H = 1120;
+      var SC = 2, W = 512, H = 896;
 
       /* --- Rendu principal --- */
-      function doRender(logo) {
+      function doRender(logo, mandala) {
         var canvas = document.createElement('canvas');
         canvas.width  = W * SC;
         canvas.height = H * SC;
         var ctx = canvas.getContext('2d');
         ctx.scale(SC, SC);
 
-        /* Étoiles pseudo-aléatoires seeded par le score */
-        var seed = score + 1;
-        function rng() { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }
-        var stars = [];
-        for (var i = 0; i < 70; i++) {
-          stars.push({ x: rng()*W, y: rng()*H, r: rng()*1.2+0.3, a: rng()*0.2+0.1 });
-        }
-
-        /* Fond dégradé radial */
-        var bg = ctx.createRadialGradient(W/2, H*0.35, 0, W/2, H*0.35, H*0.8);
+        /* Fond dégradé radial (identique au thème Dialotel) */
+        var bg = ctx.createRadialGradient(W/2, H*0.45, 0, W/2, H*0.45, H*0.85);
         bg.addColorStop(0, '#ffffff');
-        bg.addColorStop(1, '#f0e6f8');
+        bg.addColorStop(0.5, '#f8f0ff');
+        bg.addColorStop(1, '#f0e6f6');
         ctx.fillStyle = bg;
         ctx.fillRect(0, 0, W, H);
 
-        /* Étoiles */
-        stars.forEach(function (s) {
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
-          ctx.fillStyle = 'rgba(192,132,252,' + s.a + ')';
-          ctx.fill();
-        });
+        /* Mandala en fond (si chargé) */
+        if (mandala) {
+          ctx.save();
+          ctx.globalAlpha = 0.3;
+          var mSize = Math.max(W, H) * 1.4;
+          ctx.drawImage(mandala, W/2 - mSize/2, H/2 - mSize/2, mSize, mSize);
+          ctx.globalAlpha = 1;
+          ctx.restore();
+        }
 
-        /* Halo rose pâle derrière le logo */
-        var topHalo = ctx.createRadialGradient(W/2, 80, 0, W/2, 80, 180);
-        topHalo.addColorStop(0, 'rgba(237,140,230,0.12)');
-        topHalo.addColorStop(1, 'rgba(237,140,230,0)');
-        ctx.fillStyle = topHalo;
-        ctx.fillRect(W/2-180, 0, 360, 260);
+        /* Voile radial pour adoucir le mandala */
+        var veil = ctx.createRadialGradient(W/2, H*0.45, 0, W/2, H*0.45, H*0.65);
+        veil.addColorStop(0, 'rgba(255,255,255,0.6)');
+        veil.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = veil;
+        ctx.fillRect(0, 0, W, H);
 
-        /* --- Logo --- */
+        /* === ORDRE : logo → cœur → signes → phrase → URL === */
+
+        /* --- 1. Logo (proportions d'origine 636x216) --- */
         var logoY = 50;
+        var logoW = 200;
+        var logoH = Math.round(logoW * 216 / 636);
         if (logo) {
-          ctx.drawImage(logo, W/2-26, logoY, 52, 52);
+          ctx.drawImage(logo, W/2 - logoW/2, logoY, logoW, logoH);
         } else {
+          /* Fallback : hexagone */
           ctx.save();
           ctx.beginPath();
-          var hcx = W/2, hcy = logoY+26, hcr = 26;
+          var hcx = W/2, hcy = logoY + 30, hcr = 28;
           for (var k = 0; k < 6; k++) {
             var ang = Math.PI/180*(60*k-30);
             if (k===0) ctx.moveTo(hcx+hcr*Math.cos(ang), hcy+hcr*Math.sin(ang));
@@ -488,73 +530,22 @@
           var hexG = ctx.createLinearGradient(hcx-hcr, hcy-hcr, hcx+hcr, hcy+hcr);
           hexG.addColorStop(0, '#c084fc'); hexG.addColorStop(1, '#7c3aed');
           ctx.fillStyle = hexG; ctx.fill();
-          ctx.fillStyle = '#fff'; ctx.font = 'bold 15px Arial, sans-serif';
+          ctx.fillStyle = '#fff'; ctx.font = 'bold 16px Arial, sans-serif';
           ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
           ctx.fillText('HV', hcx, hcy);
           ctx.restore();
         }
 
-        /* Titre site */
-        ctx.save();
-        ctx.fillStyle = '#2d1b3d'; ctx.font = 'bold 16px Arial, sans-serif';
-        ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-        ctx.fillText('Hexagon Voyance', W/2, logoY + 62);
-        ctx.restore();
-
-        /* --- Badges zodiacaux + prénoms (au-dessus du cœur) --- */
-        var zodiacY = 220;
-        var zodiacGap = 160;
-        var bx1 = W/2 - zodiacGap/2, bx2 = W/2 + zodiacGap/2;
-        var BR = 30;
-
-        function drawBadge(bx, signData) {
-          ctx.save();
-          ctx.beginPath(); ctx.arc(bx, zodiacY, BR, 0, Math.PI*2);
-          var g = ctx.createRadialGradient(bx, zodiacY-6, 3, bx, zodiacY, BR);
-          g.addColorStop(0, '#c084fc'); g.addColorStop(1, '#7c3aed');
-          ctx.fillStyle = g; ctx.fill();
-          /* Anneau lumineux */
-          ctx.beginPath(); ctx.arc(bx, zodiacY, BR + 3, 0, Math.PI*2);
-          ctx.strokeStyle = 'rgba(237,140,230,0.35)'; ctx.lineWidth = 2; ctx.stroke();
-          /* Symbole */
-          ctx.fillStyle = '#fff'; ctx.font = '20px Arial, sans-serif';
-          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-          ctx.fillText((signData && ZODIAC[signData.key]) ? ZODIAC[signData.key] : '★', bx, zodiacY);
-          ctx.restore();
-        }
-
-        function personLabel(bx, name, sign) {
-          ctx.save();
-          ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-          ctx.fillStyle = '#2d1b3d'; ctx.font = 'bold 14px Arial, sans-serif';
-          ctx.fillText(name || '', bx, zodiacY + BR + 12);
-          if (sign) {
-            ctx.fillStyle = '#a855f7'; ctx.font = '12px Arial, sans-serif';
-            ctx.fillText(sign.name, bx, zodiacY + BR + 30);
-          }
-          ctx.restore();
-        }
-
-        drawBadge(bx1, sign1); personLabel(bx1, name1, sign1);
-        drawBadge(bx2, sign2); personLabel(bx2, name2, sign2);
-
-        /* Lien "✦" entre les deux badges */
-        ctx.save();
-        ctx.fillStyle = '#e2ed77'; ctx.font = '16px Arial, sans-serif';
-        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.fillText('✦', W/2, zodiacY);
-        ctx.restore();
-
-        /* --- Cœur central (grand) --- */
-        var heartTopY = 340;
-        var HW = 180, HH = Math.round(HW * 145 / 160);
+        /* --- 2. Cœur central --- */
+        var heartTopY = 200;
+        var HW = 200, HH = Math.round(HW * 145 / 160);
 
         /* Halo rose derrière le cœur */
-        var halo = ctx.createRadialGradient(W/2, heartTopY + HH*0.5, 0, W/2, heartTopY + HH*0.5, 140);
-        halo.addColorStop(0, 'rgba(237,140,230,0.28)');
+        var halo = ctx.createRadialGradient(W/2, heartTopY + HH*0.5, 0, W/2, heartTopY + HH*0.5, 150);
+        halo.addColorStop(0, 'rgba(237,140,230,0.3)');
         halo.addColorStop(1, 'rgba(237,140,230,0)');
         ctx.fillStyle = halo;
-        ctx.fillRect(W/2-140, heartTopY-30, 280, HH+60);
+        ctx.fillRect(W/2-150, heartTopY-30, 300, HH+60);
 
         /* Cœur Path2D */
         ctx.save();
@@ -564,46 +555,29 @@
         var hGrad = ctx.createLinearGradient(0, 0, 0, 145);
         hGrad.addColorStop(0, '#f5a0ef'); hGrad.addColorStop(0.4, '#ed8ce6'); hGrad.addColorStop(1, '#d66bc8');
         ctx.fillStyle = hGrad; ctx.fill(hPath);
-        /* Reflet subtil sur le cœur */
+        /* Reflet subtil */
         var reflectGrad = ctx.createLinearGradient(30, 0, 130, 60);
         reflectGrad.addColorStop(0, 'rgba(255,255,255,0.25)');
         reflectGrad.addColorStop(1, 'rgba(255,255,255,0)');
         ctx.fillStyle = reflectGrad; ctx.fill(hPath);
         ctx.restore();
 
-        /* Score dans le cœur */
+        /* Score parfaitement centré dans le cœur */
         ctx.save();
-        ctx.fillStyle = '#fff'; ctx.font = 'bold 38px Arial, sans-serif';
+        ctx.fillStyle = '#fff'; ctx.font = 'bold 42px Arial, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
         ctx.shadowColor = 'rgba(0,0,0,0.15)'; ctx.shadowBlur = 8;
-        ctx.fillText(score + '%', W/2, heartTopY + Math.round(HH * 0.55));
+        var heartCenterY = heartTopY + HH * 0.53;
+        ctx.fillText(score + '%', W/2, heartCenterY);
         ctx.shadowBlur = 0;
         ctx.restore();
 
-        /* --- Phrase dynamique sous le cœur --- */
-        var phraseY = heartTopY + HH + 40;
-        ctx.save();
-        ctx.fillStyle = '#8a6fa0'; ctx.font = 'italic 16px Arial, sans-serif';
-        ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-        /* Retour à la ligne automatique si la phrase est longue */
-        var maxPhraseW = W - 80;
-        var words = phrase.split(' '), line = '', lineY = phraseY;
-        words.forEach(function (w) {
-          var test = line + w + ' ';
-          if (line && ctx.measureText(test).width > maxPhraseW) {
-            ctx.fillText(line.trim(), W/2, lineY);
-            lineY += 22; line = w + ' ';
-          } else { line = test; }
-        });
-        ctx.fillText(line.trim(), W/2, lineY);
-        ctx.restore();
-
-        /* --- Décoration : petits points lumineux autour du cœur --- */
+        /* Sparkles autour du cœur */
         var sparkles = [
-          { x: W/2 - 120, y: heartTopY + 30, r: 3 },
-          { x: W/2 + 115, y: heartTopY + 50, r: 2.5 },
-          { x: W/2 - 100, y: heartTopY + HH - 20, r: 2 },
-          { x: W/2 + 105, y: heartTopY + HH - 10, r: 3 },
+          { x: W/2 - 130, y: heartTopY + 35, r: 3 },
+          { x: W/2 + 125, y: heartTopY + 55, r: 2.5 },
+          { x: W/2 - 110, y: heartTopY + HH - 20, r: 2 },
+          { x: W/2 + 115, y: heartTopY + HH - 10, r: 3 },
           { x: W/2, y: heartTopY - 15, r: 2.5 }
         ];
         sparkles.forEach(function (sp) {
@@ -616,11 +590,72 @@
           ctx.fillStyle = '#e2ed77'; ctx.fill();
         });
 
-        /* --- Footer URL --- */
+        /* --- 3. Signes zodiacaux + prénoms (gros) --- */
+        var zodiacY = heartTopY + HH + 70;
+        var BR = 32;
+        var zodiacGap = 180;
+        var bx1 = W/2 - zodiacGap/2, bx2 = W/2 + zodiacGap/2;
+
+        function drawBadge(bx, signData) {
+          ctx.save();
+          ctx.beginPath(); ctx.arc(bx, zodiacY, BR, 0, Math.PI*2);
+          var g = ctx.createRadialGradient(bx, zodiacY-8, 3, bx, zodiacY, BR);
+          g.addColorStop(0, '#c084fc'); g.addColorStop(1, '#7c3aed');
+          ctx.fillStyle = g; ctx.fill();
+          /* Anneau lumineux */
+          ctx.beginPath(); ctx.arc(bx, zodiacY, BR + 4, 0, Math.PI*2);
+          ctx.strokeStyle = 'rgba(237,140,230,0.35)'; ctx.lineWidth = 2; ctx.stroke();
+          /* Symbole */
+          ctx.fillStyle = '#fff'; ctx.font = '24px Arial, sans-serif';
+          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          ctx.fillText((signData && ZODIAC[signData.key]) ? ZODIAC[signData.key] : '★', bx, zodiacY);
+          ctx.restore();
+        }
+
+        function personLabel(bx, name, sign) {
+          ctx.save();
+          ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+          ctx.fillStyle = '#2d1b3d'; ctx.font = 'bold 16px Arial, sans-serif';
+          ctx.fillText(name || '', bx, zodiacY + BR + 14);
+          if (sign) {
+            ctx.fillStyle = '#a855f7'; ctx.font = '14px Arial, sans-serif';
+            ctx.fillText(sign.name, bx, zodiacY + BR + 34);
+          }
+          ctx.restore();
+        }
+
+        drawBadge(bx1, sign1); personLabel(bx1, name1, sign1);
+        drawBadge(bx2, sign2); personLabel(bx2, name2, sign2);
+
+        /* ✦ entre les badges */
+        ctx.save();
+        ctx.fillStyle = '#e2ed77'; ctx.font = '18px Arial, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('✦', W/2, zodiacY);
+        ctx.restore();
+
+        /* --- 4. Phrase dynamique --- */
+        var phraseY = zodiacY + BR + 70;
+        ctx.save();
+        ctx.fillStyle = '#8a6fa0'; ctx.font = 'italic 15px Arial, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+        var maxPhraseW = W - 60;
+        var words = phrase.split(' '), line = '', lineY = phraseY;
+        words.forEach(function (w) {
+          var test = line + w + ' ';
+          if (line && ctx.measureText(test).width > maxPhraseW) {
+            ctx.fillText(line.trim(), W/2, lineY);
+            lineY += 20; line = w + ' ';
+          } else { line = test; }
+        });
+        ctx.fillText(line.trim(), W/2, lineY);
+        ctx.restore();
+
+        /* --- 5. Footer URL --- */
         ctx.save();
         ctx.fillStyle = '#a855f7'; ctx.font = '12px Arial, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-        ctx.fillText('hexagon-voyance.com', W/2, H - 34);
+        ctx.fillText('hexagon-voyance.com', W/2, H - 30);
         ctx.restore();
 
         /* Affichage dans la modale */
@@ -636,11 +671,22 @@
         VT.Analytics.track('vt_share', { platform: 'image', type: 'compatibilite-amoureuse' });
       }
 
-      /* Chargement logo (async) — fallback hexagone si erreur file:// */
+      /* Chargement async du logo et du mandala */
+      var loaded = { logo: null, mandala: null, done: 0 };
+      function checkDone() {
+        loaded.done++;
+        if (loaded.done === 2) doRender(loaded.logo, loaded.mandala);
+      }
+
       var logoImg = new Image();
-      logoImg.onload  = function () { doRender(logoImg); };
-      logoImg.onerror = function () { doRender(null); };
+      logoImg.onload = function () { loaded.logo = logoImg; checkDone(); };
+      logoImg.onerror = function () { checkDone(); };
       logoImg.src = '../wordpress/assets/logo-hexagon-voyance.webp';
+
+      var mandalaImg = new Image();
+      mandalaImg.onload = function () { loaded.mandala = mandalaImg; checkDone(); };
+      mandalaImg.onerror = function () { checkDone(); };
+      mandalaImg.src = mandalaSrc;
     }
   };
 

@@ -52,7 +52,9 @@
       "Bash(wp-now wp:*)",
       "Bash(curl:*)",
       "Bash(cmd.exe /c start http://localhost:8080/)",
-      "Bash(echo \"EXIT:$?\")"
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(identify \"/mnt/c/Users/Olivier/desktop/claude/Z-AI_PLUGIN_TIRAGES/clients/dialotel/wordpress/assets/logo-hexagon-voyance.webp\")",
+      "Bash(python3 -c ':*)"
     ]
   }
 }
