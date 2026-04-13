@@ -125,6 +125,7 @@ function vt_render_admin_page() {
 	$page_obj   = get_page_by_path( $page_slug, OBJECT, 'page' );
 	$page_status = $page_obj ? get_post_status( $page_obj ) : 'not_found';
 	$page_url    = $page_obj ? get_permalink( $page_obj->ID ) : '';
+	$just_saved  = isset( $_GET['settings-updated'] ) && $_GET['settings-updated'];
 	?>
 	<div class="vt-admin-wrap">
 		<!-- Header -->
@@ -138,10 +139,18 @@ function vt_render_admin_page() {
 					<p class="vt-admin-subtitle">Compatibilite Amoureuse — Reglages</p>
 				</div>
 			</div>
-			<button type="submit" form="vt-settings-form" class="vt-admin-save-btn">
-				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-				Enregistrer
-			</button>
+			<div style="display:flex;align-items:center;gap:0.75rem;">
+				<?php if ( $just_saved ) : ?>
+				<span style="display:flex;align-items:center;gap:0.4rem;color:#16a34a;font-size:0.85rem;font-weight:600;">
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+					Enregistre
+				</span>
+				<?php endif; ?>
+				<button type="submit" form="vt-settings-form" class="vt-admin-save-btn" id="vt-header-save-btn">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+					Enregistrer
+				</button>
+			</div>
 		</div>
 
 		<!-- Onglets -->
@@ -413,7 +422,9 @@ function vt_render_admin_page() {
 				<div class="vt-admin-card">
 					<h3 class="vt-admin-card-title">Mistral AI</h3>
 					<div class="vt-admin-field">
-						<label for="vt_ai_mistral_key">Cle API</label>
+						<label for="vt_ai_mistral_key">Cle API
+							<?php $k = get_option('vt_ai_mistral_key'); if ( $k ) : ?><span style="color:#16a34a;font-size:0.78rem;font-weight:600;margin-left:0.5rem;">&#10003; Configuree (se termine par ...<?php echo esc_html( substr($k,-4) ); ?>)</span><?php else: ?><span style="color:#dc2626;font-size:0.78rem;margin-left:0.5rem;">Non configuree</span><?php endif; ?>
+						</label>
 						<div class="vt-admin-password-wrap">
 							<input type="password" name="vt_ai_mistral_key" id="vt_ai_mistral_key" value="<?php echo esc_attr( get_option('vt_ai_mistral_key') ); ?>" placeholder="vxMist...">
 							<button type="button" class="vt-admin-password-toggle" onclick="var f=this.previousElementSibling;f.type=f.type==='password'?'text':'password';">
@@ -436,7 +447,9 @@ function vt_render_admin_page() {
 				<div class="vt-admin-card">
 					<h3 class="vt-admin-card-title">OpenAI</h3>
 					<div class="vt-admin-field">
-						<label for="vt_ai_openai_key">Cle API</label>
+						<label for="vt_ai_openai_key">Cle API
+							<?php $k = get_option('vt_ai_openai_key'); if ( $k ) : ?><span style="color:#16a34a;font-size:0.78rem;font-weight:600;margin-left:0.5rem;">&#10003; Configuree (se termine par ...<?php echo esc_html( substr($k,-4) ); ?>)</span><?php else: ?><span style="color:#dc2626;font-size:0.78rem;margin-left:0.5rem;">Non configuree</span><?php endif; ?>
+						</label>
 						<div class="vt-admin-password-wrap">
 							<input type="password" name="vt_ai_openai_key" id="vt_ai_openai_key" value="<?php echo esc_attr( get_option('vt_ai_openai_key') ); ?>" placeholder="sk-...">
 							<button type="button" class="vt-admin-password-toggle" onclick="var f=this.previousElementSibling;f.type=f.type==='password'?'text':'password';">
@@ -459,7 +472,9 @@ function vt_render_admin_page() {
 				<div class="vt-admin-card">
 					<h3 class="vt-admin-card-title">Claude (Anthropic)</h3>
 					<div class="vt-admin-field">
-						<label for="vt_ai_claude_key">Cle API</label>
+						<label for="vt_ai_claude_key">Cle API
+							<?php $k = get_option('vt_ai_claude_key'); if ( $k ) : ?><span style="color:#16a34a;font-size:0.78rem;font-weight:600;margin-left:0.5rem;">&#10003; Configuree (se termine par ...<?php echo esc_html( substr($k,-4) ); ?>)</span><?php else: ?><span style="color:#dc2626;font-size:0.78rem;margin-left:0.5rem;">Non configuree</span><?php endif; ?>
+						</label>
 						<div class="vt-admin-password-wrap">
 							<input type="password" name="vt_ai_claude_key" id="vt_ai_claude_key" value="<?php echo esc_attr( get_option('vt_ai_claude_key') ); ?>" placeholder="sk-ant-...">
 							<button type="button" class="vt-admin-password-toggle" onclick="var f=this.previousElementSibling;f.type=f.type==='password'?'text':'password';">
@@ -483,7 +498,13 @@ function vt_render_admin_page() {
 						Brevo (Email)
 					</h3>
 					<div class="vt-admin-field">
-						<label for="vt_brevo_key">Cle API</label>
+						<label for="vt_brevo_key">Cle API
+							<?php $k = get_option('vt_brevo_key'); if ( $k ) : ?>
+							<span style="color:#16a34a;font-size:0.78rem;font-weight:600;margin-left:0.5rem;">&#10003; Configuree (se termine par ...<?php echo esc_html( substr($k,-4) ); ?>)</span>
+							<?php else: ?>
+							<span style="color:#dc2626;font-size:0.78rem;margin-left:0.5rem;">Non configuree</span>
+							<?php endif; ?>
+						</label>
 						<div class="vt-admin-password-wrap">
 							<input type="password" name="vt_brevo_key" id="vt_brevo_key" value="<?php echo esc_attr( get_option('vt_brevo_key') ); ?>" placeholder="xkeysib-...">
 							<button type="button" class="vt-admin-password-toggle" onclick="var f=this.previousElementSibling;f.type=f.type==='password'?'text':'password';">
@@ -632,7 +653,7 @@ function vt_render_admin_page() {
 		var toastText = document.getElementById('vt-admin-toast-text');
 		toastText.textContent = 'Reglages enregistres avec succes !';
 		toast.classList.add('visible');
-		setTimeout(function() { toast.classList.remove('visible'); }, 3500);
+		setTimeout(function() { toast.classList.remove('visible'); }, 6000);
 		<?php endif; ?>
 
 		// Live preview slug
