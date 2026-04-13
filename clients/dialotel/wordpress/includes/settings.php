@@ -13,6 +13,110 @@ if ( ! defined( 'ABSPATH' ) ) exit;
    ============================================================ */
 add_action( 'admin_menu', 'vt_register_admin_page' );
 add_action( 'admin_init', 'vt_register_settings' );
+add_action( 'wp_ajax_vt_test_api_key', 'vt_ajax_test_api_key' );
+
+/* ============================================================
+   AJAX — Test de cle API
+   ============================================================ */
+function vt_ajax_test_api_key() {
+	check_ajax_referer( 'vt_admin_nonce', 'nonce' );
+	if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error( array( 'message' => 'Accès refusé.' ) );
+
+	$provider = isset( $_POST['provider'] ) ? sanitize_text_field( $_POST['provider'] ) : '';
+	$key      = isset( $_POST['key'] )      ? sanitize_text_field( $_POST['key'] )      : '';
+
+	if ( ! $key ) {
+		wp_send_json_error( array( 'message' => 'Clé vide — saisissez une clé avant de tester.' ) );
+	}
+
+	$result = array( 'ok' => false, 'message' => '' );
+
+	switch ( $provider ) {
+
+		case 'mistral':
+			$resp = wp_remote_get( 'https://api.mistral.ai/v1/models', array(
+				'headers' => array( 'Authorization' => 'Bearer ' . $key ),
+				'timeout' => 10,
+			));
+			if ( is_wp_error( $resp ) ) {
+				$result['message'] = 'Erreur réseau : ' . $resp->get_error_message();
+			} elseif ( wp_remote_retrieve_response_code( $resp ) === 200 ) {
+				$result['ok']      = true;
+				$result['message'] = 'Clé valide — connexion Mistral réussie.';
+			} else {
+				$body = json_decode( wp_remote_retrieve_body( $resp ), true );
+				$result['message'] = 'Clé invalide (' . wp_remote_retrieve_response_code( $resp ) . ') : ' . ( isset( $body['message'] ) ? $body['message'] : 'Erreur inconnue.' );
+			}
+			break;
+
+		case 'openai':
+			$resp = wp_remote_get( 'https://api.openai.com/v1/models', array(
+				'headers' => array( 'Authorization' => 'Bearer ' . $key ),
+				'timeout' => 10,
+			));
+			if ( is_wp_error( $resp ) ) {
+				$result['message'] = 'Erreur réseau : ' . $resp->get_error_message();
+			} elseif ( wp_remote_retrieve_response_code( $resp ) === 200 ) {
+				$result['ok']      = true;
+				$result['message'] = 'Clé valide — connexion OpenAI réussie.';
+			} else {
+				$body = json_decode( wp_remote_retrieve_body( $resp ), true );
+				$result['message'] = 'Clé invalide (' . wp_remote_retrieve_response_code( $resp ) . ') : ' . ( isset( $body['error']['message'] ) ? $body['error']['message'] : 'Erreur inconnue.' );
+			}
+			break;
+
+		case 'claude':
+			$resp = wp_remote_post( 'https://api.anthropic.com/v1/messages', array(
+				'headers' => array(
+					'x-api-key'         => $key,
+					'anthropic-version' => '2023-06-01',
+					'content-type'      => 'application/json',
+				),
+				'body'    => json_encode( array(
+					'model'      => 'claude-haiku-4-5-20251001',
+					'max_tokens' => 1,
+					'messages'   => array( array( 'role' => 'user', 'content' => 'Hi' ) ),
+				)),
+				'timeout' => 15,
+			));
+			if ( is_wp_error( $resp ) ) {
+				$result['message'] = 'Erreur réseau : ' . $resp->get_error_message();
+			} elseif ( in_array( wp_remote_retrieve_response_code( $resp ), array( 200, 201 ), true ) ) {
+				$result['ok']      = true;
+				$result['message'] = 'Clé valide — connexion Claude réussie.';
+			} else {
+				$body = json_decode( wp_remote_retrieve_body( $resp ), true );
+				$result['message'] = 'Clé invalide (' . wp_remote_retrieve_response_code( $resp ) . ') : ' . ( isset( $body['error']['message'] ) ? $body['error']['message'] : 'Erreur inconnue.' );
+			}
+			break;
+
+		case 'brevo':
+			$resp = wp_remote_get( 'https://api.brevo.com/v3/account', array(
+				'headers' => array( 'api-key' => $key ),
+				'timeout' => 10,
+			));
+			if ( is_wp_error( $resp ) ) {
+				$result['message'] = 'Erreur réseau : ' . $resp->get_error_message();
+			} elseif ( wp_remote_retrieve_response_code( $resp ) === 200 ) {
+				$body = json_decode( wp_remote_retrieve_body( $resp ), true );
+				$result['ok']      = true;
+				$result['message'] = 'Clé valide — compte : ' . ( isset( $body['email'] ) ? esc_html( $body['email'] ) : 'OK' );
+			} else {
+				$body = json_decode( wp_remote_retrieve_body( $resp ), true );
+				$result['message'] = 'Clé invalide (' . wp_remote_retrieve_response_code( $resp ) . ') : ' . ( isset( $body['message'] ) ? $body['message'] : 'Erreur inconnue.' );
+			}
+			break;
+
+		default:
+			$result['message'] = 'Provider inconnu.';
+	}
+
+	if ( $result['ok'] ) {
+		wp_send_json_success( $result );
+	} else {
+		wp_send_json_error( $result );
+	}
+}
 
 /* ============================================================
    MENU — Top-level (pas sous Reglages)
@@ -431,6 +535,8 @@ function vt_render_admin_page() {
 								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
 							</button>
 						</div>
+						<button type="button" class="vt-admin-test-btn" data-provider="mistral" data-field="vt_ai_mistral_key">Tester la cle</button>
+						<span class="vt-test-result" id="vt-test-mistral"></span>
 					</div>
 					<div class="vt-admin-field">
 						<label for="vt_ai_mistral_model">Modele</label>
@@ -456,6 +562,8 @@ function vt_render_admin_page() {
 								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
 							</button>
 						</div>
+						<button type="button" class="vt-admin-test-btn" data-provider="openai" data-field="vt_ai_openai_key">Tester la cle</button>
+						<span class="vt-test-result" id="vt-test-openai"></span>
 					</div>
 					<div class="vt-admin-field">
 						<label for="vt_ai_openai_model">Modele</label>
@@ -481,6 +589,8 @@ function vt_render_admin_page() {
 								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
 							</button>
 						</div>
+						<button type="button" class="vt-admin-test-btn" data-provider="claude" data-field="vt_ai_claude_key">Tester la cle</button>
+						<span class="vt-test-result" id="vt-test-claude"></span>
 					</div>
 					<div class="vt-admin-field">
 						<label for="vt_ai_claude_model">Modele</label>
@@ -511,6 +621,8 @@ function vt_render_admin_page() {
 								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
 							</button>
 						</div>
+						<button type="button" class="vt-admin-test-btn" data-provider="brevo" data-field="vt_brevo_key">Tester la cle</button>
+						<span class="vt-test-result" id="vt-test-brevo"></span>
 					</div>
 					<div class="vt-admin-field">
 						<label for="vt_brevo_list_id">List ID</label>
@@ -681,6 +793,35 @@ function vt_render_admin_page() {
 
 		$('#vt-refresh-log-btn').on('click', function() {
 			location.reload();
+		});
+
+		// === Test de cle API ===
+		$('.vt-admin-test-btn').on('click', function() {
+			var btn      = $(this);
+			var provider = btn.data('provider');
+			var fieldId  = btn.data('field');
+			var key      = $('#' + fieldId).val();
+			var $result  = $('#vt-test-' + provider);
+
+			btn.prop('disabled', true).text('Test en cours...');
+			$result.attr('class', 'vt-test-result').text('');
+
+			$.post(ajaxurl, {
+				action:   'vt_test_api_key',
+				nonce:    logNonce,
+				provider: provider,
+				key:      key
+			}, function(res) {
+				btn.prop('disabled', false).text('Tester la cle');
+				if (res.success) {
+					$result.addClass('vt-test-ok').text('✓ ' + res.data.message);
+				} else {
+					$result.addClass('vt-test-error').text('✗ ' + (res.data && res.data.message ? res.data.message : 'Erreur inconnue.'));
+				}
+			}).fail(function() {
+				btn.prop('disabled', false).text('Tester la cle');
+				$result.addClass('vt-test-error').text('✗ Erreur de connexion au serveur.');
+			});
 		});
 	});
 	</script>

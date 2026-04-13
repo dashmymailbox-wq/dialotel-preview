@@ -433,6 +433,36 @@
 	height: 18px;
 }
 
+/* ===== Bouton test cle API ===== */
+.vt-admin-test-btn {
+	margin-top: 0.5rem;
+	padding: 0.35rem 0.85rem;
+	font-size: 0.78rem;
+	font-weight: 600;
+	background: transparent;
+	border: 1px solid var(--vt-admin-border);
+	border-radius: 6px;
+	color: var(--vt-admin-text-muted);
+	cursor: pointer;
+	transition: border-color 0.15s, color 0.15s;
+}
+.vt-admin-test-btn:hover {
+	border-color: var(--vt-admin-accent);
+	color: var(--vt-admin-accent);
+}
+.vt-admin-test-btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+.vt-test-result {
+	display: block;
+	margin-top: 0.4rem;
+	font-size: 0.8rem;
+	font-weight: 600;
+}
+.vt-test-result.vt-test-ok    { color: #16a34a; }
+.vt-test-result.vt-test-error { color: #dc2626; }
+
 /* ===== Footer (bouton save bas) ===== */
 .vt-admin-footer {
 	display: flex;
