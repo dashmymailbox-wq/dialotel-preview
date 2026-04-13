@@ -430,53 +430,69 @@
         if (score <= phrases[pi].max) { phrase = phrases[pi].text; break; }
       }
 
-      /* Mandala SVG data URI (extrait de theme-dialotel.css) */
-      var mandalaSrc = 'data:image/svg+xml,' + encodeURIComponent(
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">' +
-        '<defs><style>' +
-        '.ce{fill:none;stroke:rgba(237,140,230,0.45);stroke-width:.15}' +
-        '.cf{fill:rgba(226,237,119,0.06);stroke:rgba(226,237,119,0.3);stroke-width:.18}' +
-        '.cg{fill:none;stroke:rgba(226,237,119,0.4);stroke-width:.12}' +
-        '.ch{fill:rgba(237,140,230,0.06);stroke:rgba(237,140,230,0.35);stroke-width:.14}' +
-        '.ci{fill:none;stroke:rgba(226,237,119,0.38);stroke-width:.1}' +
-        '.c5{fill:none;stroke:rgba(226,237,119,0.6);stroke-width:.035}' +
-        '.c6{fill:rgba(237,140,230,0.1);stroke:rgba(237,140,230,0.5);stroke-width:.07}' +
-        '.c7{fill:none;stroke:rgba(237,140,230,0.6);stroke-width:.03}' +
-        '.c8{fill:rgba(226,237,119,0.08);stroke:rgba(226,237,119,0.5);stroke-width:.06}' +
-        '.c9{fill:none;stroke:rgba(237,140,230,0.55);stroke-width:.04}' +
-        '.ca{fill:rgba(226,237,119,0.06);stroke:rgba(226,237,119,0.4);stroke-width:.09}' +
-        '.cb{fill:none;stroke:rgba(226,237,119,0.55);stroke-width:.025}' +
-        '.cc{fill:rgba(237,140,230,0.08);stroke:rgba(237,140,230,0.45);stroke-width:.05}' +
-        '.cd{fill:none;stroke:rgba(226,237,119,0.45);stroke-width:.04}' +
-        '</style>' +
-        '<polygon id="h" points="1,0 .5,.866 -.5,.866 -1,0 -.5,-.866 .5,-.866"/>' +
-        '</defs>' +
-        '<g transform="translate(300,300)">' +
-        '<use href="#h" transform="scale(1.5)" class="ce"/>' +
-        '<g class="ce"><use href="#h" transform="rotate(0) translate(10,0) scale(2)"/><use href="#h" transform="rotate(60) translate(10,0) scale(2)"/><use href="#h" transform="rotate(120) translate(10,0) scale(2)"/><use href="#h" transform="rotate(180) translate(10,0) scale(2)"/><use href="#h" transform="rotate(240) translate(10,0) scale(2)"/><use href="#h" transform="rotate(300) translate(10,0) scale(2)"/></g>' +
-        '<g class="cf"><use href="#h" transform="rotate(30) translate(22,0) scale(3)"/><use href="#h" transform="rotate(90) translate(22,0) scale(3)"/><use href="#h" transform="rotate(150) translate(22,0) scale(3)"/><use href="#h" transform="rotate(210) translate(22,0) scale(3)"/><use href="#h" transform="rotate(270) translate(22,0) scale(3)"/><use href="#h" transform="rotate(330) translate(22,0) scale(3)"/></g>' +
-        '<g class="cg"><use href="#h" transform="rotate(0) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(30) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(60) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(90) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(120) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(150) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(180) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(210) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(240) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(270) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(300) translate(35,0) scale(3.5)"/><use href="#h" transform="rotate(330) translate(35,0) scale(3.5)"/></g>' +
-        '<g class="ch"><use href="#h" transform="rotate(15) translate(50,0) scale(5)"/><use href="#h" transform="rotate(45) translate(50,0) scale(5)"/><use href="#h" transform="rotate(75) translate(50,0) scale(5)"/><use href="#h" transform="rotate(105) translate(50,0) scale(5)"/><use href="#h" transform="rotate(135) translate(50,0) scale(5)"/><use href="#h" transform="rotate(165) translate(50,0) scale(5)"/><use href="#h" transform="rotate(195) translate(50,0) scale(5)"/><use href="#h" transform="rotate(225) translate(50,0) scale(5)"/><use href="#h" transform="rotate(255) translate(50,0) scale(5)"/><use href="#h" transform="rotate(285) translate(50,0) scale(5)"/><use href="#h" transform="rotate(315) translate(50,0) scale(5)"/><use href="#h" transform="rotate(345) translate(50,0) scale(5)"/></g>' +
-        '<g class="ci"><use href="#h" transform="rotate(0) translate(60,0) scale(4)"/><use href="#h" transform="rotate(30) translate(60,0) scale(4)"/><use href="#h" transform="rotate(60) translate(60,0) scale(4)"/><use href="#h" transform="rotate(90) translate(60,0) scale(4)"/><use href="#h" transform="rotate(120) translate(60,0) scale(4)"/><use href="#h" transform="rotate(150) translate(60,0) scale(4)"/><use href="#h" transform="rotate(180) translate(60,0) scale(4)"/><use href="#h" transform="rotate(210) translate(60,0) scale(4)"/><use href="#h" transform="rotate(240) translate(60,0) scale(4)"/><use href="#h" transform="rotate(270) translate(60,0) scale(4)"/><use href="#h" transform="rotate(300) translate(60,0) scale(4)"/><use href="#h" transform="rotate(330) translate(60,0) scale(4)"/></g>' +
-        '<g class="c5"><use href="#h" transform="rotate(0) translate(72,0) scale(16)"/><use href="#h" transform="rotate(30) translate(72,0) scale(16)"/><use href="#h" transform="rotate(60) translate(72,0) scale(16)"/><use href="#h" transform="rotate(90) translate(72,0) scale(16)"/><use href="#h" transform="rotate(120) translate(72,0) scale(16)"/><use href="#h" transform="rotate(150) translate(72,0) scale(16)"/><use href="#h" transform="rotate(180) translate(72,0) scale(16)"/><use href="#h" transform="rotate(210) translate(72,0) scale(16)"/><use href="#h" transform="rotate(240) translate(72,0) scale(16)"/><use href="#h" transform="rotate(270) translate(72,0) scale(16)"/><use href="#h" transform="rotate(300) translate(72,0) scale(16)"/><use href="#h" transform="rotate(330) translate(72,0) scale(16)"/></g>' +
-        '<g class="c6"><use href="#h" transform="rotate(0) translate(72,0) scale(6)"/><use href="#h" transform="rotate(30) translate(72,0) scale(6)"/><use href="#h" transform="rotate(60) translate(72,0) scale(6)"/><use href="#h" transform="rotate(90) translate(72,0) scale(6)"/><use href="#h" transform="rotate(120) translate(72,0) scale(6)"/><use href="#h" transform="rotate(150) translate(72,0) scale(6)"/><use href="#h" transform="rotate(180) translate(72,0) scale(6)"/><use href="#h" transform="rotate(210) translate(72,0) scale(6)"/><use href="#h" transform="rotate(240) translate(72,0) scale(6)"/><use href="#h" transform="rotate(270) translate(72,0) scale(6)"/><use href="#h" transform="rotate(300) translate(72,0) scale(6)"/><use href="#h" transform="rotate(330) translate(72,0) scale(6)"/></g>' +
-        '<g class="c7"><use href="#h" transform="rotate(15) translate(115,0) scale(22)"/><use href="#h" transform="rotate(45) translate(115,0) scale(22)"/><use href="#h" transform="rotate(75) translate(115,0) scale(22)"/><use href="#h" transform="rotate(105) translate(115,0) scale(22)"/><use href="#h" transform="rotate(135) translate(115,0) scale(22)"/><use href="#h" transform="rotate(165) translate(115,0) scale(22)"/><use href="#h" transform="rotate(195) translate(115,0) scale(22)"/><use href="#h" transform="rotate(225) translate(115,0) scale(22)"/><use href="#h" transform="rotate(255) translate(115,0) scale(22)"/><use href="#h" transform="rotate(285) translate(115,0) scale(22)"/><use href="#h" transform="rotate(315) translate(115,0) scale(22)"/><use href="#h" transform="rotate(345) translate(115,0) scale(22)"/></g>' +
-        '<g class="c8"><use href="#h" transform="rotate(15) translate(115,0) scale(8)"/><use href="#h" transform="rotate(45) translate(115,0) scale(8)"/><use href="#h" transform="rotate(75) translate(115,0) scale(8)"/><use href="#h" transform="rotate(105) translate(115,0) scale(8)"/><use href="#h" transform="rotate(135) translate(115,0) scale(8)"/><use href="#h" transform="rotate(165) translate(115,0) scale(8)"/><use href="#h" transform="rotate(195) translate(115,0) scale(8)"/><use href="#h" transform="rotate(225) translate(115,0) scale(8)"/><use href="#h" transform="rotate(255) translate(115,0) scale(8)"/><use href="#h" transform="rotate(285) translate(115,0) scale(8)"/><use href="#h" transform="rotate(315) translate(115,0) scale(8)"/><use href="#h" transform="rotate(345) translate(115,0) scale(8)"/></g>' +
-        '<g class="c9"><use href="#h" transform="rotate(0) translate(158,0) scale(14)"/><use href="#h" transform="rotate(30) translate(158,0) scale(14)"/><use href="#h" transform="rotate(60) translate(158,0) scale(14)"/><use href="#h" transform="rotate(90) translate(158,0) scale(14)"/><use href="#h" transform="rotate(120) translate(158,0) scale(14)"/><use href="#h" transform="rotate(150) translate(158,0) scale(14)"/><use href="#h" transform="rotate(180) translate(158,0) scale(14)"/><use href="#h" transform="rotate(210) translate(158,0) scale(14)"/><use href="#h" transform="rotate(240) translate(158,0) scale(14)"/><use href="#h" transform="rotate(270) translate(158,0) scale(14)"/><use href="#h" transform="rotate(300) translate(158,0) scale(14)"/><use href="#h" transform="rotate(330) translate(158,0) scale(14)"/></g>' +
-        '<g class="ca"><use href="#h" transform="rotate(0) translate(158,0) scale(5)"/><use href="#h" transform="rotate(30) translate(158,0) scale(5)"/><use href="#h" transform="rotate(60) translate(158,0) scale(5)"/><use href="#h" transform="rotate(90) translate(158,0) scale(5)"/><use href="#h" transform="rotate(120) translate(158,0) scale(5)"/><use href="#h" transform="rotate(150) translate(158,0) scale(5)"/><use href="#h" transform="rotate(180) translate(158,0) scale(5)"/><use href="#h" transform="rotate(210) translate(158,0) scale(5)"/><use href="#h" transform="rotate(240) translate(158,0) scale(5)"/><use href="#h" transform="rotate(270) translate(158,0) scale(5)"/><use href="#h" transform="rotate(300) translate(158,0) scale(5)"/><use href="#h" transform="rotate(330) translate(158,0) scale(5)"/></g>' +
-        '<g class="cb"><use href="#h" transform="rotate(15) translate(200,0) scale(26)"/><use href="#h" transform="rotate(45) translate(200,0) scale(26)"/><use href="#h" transform="rotate(75) translate(200,0) scale(26)"/><use href="#h" transform="rotate(105) translate(200,0) scale(26)"/><use href="#h" transform="rotate(135) translate(200,0) scale(26)"/><use href="#h" transform="rotate(165) translate(200,0) scale(26)"/><use href="#h" transform="rotate(195) translate(200,0) scale(26)"/><use href="#h" transform="rotate(225) translate(200,0) scale(26)"/><use href="#h" transform="rotate(255) translate(200,0) scale(26)"/><use href="#h" transform="rotate(285) translate(200,0) scale(26)"/><use href="#h" transform="rotate(315) translate(200,0) scale(26)"/><use href="#h" transform="rotate(345) translate(200,0) scale(26)"/></g>' +
-        '<g class="cc"><use href="#h" transform="rotate(15) translate(200,0) scale(10)"/><use href="#h" transform="rotate(45) translate(200,0) scale(10)"/><use href="#h" transform="rotate(75) translate(200,0) scale(10)"/><use href="#h" transform="rotate(105) translate(200,0) scale(10)"/><use href="#h" transform="rotate(135) translate(200,0) scale(10)"/><use href="#h" transform="rotate(165) translate(200,0) scale(10)"/><use href="#h" transform="rotate(195) translate(200,0) scale(10)"/><use href="#h" transform="rotate(225) translate(200,0) scale(10)"/><use href="#h" transform="rotate(255) translate(200,0) scale(10)"/><use href="#h" transform="rotate(285) translate(200,0) scale(10)"/><use href="#h" transform="rotate(315) translate(200,0) scale(10)"/><use href="#h" transform="rotate(345) translate(200,0) scale(10)"/></g>' +
-        '<g class="c9"><use href="#h" transform="rotate(0) translate(242,0) scale(14)"/><use href="#h" transform="rotate(30) translate(242,0) scale(14)"/><use href="#h" transform="rotate(60) translate(242,0) scale(14)"/><use href="#h" transform="rotate(90) translate(242,0) scale(14)"/><use href="#h" transform="rotate(120) translate(242,0) scale(14)"/><use href="#h" transform="rotate(150) translate(242,0) scale(14)"/><use href="#h" transform="rotate(180) translate(242,0) scale(14)"/><use href="#h" transform="rotate(210) translate(242,0) scale(14)"/><use href="#h" transform="rotate(240) translate(242,0) scale(14)"/><use href="#h" transform="rotate(270) translate(242,0) scale(14)"/><use href="#h" transform="rotate(300) translate(242,0) scale(14)"/><use href="#h" transform="rotate(330) translate(242,0) scale(14)"/></g>' +
-        '<g class="ca"><use href="#h" transform="rotate(0) translate(242,0) scale(5)"/><use href="#h" transform="rotate(30) translate(242,0) scale(5)"/><use href="#h" transform="rotate(60) translate(242,0) scale(5)"/><use href="#h" transform="rotate(90) translate(242,0) scale(5)"/><use href="#h" transform="rotate(120) translate(242,0) scale(5)"/><use href="#h" transform="rotate(150) translate(242,0) scale(5)"/><use href="#h" transform="rotate(180) translate(242,0) scale(5)"/><use href="#h" transform="rotate(210) translate(242,0) scale(5)"/><use href="#h" transform="rotate(240) translate(242,0) scale(5)"/><use href="#h" transform="rotate(270) translate(242,0) scale(5)"/><use href="#h" transform="rotate(300) translate(242,0) scale(5)"/><use href="#h" transform="rotate(330) translate(242,0) scale(5)"/></g>' +
-        '<g class="cd"><use href="#h" transform="rotate(15) translate(280,0) scale(10)"/><use href="#h" transform="rotate(45) translate(280,0) scale(10)"/><use href="#h" transform="rotate(75) translate(280,0) scale(10)"/><use href="#h" transform="rotate(105) translate(280,0) scale(10)"/><use href="#h" transform="rotate(135) translate(280,0) scale(10)"/><use href="#h" transform="rotate(165) translate(280,0) scale(10)"/><use href="#h" transform="rotate(195) translate(280,0) scale(10)"/><use href="#h" transform="rotate(225) translate(280,0) scale(10)"/><use href="#h" transform="rotate(255) translate(280,0) scale(10)"/><use href="#h" transform="rotate(285) translate(280,0) scale(10)"/><use href="#h" transform="rotate(315) translate(280,0) scale(10)"/><use href="#h" transform="rotate(345) translate(280,0) scale(10)"/></g>' +
-        '</g></svg>'
-      );
-
       /* --- Dimensions 9:16 --- */
       var SC = 2, W = 512, H = 896;
 
+      /* Dessin du mandala hexagonal directement en Canvas */
+      function drawMandala(ctx, W, H) {
+        var cx = W / 2, cy = H / 2;
+        var s = Math.max(W, H) * 1.4 / 600;
+        var LW = 5;
+
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.scale(s, s);
+
+        function hex(r) {
+          ctx.beginPath();
+          for (var i = 0; i < 6; i++) {
+            var a = Math.PI / 3 * i;
+            var x = Math.cos(a) * r, y = Math.sin(a) * r;
+            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+          }
+          ctx.closePath();
+        }
+
+        function ring(n, startDeg, dist, sc, fill, stroke, lw) {
+          for (var i = 0; i < n; i++) {
+            var deg = startDeg + (360 / n) * i;
+            var rad = deg * Math.PI / 180;
+            var tx = Math.cos(rad) * dist, ty = Math.sin(rad) * dist;
+            ctx.save();
+            ctx.translate(tx, ty);
+            hex(sc);
+            if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+            ctx.strokeStyle = stroke;
+            ctx.lineWidth = lw * LW;
+            ctx.stroke();
+            ctx.restore();
+          }
+        }
+
+        /* Anneaux du mandala (reproduction exacte du SVG) */
+        ring(1,  0,   0,   1.5,  null,                            'rgba(237,140,230,0.45)', 0.15);
+        ring(6,  0,   10,  2,    null,                            'rgba(237,140,230,0.45)', 0.15);
+        ring(6,  30,  22,  3,    'rgba(226,237,119,0.06)',        'rgba(226,237,119,0.3)',  0.18);
+        ring(12, 0,   35,  3.5,  null,                            'rgba(226,237,119,0.4)',  0.12);
+        ring(12, 15,  50,  5,    'rgba(237,140,230,0.06)',        'rgba(237,140,230,0.35)', 0.14);
+        ring(12, 0,   60,  4,    null,                            'rgba(226,237,119,0.38)', 0.1);
+        ring(12, 0,   72,  16,   null,                            'rgba(226,237,119,0.6)',  0.035);
+        ring(12, 0,   72,  6,    'rgba(237,140,230,0.1)',         'rgba(237,140,230,0.5)',  0.07);
+        ring(12, 15,  115, 22,   null,                            'rgba(237,140,230,0.6)',  0.03);
+        ring(12, 15,  115, 8,    'rgba(226,237,119,0.08)',        'rgba(226,237,119,0.5)',  0.06);
+        ring(12, 0,   158, 14,   null,                            'rgba(237,140,230,0.55)', 0.04);
+        ring(12, 0,   158, 5,    'rgba(226,237,119,0.06)',        'rgba(226,237,119,0.4)',  0.09);
+        ring(12, 15,  200, 26,   null,                            'rgba(226,237,119,0.55)', 0.025);
+        ring(12, 15,  200, 10,   'rgba(237,140,230,0.08)',        'rgba(237,140,230,0.45)', 0.05);
+        ring(12, 0,   242, 14,   null,                            'rgba(237,140,230,0.55)', 0.04);
+        ring(12, 0,   242, 5,    'rgba(226,237,119,0.06)',        'rgba(226,237,119,0.4)',  0.09);
+        ring(12, 15,  280, 10,   null,                            'rgba(226,237,119,0.45)', 0.04);
+
+        ctx.restore();
+      }
+
       /* --- Rendu principal --- */
-      function doRender(logo, mandala) {
+      function doRender(logo) {
         var canvas = document.createElement('canvas');
         canvas.width  = W * SC;
         canvas.height = H * SC;
@@ -491,15 +507,12 @@
         ctx.fillStyle = bg;
         ctx.fillRect(0, 0, W, H);
 
-        /* Mandala en fond (si chargé) */
-        if (mandala) {
-          ctx.save();
-          ctx.globalAlpha = 0.3;
-          var mSize = Math.max(W, H) * 1.4;
-          ctx.drawImage(mandala, W/2 - mSize/2, H/2 - mSize/2, mSize, mSize);
-          ctx.globalAlpha = 1;
-          ctx.restore();
-        }
+        /* Mandala hexagonal en fond */
+        ctx.save();
+        ctx.globalAlpha = 0.3;
+        drawMandala(ctx, W, H);
+        ctx.globalAlpha = 1;
+        ctx.restore();
 
         /* Voile radial pour adoucir le mandala */
         var veil = ctx.createRadialGradient(W/2, H*0.45, 0, W/2, H*0.45, H*0.65);
@@ -671,22 +684,11 @@
         VT.Analytics.track('vt_share', { platform: 'image', type: 'compatibilite-amoureuse' });
       }
 
-      /* Chargement async du logo et du mandala */
-      var loaded = { logo: null, mandala: null, done: 0 };
-      function checkDone() {
-        loaded.done++;
-        if (loaded.done === 2) doRender(loaded.logo, loaded.mandala);
-      }
-
+      /* Chargement logo (async) — fallback hexagone si erreur */
       var logoImg = new Image();
-      logoImg.onload = function () { loaded.logo = logoImg; checkDone(); };
-      logoImg.onerror = function () { checkDone(); };
+      logoImg.onload  = function () { doRender(logoImg); };
+      logoImg.onerror = function () { doRender(null); };
       logoImg.src = '../wordpress/assets/logo-hexagon-voyance.webp';
-
-      var mandalaImg = new Image();
-      mandalaImg.onload = function () { loaded.mandala = mandalaImg; checkDone(); };
-      mandalaImg.onerror = function () { checkDone(); };
-      mandalaImg.src = mandalaSrc;
     }
   };
 
