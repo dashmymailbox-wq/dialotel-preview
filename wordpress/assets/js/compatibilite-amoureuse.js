@@ -406,34 +406,70 @@
     },
 
     _shareImage: function () {
-      var scoreEl = VT.$('#vt-result-score');
-      var score = scoreEl ? scoreEl.textContent.trim() : '?%';
-      var canvas = VT.ShareCard.generate({
-        title: 'Compatibilite Amoureuse',
-        names: (this._name1 || '') + ' & ' + (this._name2 || ''),
-        score: score,
-        url: window.location.hostname
+      var resultEl = VT.$('.vt-result');
+      if (!resultEl || typeof html2canvas === 'undefined') return;
+
+      // Masquer les éléments UI qui ne font pas partie du résultat
+      var toHide = ['.vt-tts-controls', '.vt-share', '.vt-email-inline', '.vt-cta-voyants', '.vt-result-actions'];
+      var hidden = [];
+      toHide.forEach(function (sel) {
+        VT.$$(sel).forEach(function (el) {
+          if (el.style.display !== 'none') {
+            el.style.display = 'none';
+            hidden.push(el);
+          }
+        });
       });
 
-      var isMobileHttps = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) && location.protocol === 'https:';
+      html2canvas(resultEl, {
+        allowTaint: true,
+        useCORS: true,
+        scale: 2,
+        backgroundColor: '#ffffff',
+        logging: false
+      }).then(function (captured) {
+        // Restaurer les éléments masqués
+        hidden.forEach(function (el) { el.style.display = ''; });
 
-      if (isMobileHttps && navigator.share) {
-        VT.ShareCard.toFile(canvas, 'compatibilite-amoureuse.png').then(function (file) {
-          if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            return navigator.share({ files: [file] });
-          }
-        }).then(function () {
-          VT.Analytics.track('vt_share', { platform: 'image-mobile', type: 'compatibilite-amoureuse' });
-        }).catch(function () {});
-      } else {
-        var dataURL = VT.ShareCard.toDataURL(canvas);
+        var logoHeight = 60;
+        var padding = 24;
+        var finalCanvas = document.createElement('canvas');
+        finalCanvas.width = captured.width;
+        finalCanvas.height = captured.height + logoHeight + padding;
+
+        var ctx = finalCanvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
+        ctx.drawImage(captured, 0, 0);
+
+        // Logo en bas à droite
+        var logo = new Image();
+        logo.onload = function () {
+          var ratio = logo.naturalWidth / logo.naturalHeight;
+          var lh = logoHeight - 16;
+          var lw = Math.round(lh * ratio);
+          ctx.drawImage(logo, finalCanvas.width - lw - padding, captured.height + 8, lw, lh);
+          _vtDownload(finalCanvas);
+        };
+        logo.onerror = function () {
+          _vtDownload(finalCanvas);
+        };
+        logo.src = '../wordpress/assets/logo-hexagon-voyance.webp';
+
+        VT.Analytics.track('vt_share', { platform: 'image', type: 'compatibilite-amoureuse' });
+      }).catch(function (err) {
+        // Restaurer en cas d'erreur
+        hidden.forEach(function (el) { el.style.display = ''; });
+        console.error('[VT] html2canvas erreur :', err);
+      });
+
+      function _vtDownload(canvas) {
         var a = document.createElement('a');
-        a.href = dataURL;
+        a.href = canvas.toDataURL('image/png');
         a.download = 'compatibilite-amoureuse.png';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-        VT.Analytics.track('vt_share', { platform: 'image-desktop', type: 'compatibilite-amoureuse' });
       }
     }
   };
