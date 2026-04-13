@@ -437,7 +437,7 @@
       function drawMandala(ctx, W, H) {
         var cx = W / 2, cy = H / 2;
         var s = Math.max(W, H) * 1.4 / 600;
-        var LW = 5;
+        var LW = 18;
 
         ctx.save();
         ctx.translate(cx, cy);
@@ -509,14 +509,14 @@
 
         /* Mandala hexagonal en fond */
         ctx.save();
-        ctx.globalAlpha = 0.3;
+        ctx.globalAlpha = 0.5;
         drawMandala(ctx, W, H);
         ctx.globalAlpha = 1;
         ctx.restore();
 
         /* Voile radial pour adoucir le mandala */
         var veil = ctx.createRadialGradient(W/2, H*0.45, 0, W/2, H*0.45, H*0.65);
-        veil.addColorStop(0, 'rgba(255,255,255,0.6)');
+        veil.addColorStop(0, 'rgba(255,255,255,0.3)');
         veil.addColorStop(1, 'rgba(255,255,255,0)');
         ctx.fillStyle = veil;
         ctx.fillRect(0, 0, W, H);
