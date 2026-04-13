@@ -262,7 +262,7 @@
 
         <!-- Partage social -->
         <div class="vt-share" id="vt-share">
-          <button class="btn-hex btn-hex--secondary" id="vt-btn-share" onclick="window._vtShareImage && window._vtShareImage()">
+          <button class="btn-hex btn-hex--secondary" id="vt-btn-share" type="button" onclick="window._vtShareImage && window._vtShareImage()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
             Partager mon score
           </button>
@@ -344,6 +344,20 @@ Tu es un astrologue et expert en compatibilite amoureuse. Redige une analyse de 
 { "score": <1-100>, "resume": "<2-3 phrases>", "pointsFort": ["<1>", "<2>", "<3>"], "tensions": ["<1>", "<2>"], "conseil": "<2-3 phrases>" }
 Ton : bienveillant, positif, encourageant. Texte en francais. Reponds UNIQUEMENT avec le JSON.
 </script>
+
+<!-- Modale prévisualisation partage -->
+<div id="vt-share-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:99999;align-items:center;justify-content:center;padding:1rem;">
+  <div style="background:#fff;border-radius:16px;padding:1.25rem;max-width:480px;width:100%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,0.3);">
+    <img id="vt-share-preview" alt="Aperçu" style="max-width:100%;border-radius:8px;display:block;margin:0 auto 1rem;">
+    <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
+      <a id="vt-share-download" download="compatibilite-amoureuse.png" class="btn-hex" style="text-decoration:none;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Télécharger
+      </a>
+      <button type="button" class="btn-hex btn-hex--secondary" onclick="document.getElementById('vt-share-modal').style.display='none'">Fermer</button>
+    </div>
+  </div>
+</div>
 
 <script>if(!localStorage.getItem('vt_theme'))localStorage.setItem('vt_theme','light');</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
