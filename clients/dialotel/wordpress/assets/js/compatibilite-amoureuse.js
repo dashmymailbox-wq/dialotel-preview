@@ -406,16 +406,9 @@
     },
 
     _shareImage: function () {
-      var self = this;
-
-      /* --- Collecte des données du résultat --- */
+      /* --- Collecte --- */
       var scoreText = (VT.$('#vt-result-score') || {}).textContent || '0%';
       var score   = parseInt(scoreText, 10) || 0;
-      var resume  = (VT.$('#vt-result-resume') || {}).textContent || '';
-      var conseil = (VT.$('#vt-result-advice') || {}).textContent || '';
-      var pfArr = [], tArr = [];
-      VT.$$('#vt-result-strengths li').forEach(function (li) { pfArr.push(li.textContent.trim()); });
-      VT.$$('#vt-result-tensions  li').forEach(function (li) { tArr .push(li.textContent.trim()); });
       var name1 = this._name1 || '', name2 = this._name2 || '';
       var sign1 = this._sign1, sign2 = this._sign2;
 
@@ -424,20 +417,23 @@
         libra:'♎', scorpio:'♏', sagittarius:'♐', capricorn:'♑', aquarius:'♒', pisces:'♓'
       };
 
-      /* --- Dimensions 9:16 --- */
-      var SC = 2, W = 630, H = 1120, PAD = 32, CW = W - PAD * 2;
-
-      /* roundRect avec fallback */
-      function rr(ctx, x, y, w, h, r) {
-        ctx.beginPath();
-        if (ctx.roundRect) { ctx.roundRect(x, y, w, h, r); return; }
-        ctx.moveTo(x+r, y); ctx.lineTo(x+w-r, y); ctx.quadraticCurveTo(x+w, y, x+w, y+r);
-        ctx.lineTo(x+w, y+h-r); ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
-        ctx.lineTo(x+r, y+h); ctx.quadraticCurveTo(x, y+h, x, y+h-r);
-        ctx.lineTo(x, y+r); ctx.quadraticCurveTo(x, y, x+r, y); ctx.closePath();
+      /* Phrase dynamique selon le score */
+      var phrases = [
+        { max: 25, text: 'Un chemin semé d\'épreuves, mais rien n\'est impossible' },
+        { max: 50, text: 'Des défis à relever ensemble, patience et compréhension' },
+        { max: 75, text: 'Une belle alchimie se dessine entre vous' },
+        { max: 90, text: 'Les étoiles brillent sur votre union' },
+        { max: 100, text: 'Une connexion rare et puissante vous unit' }
+      ];
+      var phrase = phrases[0].text;
+      for (var pi = 0; pi < phrases.length; pi++) {
+        if (score <= phrases[pi].max) { phrase = phrases[pi].text; break; }
       }
 
-      /* --- Rendu principal (async après chargement logo) --- */
+      /* --- Dimensions 9:16 --- */
+      var SC = 2, W = 630, H = 1120;
+
+      /* --- Rendu principal --- */
       function doRender(logo) {
         var canvas = document.createElement('canvas');
         canvas.width  = W * SC;
@@ -449,18 +445,18 @@
         var seed = score + 1;
         function rng() { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }
         var stars = [];
-        for (var i = 0; i < 90; i++) {
-          stars.push({ x: rng()*W, y: rng()*H, r: rng()*1.1+0.4, a: rng()*0.25+0.15 });
+        for (var i = 0; i < 70; i++) {
+          stars.push({ x: rng()*W, y: rng()*H, r: rng()*1.2+0.3, a: rng()*0.2+0.1 });
         }
 
-        /* Fond dégradé radial clair */
-        var bg = ctx.createRadialGradient(W/2, H*0.38, 0, W/2, H*0.38, H*0.8);
+        /* Fond dégradé radial */
+        var bg = ctx.createRadialGradient(W/2, H*0.35, 0, W/2, H*0.35, H*0.8);
         bg.addColorStop(0, '#ffffff');
         bg.addColorStop(1, '#f0e6f8');
         ctx.fillStyle = bg;
         ctx.fillRect(0, 0, W, H);
 
-        /* Étoiles violet doux */
+        /* Étoiles */
         stars.forEach(function (s) {
           ctx.beginPath();
           ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
@@ -469,22 +465,20 @@
         });
 
         /* Halo rose pâle derrière le logo */
-        var topHalo = ctx.createRadialGradient(W/2, 55, 0, W/2, 55, 190);
-        topHalo.addColorStop(0, 'rgba(237,140,230,0.14)');
+        var topHalo = ctx.createRadialGradient(W/2, 80, 0, W/2, 80, 180);
+        topHalo.addColorStop(0, 'rgba(237,140,230,0.12)');
         topHalo.addColorStop(1, 'rgba(237,140,230,0)');
         ctx.fillStyle = topHalo;
-        ctx.fillRect(W/2-190, 0, 380, 250);
+        ctx.fillRect(W/2-180, 0, 360, 260);
 
-        var y = 28;
-
-        /* Logo */
+        /* --- Logo --- */
+        var logoY = 50;
         if (logo) {
-          ctx.drawImage(logo, W/2-22, y, 44, 44);
+          ctx.drawImage(logo, W/2-26, logoY, 52, 52);
         } else {
-          /* Fallback : hexagone dessiné en code */
           ctx.save();
           ctx.beginPath();
-          var hcx = W/2, hcy = y+22, hcr = 22;
+          var hcx = W/2, hcy = logoY+26, hcr = 26;
           for (var k = 0; k < 6; k++) {
             var ang = Math.PI/180*(60*k-30);
             if (k===0) ctx.moveTo(hcx+hcr*Math.cos(ang), hcy+hcr*Math.sin(ang));
@@ -494,49 +488,73 @@
           var hexG = ctx.createLinearGradient(hcx-hcr, hcy-hcr, hcx+hcr, hcy+hcr);
           hexG.addColorStop(0, '#c084fc'); hexG.addColorStop(1, '#7c3aed');
           ctx.fillStyle = hexG; ctx.fill();
-          ctx.fillStyle = '#fff'; ctx.font = 'bold 13px Arial, sans-serif';
+          ctx.fillStyle = '#fff'; ctx.font = 'bold 15px Arial, sans-serif';
           ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
           ctx.fillText('HV', hcx, hcy);
           ctx.restore();
         }
-        y += 58;
 
         /* Titre site */
         ctx.save();
-        ctx.fillStyle = '#2d1b3d'; ctx.font = 'bold 18px Arial, sans-serif';
+        ctx.fillStyle = '#2d1b3d'; ctx.font = 'bold 16px Arial, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-        ctx.fillText('Hexagon Voyance', W/2, y);
+        ctx.fillText('Hexagon Voyance', W/2, logoY + 62);
         ctx.restore();
-        y += 26;
 
-        /* Sous-titre */
+        /* --- Badges zodiacaux + prénoms (au-dessus du cœur) --- */
+        var zodiacY = 220;
+        var zodiacGap = 160;
+        var bx1 = W/2 - zodiacGap/2, bx2 = W/2 + zodiacGap/2;
+        var BR = 30;
+
+        function drawBadge(bx, signData) {
+          ctx.save();
+          ctx.beginPath(); ctx.arc(bx, zodiacY, BR, 0, Math.PI*2);
+          var g = ctx.createRadialGradient(bx, zodiacY-6, 3, bx, zodiacY, BR);
+          g.addColorStop(0, '#c084fc'); g.addColorStop(1, '#7c3aed');
+          ctx.fillStyle = g; ctx.fill();
+          /* Anneau lumineux */
+          ctx.beginPath(); ctx.arc(bx, zodiacY, BR + 3, 0, Math.PI*2);
+          ctx.strokeStyle = 'rgba(237,140,230,0.35)'; ctx.lineWidth = 2; ctx.stroke();
+          /* Symbole */
+          ctx.fillStyle = '#fff'; ctx.font = '20px Arial, sans-serif';
+          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          ctx.fillText((signData && ZODIAC[signData.key]) ? ZODIAC[signData.key] : '★', bx, zodiacY);
+          ctx.restore();
+        }
+
+        function personLabel(bx, name, sign) {
+          ctx.save();
+          ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+          ctx.fillStyle = '#2d1b3d'; ctx.font = 'bold 14px Arial, sans-serif';
+          ctx.fillText(name || '', bx, zodiacY + BR + 12);
+          if (sign) {
+            ctx.fillStyle = '#a855f7'; ctx.font = '12px Arial, sans-serif';
+            ctx.fillText(sign.name, bx, zodiacY + BR + 30);
+          }
+          ctx.restore();
+        }
+
+        drawBadge(bx1, sign1); personLabel(bx1, name1, sign1);
+        drawBadge(bx2, sign2); personLabel(bx2, name2, sign2);
+
+        /* Lien "✦" entre les deux badges */
         ctx.save();
-        ctx.fillStyle = '#8a6fa0'; ctx.font = '13px Arial, sans-serif';
-        ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-        ctx.fillText('Compatibilité Amoureuse', W/2, y);
+        ctx.fillStyle = '#e2ed77'; ctx.font = '16px Arial, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('✦', W/2, zodiacY);
         ctx.restore();
-        y += 22;
 
-        /* Séparateur */
-        ctx.save();
-        ctx.strokeStyle = 'rgba(237,140,230,0.35)'; ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W-PAD, y); ctx.stroke();
-        ctx.restore();
-        y += 18;
-
-        /* --- Zone cœur + personnes (hauteur fixe 180px) --- */
-        var HW = 130, HH = Math.round(HW * 145 / 160); /* 118 */
-        var BR = 34;
-        var heartTopY = y;
-        var midY = heartTopY + Math.round(HH / 2);
-        var bx1 = 88, bx2 = W - 88;
+        /* --- Cœur central (grand) --- */
+        var heartTopY = 340;
+        var HW = 180, HH = Math.round(HW * 145 / 160);
 
         /* Halo rose derrière le cœur */
-        var halo = ctx.createRadialGradient(W/2, heartTopY+HH*0.5, 0, W/2, heartTopY+HH*0.5, 110);
-        halo.addColorStop(0, 'rgba(237,140,230,0.32)');
+        var halo = ctx.createRadialGradient(W/2, heartTopY + HH*0.5, 0, W/2, heartTopY + HH*0.5, 140);
+        halo.addColorStop(0, 'rgba(237,140,230,0.28)');
         halo.addColorStop(1, 'rgba(237,140,230,0)');
         ctx.fillStyle = halo;
-        ctx.fillRect(W/2-110, heartTopY-20, 220, HH+40);
+        ctx.fillRect(W/2-140, heartTopY-30, 280, HH+60);
 
         /* Cœur Path2D */
         ctx.save();
@@ -546,123 +564,59 @@
         var hGrad = ctx.createLinearGradient(0, 0, 0, 145);
         hGrad.addColorStop(0, '#f5a0ef'); hGrad.addColorStop(0.4, '#ed8ce6'); hGrad.addColorStop(1, '#d66bc8');
         ctx.fillStyle = hGrad; ctx.fill(hPath);
+        /* Reflet subtil sur le cœur */
+        var reflectGrad = ctx.createLinearGradient(30, 0, 130, 60);
+        reflectGrad.addColorStop(0, 'rgba(255,255,255,0.25)');
+        reflectGrad.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = reflectGrad; ctx.fill(hPath);
         ctx.restore();
 
         /* Score dans le cœur */
         ctx.save();
-        ctx.fillStyle = '#fff'; ctx.font = 'bold 28px Arial, sans-serif';
+        ctx.fillStyle = '#fff'; ctx.font = 'bold 38px Arial, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.fillText(score + '%', W/2, heartTopY + Math.round(HH * 0.58));
+        ctx.shadowColor = 'rgba(0,0,0,0.15)'; ctx.shadowBlur = 8;
+        ctx.fillText(score + '%', W/2, heartTopY + Math.round(HH * 0.55));
+        ctx.shadowBlur = 0;
         ctx.restore();
 
-        /* Badges zodiaque */
-        function drawBadge(bx, signData) {
-          ctx.save();
-          ctx.beginPath(); ctx.arc(bx, midY, BR, 0, Math.PI*2);
-          var g = ctx.createRadialGradient(bx, midY-8, 4, bx, midY, BR);
-          g.addColorStop(0, '#c084fc'); g.addColorStop(1, '#7c3aed');
-          ctx.fillStyle = g; ctx.fill();
-          ctx.fillStyle = '#fff'; ctx.font = '22px Arial, sans-serif';
-          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-          ctx.fillText((signData && ZODIAC[signData.key]) ? ZODIAC[signData.key] : '★', bx, midY);
-          ctx.restore();
-        }
-
-        function personLabel(bx, name, sign) {
-          ctx.save();
-          ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-          ctx.fillStyle = '#2d1b3d'; ctx.font = 'bold 13px Arial, sans-serif';
-          ctx.fillText(name, bx, midY + BR + 10);
-          if (sign) {
-            ctx.fillStyle = '#a855f7'; ctx.font = '11px Arial, sans-serif';
-            ctx.fillText(sign.name, bx, midY + BR + 27);
-          }
-          ctx.restore();
-        }
-
-        drawBadge(bx1, sign1); personLabel(bx1, name1, sign1);
-        drawBadge(bx2, sign2); personLabel(bx2, name2, sign2);
-
-        /* Fixer y à la position du score label (position fixe) */
-        y = 320;
-
-        /* Score label */
+        /* --- Phrase dynamique sous le cœur --- */
+        var phraseY = heartTopY + HH + 40;
         ctx.save();
-        ctx.fillStyle = '#8a6fa0'; ctx.font = '13px Arial, sans-serif';
+        ctx.fillStyle = '#8a6fa0'; ctx.font = 'italic 16px Arial, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-        ctx.fillText(score + '% de compatibilité', W/2, y);
+        /* Retour à la ligne automatique si la phrase est longue */
+        var maxPhraseW = W - 80;
+        var words = phrase.split(' '), line = '', lineY = phraseY;
+        words.forEach(function (w) {
+          var test = line + w + ' ';
+          if (line && ctx.measureText(test).width > maxPhraseW) {
+            ctx.fillText(line.trim(), W/2, lineY);
+            lineY += 22; line = w + ' ';
+          } else { line = test; }
+        });
+        ctx.fillText(line.trim(), W/2, lineY);
         ctx.restore();
-        y += 28;
 
-        /* Barre de score */
-        rr(ctx, PAD, y, CW, 8, 4); ctx.fillStyle = '#f3e8ff'; ctx.fill();
-        if (score > 0) {
-          rr(ctx, PAD, y, CW * score / 100, 8, 4);
-          var barG = ctx.createLinearGradient(PAD, 0, PAD+CW, 0);
-          barG.addColorStop(0, '#f5a0ef'); barG.addColorStop(1, '#d66bc8');
-          ctx.fillStyle = barG; ctx.fill();
-        }
-        y += 24;
-
-        /* --- Cartes à hauteur fixe pour remplir exactement le 9:16 --- */
-        var FOOTER_ZONE = 58, CARD_GAP = 10;
-        var CARD_H = Math.floor((H - y - FOOTER_ZONE - 3 * CARD_GAP) / 4); /* ≈ 165 */
-        var CP = 14, LH = 20, IH = 24;
-
-        var cardDefs = [
-          { title: 'En résumé',           icon: '♥', accent: '#d66bc8', content: resume,  isArr: false, italic: true  },
-          { title: 'Points forts',        icon: '✦', accent: '#9333ea', content: pfArr,   isArr: true,  italic: false },
-          { title: 'Points de tension',   icon: '⚡', accent: '#f59e0b', content: tArr,    isArr: true,  italic: false },
-          { title: 'Conseil des étoiles', icon: '✧', accent: '#059669', content: conseil, isArr: false, italic: true  }
+        /* --- Décoration : petits points lumineux autour du cœur --- */
+        var sparkles = [
+          { x: W/2 - 120, y: heartTopY + 30, r: 3 },
+          { x: W/2 + 115, y: heartTopY + 50, r: 2.5 },
+          { x: W/2 - 100, y: heartTopY + HH - 20, r: 2 },
+          { x: W/2 + 105, y: heartTopY + HH - 10, r: 3 },
+          { x: W/2, y: heartTopY - 15, r: 2.5 }
         ];
-
-        cardDefs.forEach(function (def) {
-          /* Ombre simulée */
-          ctx.save();
-          ctx.fillStyle = 'rgba(180,100,220,0.08)';
-          rr(ctx, PAD+1, y+2, CW, CARD_H, 10); ctx.fill();
-          /* Fond blanc */
-          ctx.fillStyle = '#ffffff';
-          rr(ctx, PAD, y, CW, CARD_H, 10); ctx.fill();
-          /* Bordure */
-          ctx.strokeStyle = 'rgba(237,140,230,0.40)'; ctx.lineWidth = 1;
-          rr(ctx, PAD, y, CW, CARD_H, 10); ctx.stroke();
-          /* Barre accent */
-          var barG2 = ctx.createLinearGradient(0, y, 0, y+CARD_H);
-          barG2.addColorStop(0, def.accent); barG2.addColorStop(1, def.accent + '88');
-          ctx.fillStyle = barG2; ctx.fillRect(PAD, y+10, 3, CARD_H-20);
-          /* Titre */
-          ctx.fillStyle = def.accent; ctx.font = 'bold 12px Arial, sans-serif';
-          ctx.textAlign = 'left'; ctx.textBaseline = 'top';
-          ctx.fillText(def.icon + ' ' + def.title, PAD+CP, y+CP);
-          /* Contenu */
-          ctx.fillStyle = '#2d1b3d';
-          ctx.font = (def.italic ? 'italic ' : '') + '13px Arial, sans-serif';
-          var innerW = CW - CP * 2;
-          var ty = y + CP + 24;
-          var maxContentH = CARD_H - CP - 24 - CP;
-          if (def.isArr) {
-            var maxItems = Math.floor(maxContentH / IH);
-            def.content.slice(0, maxItems).forEach(function (item, i) {
-              ctx.fillText('• ' + item, PAD+CP, ty + i*IH);
-            });
-          } else {
-            var wds = (def.content || '').split(' '), l = '', li = 0;
-            var maxLines = Math.floor(maxContentH / LH);
-            wds.forEach(function (w) {
-              if (li >= maxLines) return;
-              var t = l + w + ' ';
-              if (l && ctx.measureText(t).width > innerW) {
-                ctx.fillText(l.trim(), PAD+CP, ty + li*LH); li++; l = w + ' ';
-              } else l = t;
-            });
-            if (li < maxLines) ctx.fillText(l.trim(), PAD+CP, ty + li*LH);
-          }
-          ctx.restore();
-          y += CARD_H + CARD_GAP;
+        sparkles.forEach(function (sp) {
+          var spGrad = ctx.createRadialGradient(sp.x, sp.y, 0, sp.x, sp.y, sp.r * 3);
+          spGrad.addColorStop(0, 'rgba(226,237,119,0.6)');
+          spGrad.addColorStop(1, 'rgba(226,237,119,0)');
+          ctx.fillStyle = spGrad;
+          ctx.fillRect(sp.x - sp.r*3, sp.y - sp.r*3, sp.r*6, sp.r*6);
+          ctx.beginPath(); ctx.arc(sp.x, sp.y, sp.r, 0, Math.PI*2);
+          ctx.fillStyle = '#e2ed77'; ctx.fill();
         });
 
-        /* Footer URL */
+        /* --- Footer URL --- */
         ctx.save();
         ctx.fillStyle = '#a855f7'; ctx.font = '12px Arial, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'top';
