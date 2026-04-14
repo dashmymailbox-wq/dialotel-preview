@@ -350,7 +350,6 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 			<div class="vt-share-modal-actions">
 				<a id="vt-share-download" download="compatibilite-amoureuse.png" class="btn-hex">Telecharger l'image</a>
 				<button id="vt-share-copy-link" class="btn-hex btn-hex--secondary" type="button">Copier le lien</button>
-				<button id="vt-share-copy-caption" class="btn-hex btn-hex--secondary" type="button">Copier la caption</button>
 			</div>
 			<p class="vt-share-assist-text" id="vt-share-assist-text" style="display:none;"></p>
 		</div>
