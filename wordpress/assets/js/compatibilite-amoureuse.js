@@ -417,18 +417,9 @@
         libra:'♎', scorpio:'♏', sagittarius:'♐', capricorn:'♑', aquarius:'♒', pisces:'♓'
       };
 
-      /* Phrase dynamique selon le score */
-      var phrases = [
-        { max: 25, text: 'Un chemin semé d\'épreuves, mais rien n\'est impossible' },
-        { max: 50, text: 'Des défis à relever ensemble, patience et compréhension' },
-        { max: 75, text: 'Une belle alchimie se dessine entre vous' },
-        { max: 90, text: 'Les étoiles brillent sur votre union' },
-        { max: 100, text: 'Une connexion rare et puissante vous unit' }
-      ];
-      var phrase = phrases[0].text;
-      for (var pi = 0; pi < phrases.length; pi++) {
-        if (score <= phrases[pi].max) { phrase = phrases[pi].text; break; }
-      }
+      /* Résumé IA du tirage */
+      var resumeEl = VT.$('#vt-result-resume');
+      var phrase = resumeEl ? resumeEl.textContent.trim() : '';
 
       /* --- Dimensions 9:16 --- */
       var SC = 2, W = 512, H = 896;
@@ -536,7 +527,7 @@
 
         /* Pré-calcul des lignes de phrase pour connaître sa hauteur */
         ctx.save();
-        ctx.font = 'bold 22px "Catchy Mager", "Cinzel", Georgia, serif';
+        ctx.font = '16px "Lato", Arial, sans-serif';
         var phraseMaxW = W - 70;
         var pWords = phrase.split(' '), pLine = '', pLines = [];
         pWords.forEach(function (w) {
@@ -548,7 +539,7 @@
         });
         if (pLine.trim()) pLines.push(pLine.trim());
         ctx.restore();
-        var pLineH = 26;
+        var pLineH = 20;
         var phraseH = pLines.length * pLineH;
 
         /* GAP uniforme entre chaque élément (5 intervalles) */
@@ -663,14 +654,14 @@
         drawPersonBlock(W/2, cursorY + BR, sign1, name1);
         cursorY += personH(sign1) + GAP;
 
-        /* --- 4. Phrase dynamique --- */
+        /* --- 4. Résumé --- */
         ctx.save();
         var titleGrad = ctx.createLinearGradient(W/2 - 130, 0, W/2 + 130, 0);
         titleGrad.addColorStop(0, '#c084fc');
         titleGrad.addColorStop(0.5, '#ed8ce6');
         titleGrad.addColorStop(1, '#c084fc');
         ctx.fillStyle = titleGrad;
-        ctx.font = 'bold 22px "Catchy Mager", "Cinzel", Georgia, serif';
+        ctx.font = '16px "Lato", Arial, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'top';
         pLines.forEach(function (ln, i) {
           ctx.fillText(ln, W/2, cursorY + i * pLineH);
