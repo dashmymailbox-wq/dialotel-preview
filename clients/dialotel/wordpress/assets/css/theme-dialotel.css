@@ -734,15 +734,6 @@
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* ===== @font-face Catchy Mager ===== */
-@font-face {
-  font-family: 'Catchy Mager';
-  src: url('fonts/CatchyMager.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 /* ===== FAQ — section sans fond sous l'intro ===== */
 .vt-app .vt-step[data-step="intro"].vt-step--active {
   width: 100% !important;
