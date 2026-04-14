@@ -550,15 +550,15 @@
         }
 
         /* --- 2. Cœur central --- */
-        var heartTopY = 200;
-        var HW = 200, HH = Math.round(HW * 145 / 160);
+        var heartTopY = 210;
+        var HW = 240, HH = Math.round(HW * 145 / 160);
 
         /* Halo rose derrière le cœur */
-        var halo = ctx.createRadialGradient(W/2, heartTopY + HH*0.5, 0, W/2, heartTopY + HH*0.5, 150);
+        var halo = ctx.createRadialGradient(W/2, heartTopY + HH*0.5, 0, W/2, heartTopY + HH*0.5, 170);
         halo.addColorStop(0, 'rgba(237,140,230,0.3)');
         halo.addColorStop(1, 'rgba(237,140,230,0)');
         ctx.fillStyle = halo;
-        ctx.fillRect(W/2-150, heartTopY-30, 300, HH+60);
+        ctx.fillRect(W/2-170, heartTopY-30, 340, HH+60);
 
         /* Cœur Path2D */
         ctx.save();
@@ -577,7 +577,7 @@
 
         /* Score parfaitement centré dans le cœur */
         ctx.save();
-        ctx.fillStyle = '#fff'; ctx.font = 'bold 42px Arial, sans-serif';
+        ctx.fillStyle = '#fff'; ctx.font = 'bold 48px Arial, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
         ctx.shadowColor = 'rgba(0,0,0,0.15)'; ctx.shadowBlur = 8;
         var heartCenterY = heartTopY + HH * 0.53;
@@ -587,11 +587,13 @@
 
         /* Sparkles autour du cœur */
         var sparkles = [
-          { x: W/2 - 130, y: heartTopY + 35, r: 3 },
-          { x: W/2 + 125, y: heartTopY + 55, r: 2.5 },
-          { x: W/2 - 110, y: heartTopY + HH - 20, r: 2 },
-          { x: W/2 + 115, y: heartTopY + HH - 10, r: 3 },
-          { x: W/2, y: heartTopY - 15, r: 2.5 }
+          { x: W/2 - 150, y: heartTopY + 40, r: 3.5 },
+          { x: W/2 + 145, y: heartTopY + 60, r: 3 },
+          { x: W/2 - 130, y: heartTopY + HH - 20, r: 2.5 },
+          { x: W/2 + 135, y: heartTopY + HH - 10, r: 3.5 },
+          { x: W/2, y: heartTopY - 20, r: 3 },
+          { x: W/2 - 85, y: heartTopY - 8, r: 2 },
+          { x: W/2 + 90, y: heartTopY + HH + 8, r: 2 }
         ];
         sparkles.forEach(function (sp) {
           var spGrad = ctx.createRadialGradient(sp.x, sp.y, 0, sp.x, sp.y, sp.r * 3);
@@ -604,9 +606,9 @@
         });
 
         /* --- 3. Signes zodiacaux + prénoms (gros) --- */
-        var zodiacY = heartTopY + HH + 70;
-        var BR = 32;
-        var zodiacGap = 180;
+        var zodiacY = heartTopY + HH + 85;
+        var BR = 36;
+        var zodiacGap = 200;
         var bx1 = W/2 - zodiacGap/2, bx2 = W/2 + zodiacGap/2;
 
         function drawBadge(bx, signData) {
@@ -619,7 +621,7 @@
           ctx.beginPath(); ctx.arc(bx, zodiacY, BR + 4, 0, Math.PI*2);
           ctx.strokeStyle = 'rgba(237,140,230,0.35)'; ctx.lineWidth = 2; ctx.stroke();
           /* Symbole */
-          ctx.fillStyle = '#fff'; ctx.font = '24px Arial, sans-serif';
+          ctx.fillStyle = '#fff'; ctx.font = '26px Arial, sans-serif';
           ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
           ctx.fillText((signData && ZODIAC[signData.key]) ? ZODIAC[signData.key] : '★', bx, zodiacY);
           ctx.restore();
@@ -628,11 +630,11 @@
         function personLabel(bx, name, sign) {
           ctx.save();
           ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-          ctx.fillStyle = '#2d1b3d'; ctx.font = 'bold 16px Arial, sans-serif';
+          ctx.fillStyle = '#2d1b3d'; ctx.font = 'bold 18px Arial, sans-serif';
           ctx.fillText(name || '', bx, zodiacY + BR + 14);
           if (sign) {
-            ctx.fillStyle = '#a855f7'; ctx.font = '14px Arial, sans-serif';
-            ctx.fillText(sign.name, bx, zodiacY + BR + 34);
+            ctx.fillStyle = '#a855f7'; ctx.font = '15px Arial, sans-serif';
+            ctx.fillText(sign.name, bx, zodiacY + BR + 36);
           }
           ctx.restore();
         }
@@ -642,15 +644,15 @@
 
         /* ✦ entre les badges */
         ctx.save();
-        ctx.fillStyle = '#e2ed77'; ctx.font = '18px Arial, sans-serif';
+        ctx.fillStyle = '#e2ed77'; ctx.font = '20px Arial, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
         ctx.fillText('✦', W/2, zodiacY);
         ctx.restore();
 
         /* --- 4. Phrase dynamique --- */
-        var phraseY = zodiacY + BR + 70;
+        var phraseY = zodiacY + BR + 85;
         ctx.save();
-        ctx.fillStyle = '#8a6fa0'; ctx.font = 'italic 15px Arial, sans-serif';
+        ctx.fillStyle = '#8a6fa0'; ctx.font = 'italic 17px Arial, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'top';
         var maxPhraseW = W - 60;
         var words = phrase.split(' '), line = '', lineY = phraseY;
@@ -658,15 +660,35 @@
           var test = line + w + ' ';
           if (line && ctx.measureText(test).width > maxPhraseW) {
             ctx.fillText(line.trim(), W/2, lineY);
-            lineY += 20; line = w + ' ';
+            lineY += 22; line = w + ' ';
           } else { line = test; }
         });
         ctx.fillText(line.trim(), W/2, lineY);
         ctx.restore();
 
+        /* Etoiles decoratives - zone inferieure */
+        var bottomStars = [
+          { x: W/2 - 100, y: H - 120, r: 2 },
+          { x: W/2 + 90, y: H - 105, r: 1.8 },
+          { x: W/2 - 40, y: H - 145, r: 1.5 },
+          { x: W/2 + 50, y: H - 135, r: 2 },
+          { x: W/2, y: H - 160, r: 1.5 },
+          { x: W/2 - 140, y: H - 80, r: 1.5 },
+          { x: W/2 + 130, y: H - 75, r: 1.8 }
+        ];
+        bottomStars.forEach(function (st) {
+          var stGrad = ctx.createRadialGradient(st.x, st.y, 0, st.x, st.y, st.r * 3);
+          stGrad.addColorStop(0, 'rgba(226,237,119,0.35)');
+          stGrad.addColorStop(1, 'rgba(226,237,119,0)');
+          ctx.fillStyle = stGrad;
+          ctx.fillRect(st.x - st.r*3, st.y - st.r*3, st.r*6, st.r*6);
+          ctx.beginPath(); ctx.arc(st.x, st.y, st.r, 0, Math.PI*2);
+          ctx.fillStyle = '#e2ed77'; ctx.fill();
+        });
+
         /* --- 5. Footer URL --- */
         ctx.save();
-        ctx.fillStyle = '#a855f7'; ctx.font = '12px Arial, sans-serif';
+        ctx.fillStyle = '#a855f7'; ctx.font = '13px Arial, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'top';
         ctx.fillText('hexagon-voyance.com', W/2, H - 30);
         ctx.restore();
