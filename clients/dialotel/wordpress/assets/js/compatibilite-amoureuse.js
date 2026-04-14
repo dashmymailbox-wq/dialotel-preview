@@ -85,7 +85,6 @@
 
       // Boutons modale partage
       VT.on('#vt-share-copy-link', 'click', function () { self._copyLink(); });
-      VT.on('#vt-share-copy-caption', 'click', function () { self._copyCaption(); });
 
       // Exposer _shareImage globalement pour le onclick inline du bouton
       window._vtShareImage = function () { self._shareImage(); };
@@ -469,11 +468,6 @@
     _copyLink: function () {
       var url = window.location.href;
       this._copyToClipboard(url, 'Lien copie !');
-    },
-
-    _copyCaption: function () {
-      var data = this._getShareData();
-      this._copyToClipboard(data.caption + '\n' + data.url, 'Caption copiee !');
     },
 
     _copyToClipboard: function (text, msg) {
