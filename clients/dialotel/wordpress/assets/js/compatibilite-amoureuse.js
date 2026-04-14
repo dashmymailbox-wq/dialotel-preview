@@ -577,9 +577,9 @@
 
         /* Score parfaitement centré dans le cœur */
         ctx.save();
-        ctx.fillStyle = '#fff'; ctx.font = 'bold 48px Arial, sans-serif';
+        ctx.fillStyle = '#e2ed77'; ctx.font = 'bold 48px Arial, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.shadowColor = 'rgba(0,0,0,0.15)'; ctx.shadowBlur = 8;
+        ctx.shadowColor = 'rgba(0,0,0,0.3)'; ctx.shadowBlur = 10;
         var heartCenterY = heartTopY + HH * 0.48;
         ctx.fillText(score + '%', W/2, heartCenterY);
         ctx.shadowBlur = 0;
@@ -605,46 +605,49 @@
           ctx.fillStyle = '#e2ed77'; ctx.fill();
         });
 
-        /* --- 3. Personne 1 — Phrase — Personne 2 --- */
-        var personY = heartTopY + HH + 95;
-        var BR = 36;
-        var col1 = W/2 - 155, col2 = W/2 + 155;
+        /* --- 3. Personne 1 — Phrase — Personne 2 (vertical) --- */
+        var BR = 34;
 
-        function drawBadge(bx, by, signData) {
+        function drawPersonBlock(cx, cy, signData, personName) {
           ctx.save();
-          ctx.beginPath(); ctx.arc(bx, by, BR, 0, Math.PI*2);
-          var g = ctx.createRadialGradient(bx, by-8, 3, bx, by, BR);
+          ctx.beginPath(); ctx.arc(cx, cy, BR, 0, Math.PI*2);
+          var g = ctx.createRadialGradient(cx, cy-8, 3, cx, cy, BR);
           g.addColorStop(0, '#c084fc'); g.addColorStop(1, '#7c3aed');
           ctx.fillStyle = g; ctx.fill();
-          ctx.beginPath(); ctx.arc(bx, by, BR + 4, 0, Math.PI*2);
+          ctx.beginPath(); ctx.arc(cx, cy, BR + 4, 0, Math.PI*2);
           ctx.strokeStyle = 'rgba(237,140,230,0.35)'; ctx.lineWidth = 2; ctx.stroke();
-          ctx.fillStyle = '#fff'; ctx.font = '26px Arial, sans-serif';
+          ctx.fillStyle = '#fff'; ctx.font = '24px Arial, sans-serif';
           ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-          ctx.fillText((signData && ZODIAC[signData.key]) ? ZODIAC[signData.key] : '★', bx, by);
+          ctx.fillText((signData && ZODIAC[signData.key]) ? ZODIAC[signData.key] : '★', cx, cy);
           ctx.restore();
-        }
-
-        function personLabel(bx, by, name, sign) {
           ctx.save();
           ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-          ctx.fillStyle = '#2d1b3d'; ctx.font = 'bold 18px Arial, sans-serif';
-          ctx.fillText(name || '', bx, by + BR + 14);
-          if (sign) {
-            ctx.fillStyle = '#a855f7'; ctx.font = '15px Arial, sans-serif';
-            ctx.fillText(sign.name, bx, by + BR + 36);
+          ctx.fillStyle = '#2d1b3d'; ctx.font = 'bold 17px Arial, sans-serif';
+          ctx.fillText(personName || '', cx, cy + BR + 12);
+          if (signData) {
+            ctx.fillStyle = '#a855f7'; ctx.font = '14px Arial, sans-serif';
+            ctx.fillText(signData.name, cx, cy + BR + 32);
           }
           ctx.restore();
         }
 
-        drawBadge(col1, personY, sign1); personLabel(col1, personY, name1, sign1);
-        drawBadge(col2, personY, sign2); personLabel(col2, personY, name2, sign2);
+        var cursorY = heartTopY + HH + 55;
 
-        /* Phrase dynamique au centre — style titre */
-        var phraseMaxW = (col2 - col1) - BR * 2 - 30;
+        /* Personne 1 */
+        drawPersonBlock(W/2, cursorY, sign1, name1);
+        cursorY += BR + (sign1 ? 50 : 24);
+
+        /* Phrase dynamique — style titre coloré */
+        cursorY += 40;
         ctx.save();
-        ctx.fillStyle = '#2d1b3d';
-        ctx.font = 'bold 20px "Catchy Mager", "Cinzel", Georgia, serif';
-        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        var titleGrad = ctx.createLinearGradient(W/2 - 130, 0, W/2 + 130, 0);
+        titleGrad.addColorStop(0, '#c084fc');
+        titleGrad.addColorStop(0.5, '#ed8ce6');
+        titleGrad.addColorStop(1, '#c084fc');
+        ctx.fillStyle = titleGrad;
+        ctx.font = 'bold 22px "Catchy Mager", "Cinzel", Georgia, serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+        var phraseMaxW = W - 70;
         var pWords = phrase.split(' '), pLine = '', pLines = [];
         pWords.forEach(function (w) {
           var test = pLine + w + ' ';
@@ -655,31 +658,15 @@
         });
         if (pLine.trim()) pLines.push(pLine.trim());
         var pLineH = 26;
-        var phraseTop = personY - (pLines.length - 1) * pLineH / 2;
         pLines.forEach(function (ln, i) {
-          ctx.fillText(ln, W/2, phraseTop + i * pLineH);
+          ctx.fillText(ln, W/2, cursorY + i * pLineH);
         });
+        cursorY += pLines.length * pLineH;
         ctx.restore();
 
-        /* Etoiles decoratives - zone inferieure */
-        var bottomStars = [
-          { x: W/2 - 100, y: H - 120, r: 2 },
-          { x: W/2 + 90, y: H - 105, r: 1.8 },
-          { x: W/2 - 40, y: H - 145, r: 1.5 },
-          { x: W/2 + 50, y: H - 135, r: 2 },
-          { x: W/2, y: H - 160, r: 1.5 },
-          { x: W/2 - 140, y: H - 80, r: 1.5 },
-          { x: W/2 + 130, y: H - 75, r: 1.8 }
-        ];
-        bottomStars.forEach(function (st) {
-          var stGrad = ctx.createRadialGradient(st.x, st.y, 0, st.x, st.y, st.r * 3);
-          stGrad.addColorStop(0, 'rgba(226,237,119,0.35)');
-          stGrad.addColorStop(1, 'rgba(226,237,119,0)');
-          ctx.fillStyle = stGrad;
-          ctx.fillRect(st.x - st.r*3, st.y - st.r*3, st.r*6, st.r*6);
-          ctx.beginPath(); ctx.arc(st.x, st.y, st.r, 0, Math.PI*2);
-          ctx.fillStyle = '#e2ed77'; ctx.fill();
-        });
+        /* Personne 2 */
+        cursorY += 40;
+        drawPersonBlock(W/2, cursorY, sign2, name2);
 
         /* --- 5. Footer URL --- */
         ctx.save();
