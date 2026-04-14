@@ -580,7 +580,7 @@
         ctx.fillStyle = '#fff'; ctx.font = 'bold 48px Arial, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
         ctx.shadowColor = 'rgba(0,0,0,0.15)'; ctx.shadowBlur = 8;
-        var heartCenterY = heartTopY + HH * 0.53;
+        var heartCenterY = heartTopY + HH * 0.48;
         ctx.fillText(score + '%', W/2, heartCenterY);
         ctx.shadowBlur = 0;
         ctx.restore();
@@ -605,65 +605,60 @@
           ctx.fillStyle = '#e2ed77'; ctx.fill();
         });
 
-        /* --- 3. Signes zodiacaux + prénoms (gros) --- */
-        var zodiacY = heartTopY + HH + 85;
+        /* --- 3. Personne 1 — Phrase — Personne 2 --- */
+        var personY = heartTopY + HH + 95;
         var BR = 36;
-        var zodiacGap = 200;
-        var bx1 = W/2 - zodiacGap/2, bx2 = W/2 + zodiacGap/2;
+        var col1 = W/2 - 155, col2 = W/2 + 155;
 
-        function drawBadge(bx, signData) {
+        function drawBadge(bx, by, signData) {
           ctx.save();
-          ctx.beginPath(); ctx.arc(bx, zodiacY, BR, 0, Math.PI*2);
-          var g = ctx.createRadialGradient(bx, zodiacY-8, 3, bx, zodiacY, BR);
+          ctx.beginPath(); ctx.arc(bx, by, BR, 0, Math.PI*2);
+          var g = ctx.createRadialGradient(bx, by-8, 3, bx, by, BR);
           g.addColorStop(0, '#c084fc'); g.addColorStop(1, '#7c3aed');
           ctx.fillStyle = g; ctx.fill();
-          /* Anneau lumineux */
-          ctx.beginPath(); ctx.arc(bx, zodiacY, BR + 4, 0, Math.PI*2);
+          ctx.beginPath(); ctx.arc(bx, by, BR + 4, 0, Math.PI*2);
           ctx.strokeStyle = 'rgba(237,140,230,0.35)'; ctx.lineWidth = 2; ctx.stroke();
-          /* Symbole */
           ctx.fillStyle = '#fff'; ctx.font = '26px Arial, sans-serif';
           ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-          ctx.fillText((signData && ZODIAC[signData.key]) ? ZODIAC[signData.key] : '★', bx, zodiacY);
+          ctx.fillText((signData && ZODIAC[signData.key]) ? ZODIAC[signData.key] : '★', bx, by);
           ctx.restore();
         }
 
-        function personLabel(bx, name, sign) {
+        function personLabel(bx, by, name, sign) {
           ctx.save();
           ctx.textAlign = 'center'; ctx.textBaseline = 'top';
           ctx.fillStyle = '#2d1b3d'; ctx.font = 'bold 18px Arial, sans-serif';
-          ctx.fillText(name || '', bx, zodiacY + BR + 14);
+          ctx.fillText(name || '', bx, by + BR + 14);
           if (sign) {
             ctx.fillStyle = '#a855f7'; ctx.font = '15px Arial, sans-serif';
-            ctx.fillText(sign.name, bx, zodiacY + BR + 36);
+            ctx.fillText(sign.name, bx, by + BR + 36);
           }
           ctx.restore();
         }
 
-        drawBadge(bx1, sign1); personLabel(bx1, name1, sign1);
-        drawBadge(bx2, sign2); personLabel(bx2, name2, sign2);
+        drawBadge(col1, personY, sign1); personLabel(col1, personY, name1, sign1);
+        drawBadge(col2, personY, sign2); personLabel(col2, personY, name2, sign2);
 
-        /* ✦ entre les badges */
+        /* Phrase dynamique au centre — style titre */
+        var phraseMaxW = (col2 - col1) - BR * 2 - 30;
         ctx.save();
-        ctx.fillStyle = '#e2ed77'; ctx.font = '20px Arial, sans-serif';
+        ctx.fillStyle = '#2d1b3d';
+        ctx.font = 'bold 20px "Catchy Mager", "Cinzel", Georgia, serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.fillText('✦', W/2, zodiacY);
-        ctx.restore();
-
-        /* --- 4. Phrase dynamique --- */
-        var phraseY = zodiacY + BR + 85;
-        ctx.save();
-        ctx.fillStyle = '#8a6fa0'; ctx.font = 'italic 17px Arial, sans-serif';
-        ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-        var maxPhraseW = W - 60;
-        var words = phrase.split(' '), line = '', lineY = phraseY;
-        words.forEach(function (w) {
-          var test = line + w + ' ';
-          if (line && ctx.measureText(test).width > maxPhraseW) {
-            ctx.fillText(line.trim(), W/2, lineY);
-            lineY += 22; line = w + ' ';
-          } else { line = test; }
+        var pWords = phrase.split(' '), pLine = '', pLines = [];
+        pWords.forEach(function (w) {
+          var test = pLine + w + ' ';
+          if (pLine && ctx.measureText(test).width > phraseMaxW) {
+            pLines.push(pLine.trim());
+            pLine = w + ' ';
+          } else { pLine = test; }
         });
-        ctx.fillText(line.trim(), W/2, lineY);
+        if (pLine.trim()) pLines.push(pLine.trim());
+        var pLineH = 26;
+        var phraseTop = personY - (pLines.length - 1) * pLineH / 2;
+        pLines.forEach(function (ln, i) {
+          ctx.fillText(ln, W/2, phraseTop + i * pLineH);
+        });
         ctx.restore();
 
         /* Etoiles decoratives - zone inferieure */
