@@ -434,15 +434,13 @@
     },
 
     _shareToPlatform: function (platform) {
+      var self = this;
       var data = this._getShareData();
 
-      // Web Share API (mobile)
-      if (navigator.share && platform !== 'facebook') {
-        navigator.share({ title: data.text, text: data.caption, url: data.url }).catch(function () {});
-        VT.Analytics.track('vt_share', { platform: 'webshare', type: 'compatibilite-amoureuse' });
-        return;
-      }
+      // Toujours ouvrir la modale avec l'image
+      this._shareImage();
 
+      // Puis partager via la plateforme
       switch (platform) {
         case 'facebook':
           window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(data.url), '_blank', 'width=600,height=400');
@@ -453,8 +451,7 @@
         case 'tiktok':
         case 'instagram':
         case 'snapchat':
-          this._shareImage();
-          this._showAssistText(platform);
+          setTimeout(function () { self._showAssistText(platform); }, 300);
           break;
       }
 

@@ -727,13 +727,8 @@
   fill: #ffffff;
 }
 
-/* Couleurs par plateforme */
-.vt-app .vt-share-btn[data-platform="facebook"]  { background: #1877F2 !important; box-shadow: 0 2px 10px rgba(24,119,242,0.35) !important; }
-.vt-app .vt-share-btn[data-platform="whatsapp"]  { background: #25D366 !important; box-shadow: 0 2px 10px rgba(37,211,102,0.35) !important; }
-.vt-app .vt-share-btn[data-platform="tiktok"]    { background: #010101 !important; box-shadow: 0 2px 10px rgba(0,0,0,0.35) !important; }
-.vt-app .vt-share-btn[data-platform="instagram"]  { background: #E4405F !important; box-shadow: 0 2px 10px rgba(228,64,95,0.35) !important; }
-.vt-app .vt-share-btn[data-platform="snapchat"]   { background: #FFFC00 !important; box-shadow: 0 2px 10px rgba(255,252,0,0.35) !important; }
-.vt-app .vt-share-btn[data-platform="snapchat"] svg { fill: #000 !important; }
+/* Couleurs boutons partage — monochrome vert */
+.vt-app .vt-share-btn { background: #25D366 !important; box-shadow: 0 2px 10px rgba(37,211,102,0.35) !important; }
 
 /* Toast confirmation */
 .vt-share-toast {
