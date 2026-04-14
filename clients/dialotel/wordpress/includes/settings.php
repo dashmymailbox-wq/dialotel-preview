@@ -159,8 +159,21 @@ function vt_register_settings() {
 		'vt_default_theme', 'vt_theme_toggle',
 	);
 
+	// Checkboxes — gerer "unchecked" (absent du POST = 0)
+	$checkboxes = array(
+		'vt_cta_enabled', 'vt_faq_enabled', 'vt_share_enabled',
+		'vt_share_facebook', 'vt_share_whatsapp', 'vt_share_tiktok', 'vt_share_instagram', 'vt_share_snapchat',
+		'vt_tts_enabled', 'vt_rate_limit_enabled', 'vt_theme_toggle',
+	);
+
 	foreach ( $settings as $setting ) {
-		register_setting( 'vt_settings_group', $setting );
+		$args = array();
+		if ( in_array( $setting, $checkboxes, true ) ) {
+			$args['sanitize_callback'] = function( $value ) {
+				return $value ? '1' : '0';
+			};
+		}
+		register_setting( 'vt_settings_group', $setting, $args );
 	}
 
 	// FAQ Q/R
@@ -412,6 +425,7 @@ function vt_render_admin_page() {
 					<div class="vt-admin-toggle-row">
 						<span class="vt-admin-toggle-label">Activer le CTA voyants</span>
 						<label class="vt-admin-toggle">
+							<input type="hidden" name="vt_cta_enabled" value="0">
 							<input type="checkbox" name="vt_cta_enabled" value="1" <?php checked( get_option('vt_cta_enabled', true) ); ?>>
 							<span class="vt-admin-toggle-slider"></span>
 						</label>
@@ -439,6 +453,7 @@ function vt_render_admin_page() {
 					<div class="vt-admin-toggle-row">
 						<span class="vt-admin-toggle-label">Afficher la FAQ</span>
 						<label class="vt-admin-toggle">
+							<input type="hidden" name="vt_faq_enabled" value="0">
 							<input type="checkbox" name="vt_faq_enabled" value="1" <?php checked( get_option('vt_faq_enabled', true) ); ?>>
 							<span class="vt-admin-toggle-slider"></span>
 						</label>
@@ -466,6 +481,7 @@ function vt_render_admin_page() {
 					<div class="vt-admin-toggle-row">
 						<span class="vt-admin-toggle-label">Activer les boutons de partage</span>
 						<label class="vt-admin-toggle">
+							<input type="hidden" name="vt_share_enabled" value="0">
 							<input type="checkbox" name="vt_share_enabled" value="1" <?php checked( get_option('vt_share_enabled', true) ); ?>>
 							<span class="vt-admin-toggle-slider"></span>
 						</label>
@@ -478,6 +494,7 @@ function vt_render_admin_page() {
 						<div class="vt-admin-toggle-row">
 							<span class="vt-admin-toggle-label"><?php echo $name; ?></span>
 							<label class="vt-admin-toggle">
+								<input type="hidden" name="vt_share_<?php echo $key; ?>" value="0">
 								<input type="checkbox" name="vt_share_<?php echo $key; ?>" value="1" <?php checked( get_option("vt_share_{$key}", true) ); ?>>
 								<span class="vt-admin-toggle-slider"></span>
 							</label>
@@ -642,6 +659,7 @@ function vt_render_admin_page() {
 					<div class="vt-admin-toggle-row">
 						<span class="vt-admin-toggle-label">Voix (TTS — lecture vocale)</span>
 						<label class="vt-admin-toggle">
+							<input type="hidden" name="vt_tts_enabled" value="0">
 							<input type="checkbox" name="vt_tts_enabled" value="1" <?php checked( get_option('vt_tts_enabled', false) ); ?>>
 							<span class="vt-admin-toggle-slider"></span>
 						</label>
@@ -650,6 +668,7 @@ function vt_render_admin_page() {
 					<div class="vt-admin-toggle-row">
 						<span class="vt-admin-toggle-label">Limite de tirages par jour</span>
 						<label class="vt-admin-toggle">
+							<input type="hidden" name="vt_rate_limit_enabled" value="0">
 							<input type="checkbox" name="vt_rate_limit_enabled" value="1" <?php checked( get_option('vt_rate_limit_enabled', false) ); ?>>
 							<span class="vt-admin-toggle-slider"></span>
 						</label>
@@ -689,6 +708,7 @@ function vt_render_admin_page() {
 					<div class="vt-admin-toggle-row" style="margin-top:0.75rem;">
 						<span class="vt-admin-toggle-label">Bouton toggle theme (clair/sombre)</span>
 						<label class="vt-admin-toggle">
+							<input type="hidden" name="vt_theme_toggle" value="0">
 							<input type="checkbox" name="vt_theme_toggle" value="1" <?php checked( get_option('vt_theme_toggle', true) ); ?>>
 							<span class="vt-admin-toggle-slider"></span>
 						</label>
