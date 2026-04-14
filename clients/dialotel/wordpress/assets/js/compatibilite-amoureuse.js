@@ -75,6 +75,18 @@
         self._extendRateLimit();
       });
 
+      // Bouton "Partager mon score"
+      VT.on('#vt-btn-share', 'click', function () { self._shareImage(); });
+
+      // Boutons plateforme
+      VT.on('.vt-share-btn', 'click', function () {
+        self._shareToPlatform(this.getAttribute('data-platform'));
+      });
+
+      // Boutons modale partage
+      VT.on('#vt-share-copy-link', 'click', function () { self._copyLink(); });
+      VT.on('#vt-share-copy-caption', 'click', function () { self._copyCaption(); });
+
       // Exposer _shareImage globalement pour le onclick inline du bouton
       window._vtShareImage = function () { self._shareImage(); };
     },
@@ -403,6 +415,95 @@
       }
 
       VT.StepEngine.goTo(0);
+    },
+
+    /* ===== Partage social ===== */
+
+    _getShareData: function () {
+      var scoreEl = VT.$('#vt-result-score');
+      var score = scoreEl ? scoreEl.textContent.trim() : '';
+      var name1 = this._name1 || '';
+      var name2 = this._name2 || '';
+      var text = name1 + ' + ' + name2 + ' = ' + score + ' de compatibilite !';
+      var resumeEl = VT.$('#vt-result-resume');
+      var caption = text;
+      if (resumeEl && resumeEl.textContent.trim()) {
+        caption += '\n' + resumeEl.textContent.trim();
+      }
+      return { name1: name1, name2: name2, score: score, text: text, caption: caption, url: window.location.href };
+    },
+
+    _shareToPlatform: function (platform) {
+      var data = this._getShareData();
+
+      // Web Share API (mobile)
+      if (navigator.share && platform !== 'facebook') {
+        navigator.share({ title: data.text, text: data.caption, url: data.url }).catch(function () {});
+        VT.Analytics.track('vt_share', { platform: 'webshare', type: 'compatibilite-amoureuse' });
+        return;
+      }
+
+      switch (platform) {
+        case 'facebook':
+          window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(data.url), '_blank', 'width=600,height=400');
+          break;
+        case 'whatsapp':
+          window.open('https://wa.me/?text=' + encodeURIComponent(data.caption + '\n' + data.url), '_blank');
+          break;
+        case 'tiktok':
+        case 'instagram':
+        case 'snapchat':
+          this._shareImage();
+          this._showAssistText(platform);
+          break;
+      }
+
+      VT.Analytics.track('vt_share', { platform: platform, type: 'compatibilite-amoureuse' });
+    },
+
+    _showAssistText: function (platform) {
+      var el = document.getElementById('vt-share-assist-text');
+      if (!el) return;
+      var names = { tiktok: 'TikTok', instagram: 'Instagram', snapchat: 'Snapchat' };
+      el.textContent = 'Image generee ! Telechargez-la, puis ouvrez ' + (names[platform] || platform) + ' pour la partager.';
+      el.style.display = 'block';
+    },
+
+    _copyLink: function () {
+      var url = window.location.href;
+      this._copyToClipboard(url, 'Lien copie !');
+    },
+
+    _copyCaption: function () {
+      var data = this._getShareData();
+      this._copyToClipboard(data.caption + '\n' + data.url, 'Caption copiee !');
+    },
+
+    _copyToClipboard: function (text, msg) {
+      var self = this;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () {
+          self._showToast(msg);
+        });
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        self._showToast(msg);
+      }
+    },
+
+    _showToast: function (msg) {
+      var toast = document.getElementById('vt-share-toast');
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.classList.add('vt-share-toast--visible');
+      setTimeout(function () { toast.classList.remove('vt-share-toast--visible'); }, 2500);
     },
 
     _shareImage: function () {

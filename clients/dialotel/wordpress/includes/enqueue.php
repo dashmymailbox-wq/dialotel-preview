@@ -31,6 +31,7 @@ function vt_enqueue_admin_assets( $hook ) {
    FRONT ASSETS — detecte le shortcode AVANT le rendu
    ============================================================ */
 add_action( 'wp_enqueue_scripts', 'vt_enqueue_assets' );
+add_action( 'wp_head', 'vt_inject_og_tags' );
 
 function vt_enqueue_assets() {
 	// Detection du shortcode via has_shortcode() (fiable contrairement a la globale)
@@ -93,4 +94,25 @@ function vt_enqueue_tirage_assets( $type ) {
 
 	// JS app (dans le footer)
 	wp_enqueue_script( 'vt-app-' . $slug, VT_PLUGIN_URL . 'assets/js/' . $slug . '.js', array( 'vt-core' ), VT_VERSION, true );
+}
+
+/* ============================================================
+   OPEN GRAPH — meta tags pour le partage social
+   ============================================================ */
+function vt_inject_og_tags() {
+	global $post;
+	if ( ! is_a( $post, 'WP_Post' ) || ! has_shortcode( $post->post_content, 'tirage_voyance' ) ) return;
+
+	$title = get_option( 'vt_meta_title' ) ?: get_option( 'vt_app_title', 'Compatibilite Amoureuse' );
+	$desc  = get_option( 'vt_meta_desc' ) ?: '';
+	$url   = get_permalink( $post );
+	$image = get_option( 'vt_brand_logo' ) ?: '';
+
+	echo '<meta property="og:title" content="' . esc_attr( $title ) . '">' . "\n";
+	echo '<meta property="og:description" content="' . esc_attr( $desc ) . '">' . "\n";
+	echo '<meta property="og:url" content="' . esc_url( $url ) . '">' . "\n";
+	if ( $image ) {
+		echo '<meta property="og:image" content="' . esc_url( $image ) . '">' . "\n";
+	}
+	echo '<meta property="og:type" content="website">' . "\n";
 }

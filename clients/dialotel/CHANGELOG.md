@@ -4,6 +4,24 @@ Toutes les modifications apportees au plugin WordPress `voyance-tirages`.
 
 ---
 
+## [2.0.2] — 2026-04-14
+
+### Added
+- **Module Partage Social complet** : les 5 boutons de partage (Facebook, WhatsApp, TikTok, Instagram, Snapchat) etaient decoratifs et ne faisaient rien. Maintenant chaque bouton declenche une action reelle.
+  - Bouton "Partager mon score" qui genere l'image Canvas et l'affiche dans une modale
+  - **Facebook** : partage via `sharer.php` avec l'URL de la page
+  - **WhatsApp** : partage via `wa.me` avec texte + lien
+  - **TikTok / Instagram / Snapchat** : mode assiste — generation de l'image + message d'instructions
+  - **Web Share API** : utilise le partage natif du systeme sur mobile quand disponible
+  - Boutons "Copier le lien" et "Copier la caption" dans la modale
+  - Telechargement de l'image PNG
+  - Couleurs specifiques par plateforme (bleu Facebook, vert WhatsApp, etc.)
+  - Fichiers : `templates/tirages/compatibilite-amoureuse.php`, `assets/js/compatibilite-amoureuse.js`, `assets/css/theme-dialotel.css`
+- **Open Graph meta tags** : injection automatique de `og:title`, `og:description`, `og:url`, `og:image` quand la page contient le shortcode `[tirage_voyance]`. Ameliore l'apperçu lors du partage sur Facebook et WhatsApp.
+  - Fichier : `includes/enqueue.php`
+
+---
+
 ## [2.0.1] — 2026-04-14
 
 ### Fixes

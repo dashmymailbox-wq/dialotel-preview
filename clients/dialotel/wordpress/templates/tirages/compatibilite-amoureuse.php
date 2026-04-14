@@ -253,6 +253,10 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 				<?php if ( $share_enabled ) : ?>
 				<div class="vt-share" id="vt-share">
 					<p class="vt-share-title">Partager le resultat</p>
+					<button class="vt-share-trigger" id="vt-btn-share" type="button">
+						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+						Partager mon score
+					</button>
 					<div class="vt-share-buttons">
 						<?php if ( get_option( 'vt_share_facebook', true ) ) : ?>
 						<button class="vt-share-btn" data-platform="facebook" title="Facebook">
@@ -332,6 +336,23 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 				<input type="email" id="vt-extend-email" placeholder="Votre adresse email" required autocomplete="email">
 				<button type="submit" class="btn-hex" style="width:100%;">Debloquer</button>
 			</form>
+		</div>
+	</div>
+
+	<!-- Modale partage -->
+	<div class="vt-modal-overlay" id="vt-share-modal">
+		<div class="vt-modal vt-share-modal">
+			<button class="vt-modal-close" onclick="this.closest('.vt-modal-overlay').style.display='none'" aria-label="Fermer">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+			</button>
+			<h3>Votre image de compatibilite</h3>
+			<img id="vt-share-preview" alt="Apercu du tirage" style="max-width:100%;border-radius:10px;margin:1rem 0;">
+			<div class="vt-share-modal-actions">
+				<a id="vt-share-download" download="compatibilite-amoureuse.png" class="btn-hex">Telecharger l'image</a>
+				<button id="vt-share-copy-link" class="btn-hex btn-hex--secondary" type="button">Copier le lien</button>
+				<button id="vt-share-copy-caption" class="btn-hex btn-hex--secondary" type="button">Copier la caption</button>
+			</div>
+			<p class="vt-share-assist-text" id="vt-share-assist-text" style="display:none;"></p>
 		</div>
 	</div>
 

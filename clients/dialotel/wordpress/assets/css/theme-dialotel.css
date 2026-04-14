@@ -676,6 +676,26 @@
   margin-bottom: 0.75rem;
 }
 
+.vt-app .vt-share-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.65rem 1.5rem;
+  border-radius: 30px;
+  border: 2px solid var(--theme-primary);
+  background: transparent;
+  color: var(--theme-primary);
+  font-family: var(--theme-font-title);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+.vt-app .vt-share-trigger:hover {
+  background: var(--theme-primary);
+  color: #fff;
+}
+
 .vt-app .vt-share-buttons {
   display: flex;
   align-items: center;
@@ -708,10 +728,12 @@
 }
 
 /* Couleurs par plateforme */
-.vt-app .vt-share-btn {
-  background: var(--theme-primary) !important;
-  box-shadow: 0 2px 10px rgba(237,140,230,0.35) !important;
-}
+.vt-app .vt-share-btn[data-platform="facebook"]  { background: #1877F2 !important; box-shadow: 0 2px 10px rgba(24,119,242,0.35) !important; }
+.vt-app .vt-share-btn[data-platform="whatsapp"]  { background: #25D366 !important; box-shadow: 0 2px 10px rgba(37,211,102,0.35) !important; }
+.vt-app .vt-share-btn[data-platform="tiktok"]    { background: #010101 !important; box-shadow: 0 2px 10px rgba(0,0,0,0.35) !important; }
+.vt-app .vt-share-btn[data-platform="instagram"]  { background: #E4405F !important; box-shadow: 0 2px 10px rgba(228,64,95,0.35) !important; }
+.vt-app .vt-share-btn[data-platform="snapchat"]   { background: #FFFC00 !important; box-shadow: 0 2px 10px rgba(255,252,0,0.35) !important; }
+.vt-app .vt-share-btn[data-platform="snapchat"] svg { fill: #000 !important; }
 
 /* Toast confirmation */
 .vt-share-toast {
@@ -733,6 +755,11 @@
   from { opacity: 0; transform: translateY(6px) scale(0.9); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
+
+/* ===== Modale partage ===== */
+.vt-app .vt-share-modal img { max-width: 100%; border-radius: 10px; margin: 1rem 0; }
+.vt-app .vt-share-modal-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; }
+.vt-app .vt-share-assist-text { font-size: 0.85rem; color: var(--theme-secondary); margin-top: 0.75rem; text-align: center; }
 
 /* ===== FAQ — section sans fond sous l'intro ===== */
 .vt-app .vt-step[data-step="intro"].vt-step--active {
