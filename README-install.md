@@ -1,26 +1,69 @@
-# Installation — Hexagon Voyance (Dialotel)
+# Installation — Plugin Voyance Tirages (Dialotel / Hexagon Voyance)
 
-## Fichiers a uploader
+## Installation WordPress
 
-1. Uploader le contenu du dossier `dist/` sur votre serveur WordPress
-2. Placer les fichiers CSS dans le dossier du theme enfant ou via un plugin d'injection CSS
-3. Placer le fichier HTML a la racine ou dans une page dediee
+1. Aller dans **Extensions > Ajouter > Televerser une extension**
+2. Selectionner le fichier `voyance-tirages.zip`
+3. Cliquer **Installer**, puis **Activer**
+4. Un nouveau menu **Voyance Tirages** apparait dans la sidebar admin
 
 ## Configuration
 
-1. Editer `config/hexagon-voyance.config.json` :
-   - Remplacer `REMPLACER_ICI` par votre cle API Mistral dans `ai.apiKey`
-   - Remplacer `REMPLACER_ICI` par l'URL de votre landing voyants dans `ctaVoyants.url`
-   - Remplacer `REMPLACER_ICI` par votre cle API Brevo dans `emailCapture.apiKey` (si utilise)
+Aller dans **Voyance Tirages** — 6 onglets :
 
-2. Police Catchy Mager :
-   - Placer le fichier `CatchyMager.woff2` dans `fonts/` a cote du theme
-   - Si absent, le theme WordPress hote sera utilise automatiquement
+### Onglet "Page & SEO"
+- Definir le titre et le slug de la page WordPress
+- Configurer les balises meta (title, description)
+- Cliquer **Enregistrer** pour creer la page automatiquement
 
-## Integration WordPress (Phase 1)
+### Onglet "Branding"
+- Nom de la marque (defaut : Hexagon Voyance)
+- Logo et favicon (URL depuis la mediatheque WordPress)
 
-En Phase 1, l'app est autonome (fichier HTML).
-En Phase 2, un shortcode `[tirage_voyance type="compatibilite-amoureuse" theme="dialotel"]` sera disponible.
+### Onglet "App"
+- Titre, description, texte du bouton
+- Compteur de tirages
+- Bon de reduction (pourcentage, texte email)
+- CTA voyants (texte d'accroche, bouton, URL destination)
+- FAQ SEO (5 questions/reponses)
+- Boutons de partage social (Facebook, WhatsApp, TikTok, Instagram, Snapchat)
+
+### Onglet "APIs"
+- Choisir le provider IA actif : **Mistral**, **OpenAI** ou **Claude**
+- Saisir la cle API correspondante
+- Tester la cle avec le bouton "Tester la cle"
+- Configurer **Brevo** pour la capture email (cle API + List ID)
+
+### Onglet "Avance"
+- Voix TTS (lecture vocale du resultat)
+- Limite de tirages par jour (gratuits + etendus apres email)
+- Theme par defaut (clair/sombre)
+- Bouton toggle theme
+
+### Onglet "Logs"
+- Journal d'activite en temps reel
+- Historique des appels IA, erreurs, inscriptions email
+
+## Integration dans une page
+
+Placer le shortcode dans le contenu de n'importe quelle page :
+
+```
+[tirage_voyance type="compatibilite-amoureuse"]
+```
+
+Types disponibles :
+- `compatibilite-amoureuse`
+- `compatibilite-astrologique` (bientot)
+- `tirage-tarot` (bientot)
+- `numerologie` (bientot)
+
+## Fonctionnement technique
+
+- Les cles API sont stockees cote serveur (WordPress options) — jamais exposees dans le navigateur
+- Les appels IA passent par un proxy AJAX (`admin-ajax.php`) pour proteger les cles
+- Les emails sont envoyes via Brevo (si configure)
+- Le plugin cree automatiquement la page WordPress lors de la premiere sauvegarde
 
 ## Support
 

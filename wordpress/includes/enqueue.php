@@ -40,7 +40,7 @@ function vt_enqueue_assets() {
 	// Google Fonts
 	wp_enqueue_style(
 		'vt-fonts',
-		'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap',
+		'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@400;700&display=swap',
 		array(),
 		null
 	);

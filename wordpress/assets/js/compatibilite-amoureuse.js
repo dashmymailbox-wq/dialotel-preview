@@ -697,7 +697,7 @@
       var logoImg = new Image();
       logoImg.onload  = function () { doRender(logoImg); };
       logoImg.onerror = function () { doRender(null); };
-      logoImg.src = '../wordpress/assets/logo-hexagon-voyance.webp';
+      logoImg.src = (app.config && app.config.logoUrl) || '../wordpress/assets/logo-hexagon-voyance.webp';
     }
   };
 
