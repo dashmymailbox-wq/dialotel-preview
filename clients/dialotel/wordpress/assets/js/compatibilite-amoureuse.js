@@ -521,19 +521,50 @@
         ctx.fillStyle = veil;
         ctx.fillRect(0, 0, W, H);
 
-        /* === ORDRE : logo → cœur → signes → phrase → URL === */
+        /* === LAYOUT DYNAMIQUE — gaps homogènes === */
 
-        /* --- 1. Logo (proportions d'origine 636x216) --- */
-        var logoY = 50;
+        /* Dimensions fixes */
+        var MARGIN = 30;
         var logoW = 200;
-        var logoH = Math.round(logoW * 216 / 636);
+        var logoH = Math.round(logoW * 216 / 636);           // ≈ 68
+        var HW = 240, HH = Math.round(HW * 145 / 160);      // ≈ 218
+        var BR = 34;
+        var urlH = 16;
+
+        /* Hauteur d'un bloc personne (depuis le haut du badge jusqu'au bas du texte) */
+        function personH(s) { return BR + (s ? 50 : 24); }   // 84 avec signe, 58 sans
+
+        /* Pré-calcul des lignes de phrase pour connaître sa hauteur */
+        ctx.save();
+        ctx.font = 'bold 22px "Catchy Mager", "Cinzel", Georgia, serif';
+        var phraseMaxW = W - 70;
+        var pWords = phrase.split(' '), pLine = '', pLines = [];
+        pWords.forEach(function (w) {
+          var test = pLine + w + ' ';
+          if (pLine && ctx.measureText(test).width > phraseMaxW) {
+            pLines.push(pLine.trim());
+            pLine = w + ' ';
+          } else { pLine = test; }
+        });
+        if (pLine.trim()) pLines.push(pLine.trim());
+        ctx.restore();
+        var pLineH = 26;
+        var phraseH = pLines.length * pLineH;
+
+        /* GAP uniforme entre chaque élément (5 intervalles) */
+        var totalContent = logoH + HH + personH(sign1) + phraseH + personH(sign2) + urlH;
+        var GAP = Math.max(12, Math.floor((H - MARGIN * 2 - totalContent) / 5));
+
+        /* --- Curseur Y --- */
+        var cursorY = MARGIN;
+
+        /* --- 1. Logo --- */
         if (logo) {
-          ctx.drawImage(logo, W/2 - logoW/2, logoY, logoW, logoH);
+          ctx.drawImage(logo, W/2 - logoW/2, cursorY, logoW, logoH);
         } else {
-          /* Fallback : hexagone */
           ctx.save();
           ctx.beginPath();
-          var hcx = W/2, hcy = logoY + 30, hcr = 28;
+          var hcx = W/2, hcy = cursorY + logoH / 2, hcr = 28;
           for (var k = 0; k < 6; k++) {
             var ang = Math.PI/180*(60*k-30);
             if (k===0) ctx.moveTo(hcx+hcr*Math.cos(ang), hcy+hcr*Math.sin(ang));
@@ -548,12 +579,12 @@
           ctx.fillText('HV', hcx, hcy);
           ctx.restore();
         }
+        cursorY += logoH + GAP;
 
         /* --- 2. Cœur central --- */
-        var heartTopY = 210;
-        var HW = 240, HH = Math.round(HW * 145 / 160);
+        var heartTopY = cursorY;
 
-        /* Halo rose derrière le cœur */
+        /* Halo rose */
         var halo = ctx.createRadialGradient(W/2, heartTopY + HH*0.5, 0, W/2, heartTopY + HH*0.5, 170);
         halo.addColorStop(0, 'rgba(237,140,230,0.3)');
         halo.addColorStop(1, 'rgba(237,140,230,0)');
@@ -568,24 +599,22 @@
         var hGrad = ctx.createLinearGradient(0, 0, 0, 145);
         hGrad.addColorStop(0, '#f5a0ef'); hGrad.addColorStop(0.4, '#ed8ce6'); hGrad.addColorStop(1, '#d66bc8');
         ctx.fillStyle = hGrad; ctx.fill(hPath);
-        /* Reflet subtil */
         var reflectGrad = ctx.createLinearGradient(30, 0, 130, 60);
         reflectGrad.addColorStop(0, 'rgba(255,255,255,0.25)');
         reflectGrad.addColorStop(1, 'rgba(255,255,255,0)');
         ctx.fillStyle = reflectGrad; ctx.fill(hPath);
         ctx.restore();
 
-        /* Score parfaitement centré dans le cœur */
+        /* Score dans le cœur */
         ctx.save();
         ctx.fillStyle = '#e2ed77'; ctx.font = 'bold 48px Arial, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
         ctx.shadowColor = 'rgba(0,0,0,0.3)'; ctx.shadowBlur = 10;
-        var heartCenterY = heartTopY + HH * 0.48;
-        ctx.fillText(score + '%', W/2, heartCenterY);
+        ctx.fillText(score + '%', W/2, heartTopY + HH * 0.48);
         ctx.shadowBlur = 0;
         ctx.restore();
 
-        /* Sparkles autour du cœur */
+        /* Sparkles */
         var sparkles = [
           { x: W/2 - 150, y: heartTopY + 40, r: 3.5 },
           { x: W/2 + 145, y: heartTopY + 60, r: 3 },
@@ -605,9 +634,9 @@
           ctx.fillStyle = '#e2ed77'; ctx.fill();
         });
 
-        /* --- 3. Personne 1 — Phrase — Personne 2 (vertical) --- */
-        var BR = 34;
+        cursorY += HH + GAP;
 
+        /* --- 3. Personne 1 --- */
         function drawPersonBlock(cx, cy, signData, personName) {
           ctx.save();
           ctx.beginPath(); ctx.arc(cx, cy, BR, 0, Math.PI*2);
@@ -631,14 +660,10 @@
           ctx.restore();
         }
 
-        var cursorY = heartTopY + HH + 55;
+        drawPersonBlock(W/2, cursorY + BR, sign1, name1);
+        cursorY += personH(sign1) + GAP;
 
-        /* Personne 1 */
-        drawPersonBlock(W/2, cursorY, sign1, name1);
-        cursorY += BR + (sign1 ? 50 : 24);
-
-        /* Phrase dynamique — style titre coloré */
-        cursorY += 40;
+        /* --- 4. Phrase dynamique --- */
         ctx.save();
         var titleGrad = ctx.createLinearGradient(W/2 - 130, 0, W/2 + 130, 0);
         titleGrad.addColorStop(0, '#c084fc');
@@ -647,32 +672,21 @@
         ctx.fillStyle = titleGrad;
         ctx.font = 'bold 22px "Catchy Mager", "Cinzel", Georgia, serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-        var phraseMaxW = W - 70;
-        var pWords = phrase.split(' '), pLine = '', pLines = [];
-        pWords.forEach(function (w) {
-          var test = pLine + w + ' ';
-          if (pLine && ctx.measureText(test).width > phraseMaxW) {
-            pLines.push(pLine.trim());
-            pLine = w + ' ';
-          } else { pLine = test; }
-        });
-        if (pLine.trim()) pLines.push(pLine.trim());
-        var pLineH = 26;
         pLines.forEach(function (ln, i) {
           ctx.fillText(ln, W/2, cursorY + i * pLineH);
         });
-        cursorY += pLines.length * pLineH;
         ctx.restore();
+        cursorY += phraseH + GAP;
 
-        /* Personne 2 */
-        cursorY += 40;
-        drawPersonBlock(W/2, cursorY, sign2, name2);
+        /* --- 5. Personne 2 --- */
+        drawPersonBlock(W/2, cursorY + BR, sign2, name2);
+        cursorY += personH(sign2) + GAP;
 
-        /* --- 5. Footer URL --- */
+        /* --- 6. Footer URL --- */
         ctx.save();
         ctx.fillStyle = '#a855f7'; ctx.font = '13px Arial, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-        ctx.fillText('hexagon-voyance.com', W/2, H - 30);
+        ctx.fillText('hexagon-voyance.com', W/2, cursorY);
         ctx.restore();
 
         /* Affichage dans la modale */
