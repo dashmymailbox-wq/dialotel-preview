@@ -214,9 +214,15 @@
 }
 
 /* ===== TTS — empilé sous le toggle theme, même colonne droite ===== */
+/* Caché par défaut, visible uniquement sur l'étape résultat */
 .vt-app .vt-tts-controls {
+  display: none !important;
+}
+
+.vt-app:has(.vt-step[data-step="result"].vt-step--active) .vt-tts-controls {
+  display: inline-flex !important;
   position: fixed !important;
-  top: calc(0.75rem + 44px + 8px) !important; /* sous le toggle theme (44px) + 8px gap */
+  top: calc(0.75rem + 44px + 8px) !important;
   right: 0.75rem !important;
   margin: 0 !important;
   z-index: 100 !important;
