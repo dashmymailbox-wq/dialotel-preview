@@ -213,11 +213,11 @@
   box-shadow: 0 0 10px var(--theme-glow-secondary) !important;
 }
 
-/* ===== TTS — bouton violet plein a droite, aligné avec le toggle theme ===== */
+/* ===== TTS — empilé sous le toggle theme, même colonne droite ===== */
 .vt-app .vt-tts-controls {
   position: fixed !important;
-  top: 0.75rem !important;
-  right: calc(0.75rem + 52px) !important; /* 44px toggle + 8px gap */
+  top: calc(0.75rem + 44px + 8px) !important; /* sous le toggle theme (44px) + 8px gap */
+  right: 0.75rem !important;
   margin: 0 !important;
   z-index: 100 !important;
 }
@@ -403,26 +403,26 @@
   transform: rotate(-90deg) scale(0.5);
 }
 
-/* Light mode → show sun */
+/* Light mode → montre la lune (indique qu'on passera en dark) */
 .vt-app[data-theme="light"] .vt-theme-icon-sun {
-  opacity: 1;
-  transform: rotate(0deg) scale(1);
-}
-
-.vt-app[data-theme="light"] .vt-theme-icon-moon {
-  opacity: 0;
-  transform: rotate(-90deg) scale(0.5);
-}
-
-/* Dark mode → show moon */
-.vt-app[data-theme="dark"] .vt-theme-icon-sun {
   opacity: 0;
   transform: rotate(90deg) scale(0.5);
 }
 
-.vt-app[data-theme="dark"] .vt-theme-icon-moon {
+.vt-app[data-theme="light"] .vt-theme-icon-moon {
   opacity: 1;
   transform: rotate(0deg) scale(1);
+}
+
+/* Dark mode → montre le soleil (indique qu'on passera en light) */
+.vt-app[data-theme="dark"] .vt-theme-icon-sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+.vt-app[data-theme="dark"] .vt-theme-icon-moon {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
 }
 
 /* ===== Dark mode overrides ===== */
