@@ -46,12 +46,12 @@ function vt_enqueue_assets() {
 		null
 	);
 
-	// Theme Dialotel
-	wp_enqueue_style( 'vt-theme', VT_PLUGIN_URL . 'assets/css/theme-dialotel.css', array(), VT_VERSION );
-
 	// Global + Components
-	wp_enqueue_style( 'vt-global', VT_PLUGIN_URL . 'assets/css/global.css', array( 'vt-theme' ), VT_VERSION );
+	wp_enqueue_style( 'vt-global', VT_PLUGIN_URL . 'assets/css/global.css', array(), VT_VERSION );
 	wp_enqueue_style( 'vt-components', VT_PLUGIN_URL . 'assets/css/components.css', array( 'vt-global' ), VT_VERSION );
+
+	// Theme Dialotel — chargé APRES global+components (comme dans la preview)
+	wp_enqueue_style( 'vt-theme', VT_PLUGIN_URL . 'assets/css/theme-dialotel.css', array( 'vt-components' ), VT_VERSION );
 
 	// Animations Dialotel
 	wp_enqueue_style( 'vt-anim-transition', VT_PLUGIN_URL . 'animations/transition-dialotel.css', array(), VT_VERSION );
