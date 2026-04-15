@@ -6,38 +6,38 @@
 - API Mistral (tirage IA)
 - TTS ElevenLabs (optionnel Phase 3)
 - WordPress (Phase 2)
-- Git local, pas de remote
+- Git local
 
 ## Fichiers clés
 | Fichier/Dossier | Rôle |
 |---|---|
 | assets/css/themes/ | Thèmes (mystique, dialotel) — CSS variables var(--theme-*) |
 | assets/js/core.js | Moteur partagé : étapes, limiteur quota, API, i18n, analytics |
-| assets/data/ | JSON inline : tarot, astrologie, config, i18n |
-| assets/animations/ | Banque CSS : transitions, loaders, card reveal, reveal |
-| [nom-tirage].html | Apps autonomes Phase 1 (compatibilité, tarot, numérologie...) |
-| clients/dialotel/ | White label client (jamais dans les zips de livraison) |
+| assets/data/ | JSON inline : tarot, astrologie, config, i18n, prompts |
+| assets/animations/ | Banque CSS : transitions, loaders, cards, reveal |
+| [nom-tirage].html | 4 apps : compatibilité-amoureuse, -astrologique, tarot, numérologie |
+| clients/dialotel/ | White label client (jamais dans les zips client) |
 
 ## Architecture
-Socle partagé : CSS global (var(--theme-*), reset .vt-app) + components réutilisables + moteur core.js pour étapes/limiteur/IA/i18n. Chaque tirage = 1 HTML autonome + CSS spécifique + JS logique métier. Phases : Phase 1 (HTML standalone + theme mystique) → Phase 1B (plugin Dialotel sobre) → Phase 2 (plugin CodeCanyon commercial).
+Socle partagé : CSS global (var(--theme-*), reset .vt-app) + moteur core.js pour étapes/limiteur/IA/i18n. Chaque tirage = 1 HTML autonome + CSS spécifique + JS logique métier. Phases : Phase 1 (4 apps HTML standalone + theme mystique) → Phase 1B (plugin Dialotel sobre) → Phase 2 (plugin CodeCanyon commercial).
 
 ## État actuel
-✅ Arborescence + socle CSS/JS + banque animations + sprites SVG + i18n  
-🔄 En cours : première app (compatibilité-amoureuse.html)  
-⏳ À faire : config API Mistral, clé CatchyMager, définir quotas/counterBase
+✅ Phase 1 socle complet : arborescence, CSS/JS, animations, SVG, i18n  
+✅ 4 apps HTML : compatibilité-amoureuse, -astrologique, tarot, numérologie  
+⏳ À finaliser : API Mistral, CatchyMager (Dialotel), counterBase & quotas
 
 ## Prochaines étapes
-1. Finaliser compatibilité-amoureuse.html (HTML + CSS + JS + config.json)
-2. Récupérer police CatchyMager auprès de Dialotel
-3. Configurer clé API Mistral (pattern `"apiKey": "REMPLACER_ICI"`)
-4. Définir dans TODO.md : counterBase par tirage + limites quotas
+1. Récupérer CatchyMager.woff2 auprès de Dialotel → clients/dialotel/fonts/
+2. Configurer clé API Mistral (pattern `"apiKey": "REMPLACER_ICI"`)
+3. Définir counterBase (valeur initiale) + quotas (freePerDay, extendedPerDay)
+4. Définir URL landing voyants pour CTA
 
 ## Commandes
 ```bash
-# Ouvrir tirage dans navigateur (pas de serveur nécessaire)
+# Ouvrir tirage dans navigateur
 open [nom-tirage].html
 
-# Consulter autorité de projet
+# Consulter références
 cat PROJECT.md   # Vision produit
 cat SPEC.md      # Règles techniques
 cat TODO.md      # État d'avancement

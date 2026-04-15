@@ -90,6 +90,15 @@
       window._vtShareImage = function () { self._shareImage(); };
     },
 
+    _sanitize: function (str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;');
+    },
+
     _checkRateLimit: function () {
       var tirageId = this.config.tirageId || 'compat-amour';
       var remaining = VT.RateLimiter.getRemaining(tirageId);
@@ -118,6 +127,21 @@
 
       if (!name1 || !name2) {
         this._showError('Veuillez entrer les deux prenoms.');
+        return;
+      }
+
+      var namePattern = /^[a-zA-ZÀ-ÿ\s\-']{1,50}$/;
+      if (!namePattern.test(name1) || !namePattern.test(name2)) {
+        this._showError('Les prenoms ne doivent contenir que des lettres (50 caracteres max).');
+        return;
+      }
+
+      if (birth1 && !/^\d{4}-\d{2}-\d{2}$/.test(birth1)) {
+        this._showError('Format de date invalide.');
+        return;
+      }
+      if (birth2 && !/^\d{4}-\d{2}-\d{2}$/.test(birth2)) {
+        this._showError('Format de date invalide.');
         return;
       }
 
@@ -210,11 +234,11 @@
       if (headerEl) {
         var html = '<div class="vt-result-person">';
         if (this._sign1) html += '<div class="vt-sign-badge vt-sign-badge--result"><svg><use href="#sign-' + this._sign1.key + '"/></svg></div>';
-        html += '<span class="vt-result-person-name">' + (this._name1 || '') + '</span></div>';
+        html += '<span class="vt-result-person-name">' + this._sanitize(this._name1 || '') + '</span></div>';
         html += '<span class="vt-result-person-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>';
         html += '<div class="vt-result-person">';
         if (this._sign2) html += '<div class="vt-sign-badge vt-sign-badge--result"><svg><use href="#sign-' + this._sign2.key + '"/></svg></div>';
-        html += '<span class="vt-result-person-name">' + (this._name2 || '') + '</span></div>';
+        html += '<span class="vt-result-person-name">' + this._sanitize(this._name2 || '') + '</span></div>';
         headerEl.innerHTML = html;
       }
 
@@ -232,14 +256,15 @@
 
       // Points forts
       var strengthsEl = VT.$('#vt-result-strengths');
+      var self2 = this;
       if (strengthsEl) strengthsEl.innerHTML = result.pointsFort.map(function (p) {
-        return '<li>' + p + '</li>';
+        return '<li>' + self2._sanitize(p) + '</li>';
       }).join('');
 
       // Tensions
       var tensionsEl = VT.$('#vt-result-tensions');
       if (tensionsEl) tensionsEl.innerHTML = result.tensions.map(function (p) {
-        return '<li>' + p + '</li>';
+        return '<li>' + self2._sanitize(p) + '</li>';
       }).join('');
 
       // Conseil
