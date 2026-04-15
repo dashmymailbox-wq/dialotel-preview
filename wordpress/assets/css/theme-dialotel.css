@@ -213,13 +213,13 @@
   box-shadow: 0 0 10px var(--theme-glow-secondary) !important;
 }
 
-/* ===== TTS — bouton violet plein a droite ===== */
+/* ===== TTS — bouton violet plein a droite, aligné avec le toggle theme ===== */
 .vt-app .vt-tts-controls {
-  position: absolute !important;
-  top: 1rem !important;
-  right: 1rem !important;
+  position: fixed !important;
+  top: 0.75rem !important;
+  right: calc(0.75rem + 52px) !important; /* 44px toggle + 8px gap */
   margin: 0 !important;
-  z-index: 3 !important;
+  z-index: 100 !important;
 }
 
 .vt-app .vt-tts-btn {
@@ -361,10 +361,10 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  position: absolute !important;
+  position: fixed !important;
   top: 0.75rem !important;
   left: auto !important;
-  right: max(0.75rem, calc(50% - 308px)) !important;
+  right: 0.75rem !important;
   z-index: 99 !important;
   width: 44px;
   height: 44px;
