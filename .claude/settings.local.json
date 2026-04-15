@@ -57,7 +57,8 @@
       "Bash(python3 -c ':*)",
       "Read(//home/caums/.wp-now/wp-content/wordpress-58a0de3ff792fb69572a41323da239eb1f5479f7/plugins/**)",
       "Read(//home/caums/.wp-now/wp-content/wordpress-58a0de3ff792fb69572a41323da239eb1f5479f7/database/**)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(npx claude-mem:*)"
     ]
   }
 }
