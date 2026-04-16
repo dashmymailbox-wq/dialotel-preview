@@ -80,6 +80,10 @@ body { background-color: #ffffff !important; margin: 0 !important; }
 	// Core JS (dans le footer)
 	wp_enqueue_script( 'vt-core', VT_PLUGIN_URL . 'assets/js/core.js', array(), VT_VERSION, true );
 
+	// Anneaux mandala — injectes en JS comme premiers enfants de <body>
+	// --vt-mandala est sur :root (theme-dialotel.css) donc accessible sans getComputedStyle
+	wp_add_inline_script( 'vt-core', '(function(){if(document.querySelector(".vt-ring-bg"))return;[1,2,3].forEach(function(i){var d=document.createElement("div");d.setAttribute("aria-hidden","true");d.className="vt-ring-bg vt-ring-bg--"+i;document.body.insertBefore(d,document.body.firstChild);});})();', 'before' );
+
 	// Proxy URLs + nonce injectes dans core.js
 	$proxy_url   = admin_url( 'admin-ajax.php?action=vt_ai_proxy' );
 	$email_proxy = admin_url( 'admin-ajax.php?action=vt_email_proxy' );
