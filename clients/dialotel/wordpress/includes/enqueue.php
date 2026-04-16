@@ -66,6 +66,7 @@ body { background-color: #ffffff !important; margin: 0 !important; }
     contain: none !important;
     will-change: auto !important;
     perspective: none !important;
+    background: transparent !important;
 }
 
 ' );
