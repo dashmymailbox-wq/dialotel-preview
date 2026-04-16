@@ -55,10 +55,12 @@ function vt_enqueue_assets() {
 
 	// Neutralise les propriétés WP qui piègent position:fixed des anneaux mandala
 	wp_add_inline_style( 'vt-theme', '
+body { background-color: #ffffff !important; margin: 0 !important; }
 #page, .wp-site-blocks, #content, #primary, main,
 .site-main, .entry-content, .wp-block-post-content,
 .is-layout-constrained, .has-global-padding,
-.wp-block-group, .wp-block-template-part {
+.wp-block-group, .wp-block-template-part,
+.wp-block-query, .wp-block-post, .wp-block-page-list {
     transform: none !important;
     filter: none !important;
     contain: none !important;
