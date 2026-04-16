@@ -122,9 +122,17 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 			<!-- FAQ SEO -->
 			<section class="vt-faq" itemscope itemtype="https://schema.org/FAQPage">
 				<h2 class="vt-faq-title"><?php echo esc_html( $faq_title ); ?></h2>
-				<?php for ( $i = 1; $i <= 5; $i++ ) :
-					$q = get_option( "vt_faq_q{$i}", '' );
-					$a = get_option( "vt_faq_a{$i}", '' );
+				<?php
+				$faq_defaults = array(
+					1 => array( 'q' => 'Comment fonctionne le calcul de compatibilite amoureuse ?', 'a' => 'Notre outil combine numerologie et astrologie pour calculer un score de compatibilite entre deux personnes. Il analyse les vibrations de vos prenoms et, si vous les renseignez, les affinites entre vos signes astrologiques.' ),
+					2 => array( 'q' => 'Le score de compatibilite est-il fiable ?', 'a' => "Le score indique des affinites potentielles basees sur des traditions astrologiques milleniaires. Il constitue un outil de reflexion et d'exploration, pas une garantie. Seule la rencontre humaine cree une vraie relation." ),
+					3 => array( 'q' => 'Que signifie un score eleve ?', 'a' => 'Un score eleve suggere une harmonie naturelle et des affinites energetiques fortes entre les deux personnes. Cela favorise la comprehension mutuelle, mais chaque couple reste unique.' ),
+					4 => array( 'q' => 'Puis-je faire plusieurs tirages gratuits ?', 'a' => 'Oui, plusieurs tirages gratuits sont disponibles chaque jour. Pour un accompagnement personnalise et approfondi, nos voyants specialistes en relations amoureuses sont disponibles 24h/24.' ),
+					5 => array( 'q' => "Faut-il connaitre la date de naissance pour utiliser l'outil ?", 'a' => 'Non, les prenoms suffisent pour obtenir un premier tirage. Ajouter les dates de naissance et signes astrologiques permet une analyse plus precise et personnalisee de votre compatibilite.' ),
+				);
+				for ( $i = 1; $i <= 5; $i++ ) :
+					$q = get_option( "vt_faq_q{$i}", $faq_defaults[ $i ]['q'] );
+					$a = get_option( "vt_faq_a{$i}", $faq_defaults[ $i ]['a'] );
 					if ( empty( $q ) ) continue;
 				?>
 				<details class="vt-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
