@@ -41,8 +41,8 @@
   content: '' !important;
   display: block !important;
   position: fixed !important;
-  top: 50% !important;
-  left: 50% !important;
+  top: 50vh !important;
+  left: 50vw !important;
   width: 140vmax !important;
   height: 140vmax !important;
   background-image: var(--vt-mandala) !important;
@@ -60,8 +60,8 @@
 .vt-app .vt-stars-layer {
   display: block !important;
   position: fixed !important;
-  top: 50% !important;
-  left: 50% !important;
+  top: 50vh !important;
+  left: 50vw !important;
   width: 140vmax !important;
   height: 140vmax !important;
   transform: translate(-50%, -50%) !important;
@@ -83,8 +83,8 @@
 .vt-app .vt-particles {
   display: block !important;
   position: fixed !important;
-  top: 50% !important;
-  left: 50% !important;
+  top: 50vh !important;
+  left: 50vw !important;
   width: 140vmax !important;
   height: 140vmax !important;
   transform: translate(-50%, -50%) !important;

@@ -67,8 +67,7 @@ body { background-color: #ffffff !important; margin: 0 !important; }
     will-change: auto !important;
     perspective: none !important;
 }
-.vt-app::before { display: none !important; }
-.vt-app .vt-stars-layer, .vt-app .vt-particles { display: none !important; }
+
 ' );
 
 	// Animations Dialotel
