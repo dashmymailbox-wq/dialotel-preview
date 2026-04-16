@@ -53,7 +53,7 @@ function vt_enqueue_assets() {
 	// Theme Dialotel — chargé APRES global+components (comme dans la preview)
 	wp_enqueue_style( 'vt-theme', VT_PLUGIN_URL . 'assets/css/theme-dialotel.css', array( 'vt-components' ), VT_VERSION );
 
-	// Neutralise les propriétés WP qui piègent position:fixed des anneaux mandala
+	// Neutralise les propriétés WP qui piègent position:fixed + supprime les anneaux originaux piégés
 	wp_add_inline_style( 'vt-theme', '
 body { background-color: #ffffff !important; margin: 0 !important; }
 #page, .wp-site-blocks, #content, #primary, main,
@@ -67,6 +67,8 @@ body { background-color: #ffffff !important; margin: 0 !important; }
     will-change: auto !important;
     perspective: none !important;
 }
+.vt-app::before { display: none !important; }
+.vt-app .vt-stars-layer, .vt-app .vt-particles { display: none !important; }
 ' );
 
 	// Animations Dialotel
@@ -77,25 +79,6 @@ body { background-color: #ffffff !important; margin: 0 !important; }
 
 	// Core JS (dans le footer)
 	wp_enqueue_script( 'vt-core', VT_PLUGIN_URL . 'assets/js/core.js', array(), VT_VERSION, true );
-
-	// Fix anneaux mandala : position:fixed est piégé par transform/contain WP → on recrée les anneaux en enfants directs du <body>
-	wp_add_inline_script( 'vt-core', '(function(){
-  if(document.querySelector(".vt-ring-bg"))return;
-  var app=document.querySelector(".vt-app");
-  if(app){
-    var m=getComputedStyle(app).getPropertyValue("--vt-mandala").trim();
-    if(m)document.documentElement.style.setProperty("--vt-mandala",m);
-  }
-  var s=document.createElement("style");
-  s.textContent=".vt-app::before{display:none!important}.vt-app .vt-stars-layer,.vt-app .vt-particles{display:none!important}";
-  document.head.appendChild(s);
-  [1,2,3].forEach(function(i){
-    var d=document.createElement("div");
-    d.setAttribute("aria-hidden","true");
-    d.className="vt-ring-bg vt-ring-bg--"+i;
-    document.body.appendChild(d);
-  });
-})();', 'before' );
 
 	// Proxy URLs + nonce injectes dans core.js
 	$proxy_url   = admin_url( 'admin-ajax.php?action=vt_ai_proxy' );
@@ -129,6 +112,21 @@ function vt_enqueue_tirage_assets( $type ) {
 
 	// JS app (dans le footer)
 	wp_enqueue_script( 'vt-app-' . $slug, VT_PLUGIN_URL . 'assets/js/' . $slug . '.js', array( 'vt-core' ), VT_VERSION, true );
+}
+
+/* ============================================================
+   ANNEAUX MANDALA — injectes comme enfants directs du <body>
+   (position:fixed fonctionne toujours sur les enfants de <body>,
+    quel que soit le theme WP — pas de piégeage possible)
+   ============================================================ */
+add_action( 'wp_body_open', 'vt_inject_mandala_rings' );
+
+function vt_inject_mandala_rings() {
+	global $post;
+	if ( ! is_a( $post, 'WP_Post' ) || ! has_shortcode( $post->post_content, 'tirage_voyance' ) ) return;
+	echo '<div aria-hidden="true" class="vt-ring-bg vt-ring-bg--1"></div>' . "\n";
+	echo '<div aria-hidden="true" class="vt-ring-bg vt-ring-bg--2"></div>' . "\n";
+	echo '<div aria-hidden="true" class="vt-ring-bg vt-ring-bg--3"></div>' . "\n";
 }
 
 /* ============================================================
