@@ -114,21 +114,6 @@ function vt_enqueue_tirage_assets( $type ) {
 }
 
 /* ============================================================
-   ANNEAUX MANDALA — injectes comme enfants directs du <body>
-   (position:fixed fonctionne toujours sur les enfants de <body>,
-    quel que soit le theme WP — pas de piégeage possible)
-   ============================================================ */
-add_action( 'wp_body_open', 'vt_inject_mandala_rings' );
-
-function vt_inject_mandala_rings() {
-	global $post;
-	if ( ! is_a( $post, 'WP_Post' ) || ! has_shortcode( $post->post_content, 'tirage_voyance' ) ) return;
-	echo '<div aria-hidden="true" class="vt-ring-bg vt-ring-bg--1"></div>' . "\n";
-	echo '<div aria-hidden="true" class="vt-ring-bg vt-ring-bg--2"></div>' . "\n";
-	echo '<div aria-hidden="true" class="vt-ring-bg vt-ring-bg--3"></div>' . "\n";
-}
-
-/* ============================================================
    OPEN GRAPH — meta tags pour le partage social
    ============================================================ */
 function vt_inject_og_tags() {

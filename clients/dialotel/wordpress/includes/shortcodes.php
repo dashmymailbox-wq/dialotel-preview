@@ -60,55 +60,50 @@ function vt_render_shortcode( $atts ) {
 	$html = ob_get_clean();
 
 	// CSS inline — cacher le chrome WP + forcer le layout du plugin
-	// Note : ce style est genere par PHP = jamais mis en cache navigateur
 	$hide_css = '<style>
-		/* Fond body blanc comme la preview */
 		body { background: #ffffff !important; margin: 0 !important; }
-
-		/* Cacher le titre de page (doublon avec le contenu du plugin) */
-		body .entry-title,
-		body .page-title,
-		body h1.entry-title,
-		body header.entry-header,
-		body .site-header,
-		body #masthead,
-		body .widget-area,
-		body .sidebar,
-		body #secondary,
-		body .wp-block-post-title {
-			display: none !important;
-		}
-		/* Forcer les conteneurs parents a ne pas contraindre le plugin */
-		body .site-content,
-		body #primary,
-		body #content,
-		body main,
-		body .entry-content,
-		body .wp-block-post-content,
-		body .is-layout-constrained,
-		body .wp-block-group.is-layout-constrained {
-			max-width: 100% !important;
-			width: 100% !important;
-			padding: 0 !important;
-			margin: 0 !important;
-			height: auto !important;
-			overflow: visible !important;
-		}
-		/*
-		 * FIX CRITIQUE — anneaux mandala centres sur le viewport.
-		 *
-		 * position:fixed est piege par transform/contain sur les ancestors WP.
-		 * Quand piege, top:50% = 50% de la colonne WP (~600px), pas du viewport.
-		 * Solution : vh/vw sont TOUJOURS relatifs au viewport, meme quand piege.
-		 */
-		.vt-app::before,
-		.vt-app .vt-stars-layer,
-		.vt-app .vt-particles,
-		.vt-ring-bg {
-			top: 50vh !important;
-			left: 50vw !important;
+		body .entry-title, body .page-title, body h1.entry-title,
+		body header.entry-header, body .site-header, body #masthead,
+		body .widget-area, body .sidebar, body #secondary,
+		body .wp-block-post-title { display: none !important; }
+		body .site-content, body #primary, body #content, body main,
+		body .entry-content, body .wp-block-post-content,
+		body .is-layout-constrained, body .wp-block-group.is-layout-constrained {
+			max-width: 100% !important; width: 100% !important;
+			padding: 0 !important; margin: 0 !important;
+			height: auto !important; overflow: visible !important;
 		}
 	</style>';
 
-	return $hide_css . $html;
+	/*
+	 * Fix position:fixed trapping.
+	 *
+	 * Dans WordPress, un ancestor de .vt-app peut avoir transform/filter/perspective,
+	 * ce qui piege les elements position:fixed et les centre sur cet ancestor
+	 * plutot que sur le viewport. Ce script detecte l'ancestor piégeant,
+	 * calcule l'offset exact pour centrer les anneaux sur le viewport,
+	 * et injecte le CSS corrige. S'il n'y a pas de piegeage, le script
+	 * ne fait rien (les anneaux fonctionnent normalement comme dans la preview).
+	 */
+	$ring_fix = '<script>
+document.addEventListener("DOMContentLoaded",function(){
+  var app=document.querySelector(".vt-app");
+  if(!app)return;
+  var el=app.parentElement,trap=null;
+  while(el&&el!==document.documentElement){
+    var cs=window.getComputedStyle(el);
+    if(cs.transform!=="none"||cs.filter!=="none"||cs.perspective!=="none"){trap=el;break;}
+    el=el.parentElement;
+  }
+  if(!trap)return;
+  var r=trap.getBoundingClientRect();
+  var t=(window.innerHeight/2-r.top).toFixed(2);
+  var l=(window.innerWidth/2-r.left).toFixed(2);
+  var s=document.createElement("style");
+  s.textContent=".vt-app::before,.vt-app .vt-stars-layer,.vt-app .vt-particles{top:"+t+"px!important;left:"+l+"px!important}";
+  document.head.appendChild(s);
+});
+</script>';
+
+	return $hide_css . $html . $ring_fix;
 }
