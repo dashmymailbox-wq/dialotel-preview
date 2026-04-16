@@ -1,0 +1,63 @@
+<h2>Le problème : container lavande dans WordPress</h2>
+<p class="subtitle">Le fond dégradé du plugin s'affiche comme une boîte car <code>.vt-app</code> est piégé dans le contenu WP</p>
+
+<div class="split" style="gap:1.5rem;margin-top:1.5rem;">
+
+  <!-- PREVIEW : OK -->
+  <div class="mockup">
+    <div class="mockup-header">Preview HTML — Correct ✓</div>
+    <div class="mockup-body" style="background:#f5f5f5;padding:0;min-height:240px;position:relative;overflow:hidden;">
+      <!-- Simule le body blanc, vt-app plein écran -->
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,#fff 0%,#f8f0ff 50%,#f0e6f6 100%);display:flex;align-items:center;justify-content:center;">
+        <div style="text-align:center;">
+          <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#ed8ce6,#d66bc8);margin:0 auto 0.5rem;"></div>
+          <span style="font-size:0.8rem;color:#8a6fa0;font-family:sans-serif;">vt-app = plein viewport<br>fond lavande invisible car full-width</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLUGIN WP : Problème -->
+  <div class="mockup">
+    <div class="mockup-header">Plugin WordPress — Problème ✗</div>
+    <div class="mockup-body" style="background:#ffffff;padding:1rem;min-height:240px;display:flex;align-items:center;justify-content:center;">
+      <!-- Simule le conteneur WP qui contraint vt-app -->
+      <div style="background:#ffffff;width:100%;padding:0.5rem;">
+        <!-- vt-app piégé dans max-width WP → fond lavande visible comme boîte -->
+        <div style="background:radial-gradient(ellipse at center,#fff 0%,#f8f0ff 50%,#f0e6f6 100%);border-radius:4px;padding:2rem;text-align:center;">
+          <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#ed8ce6,#d66bc8);margin:0 auto 0.5rem;"></div>
+          <span style="font-size:0.8rem;color:#8a6fa0;font-family:sans-serif;">vt-app = contraint<br>fond lavande visible comme container</span>
+        </div>
+        <p style="font-size:0.72rem;color:#aaa;text-align:center;margin-top:0.5rem;font-family:sans-serif;">← fond blanc WP visible tout autour →</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="section" style="margin-top:2rem;">
+  <h3>3 approches pour corriger</h3>
+  <div class="options">
+    <div class="option" data-choice="a" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>Breakout CSS</h3>
+        <p>Donner à <code>.vt-app</code> une position qui le sort du flux WP (negative margins ou width:100vw). Simple, mais peut casser certains thèmes.</p>
+      </div>
+    </div>
+    <div class="option" data-choice="b" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>Fond transparent + overlay body</h3>
+        <p>Supprimer le fond lavande de <code>.vt-app</code> et injecter le dégradé directement sur le <code>body</code> via le shortcode. Propre, sans breakout.</p>
+      </div>
+    </div>
+    <div class="option" data-choice="c" onclick="toggleSelect(this)">
+      <div class="letter">C</div>
+      <div class="content">
+        <h3>Renforcer les resets shortcode</h3>
+        <p>Ajouter les sélecteurs manquants du thème Dialotel dans <code>$hide_css</code> pour forcer tous les ancêtres à 100% width et 0 padding. Plus ciblé.</p>
+      </div>
+    </div>
+  </div>
+</div>
