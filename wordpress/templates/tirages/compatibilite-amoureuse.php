@@ -376,6 +376,17 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 { "app": { "loading": "Chargement...", "error": "Une erreur est survenue.", "retry": "Reessayer", "restart": "Refaire un tirage" }, "counter": { "label": "tirages effectues ce mois" }, "rateLimiter": { "remaining": "Il vous reste {count} tirage(s) aujourd'hui" } }
 </script>
 
+<script>
+(function(){
+    var app = document.currentScript.closest('.vt-app') ||
+              document.querySelector('.vt-app[data-tirage="compatibilite-amoureuse"]') ||
+              document.querySelector('.vt-app');
+    if (app && app.parentNode !== document.body) {
+        document.body.appendChild(app);
+    }
+})();
+</script>
+
 <script type="text/plain" id="vt-prompt-compat-amour">
 Tu es un astrologue et expert en compatibilite amoureuse. Redige une analyse de compatibilite en JSON uniquement :
 { "score": <1-100>, "resume": "<2-3 phrases>", "pointsFort": ["<1>", "<2>", "<3>"], "tensions": ["<1>", "<2>"], "conseil": "<2-3 phrases>" }
