@@ -53,6 +53,20 @@ function vt_enqueue_assets() {
 	// Theme Dialotel — chargé APRES global+components (comme dans la preview)
 	wp_enqueue_style( 'vt-theme', VT_PLUGIN_URL . 'assets/css/theme-dialotel.css', array( 'vt-components' ), VT_VERSION );
 
+	// Neutralise les propriétés WP qui piègent position:fixed des anneaux mandala
+	wp_add_inline_style( 'vt-theme', '
+#page, .wp-site-blocks, #content, #primary, main,
+.site-main, .entry-content, .wp-block-post-content,
+.is-layout-constrained, .has-global-padding,
+.wp-block-group, .wp-block-template-part {
+    transform: none !important;
+    filter: none !important;
+    contain: none !important;
+    will-change: auto !important;
+    perspective: none !important;
+}
+' );
+
 	// Animations Dialotel
 	wp_enqueue_style( 'vt-anim-transition', VT_PLUGIN_URL . 'animations/transition-dialotel.css', array(), VT_VERSION );
 	wp_enqueue_style( 'vt-anim-loader', VT_PLUGIN_URL . 'animations/loader-dialotel.css', array(), VT_VERSION );
