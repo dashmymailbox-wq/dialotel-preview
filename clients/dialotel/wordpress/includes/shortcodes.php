@@ -61,7 +61,8 @@ function vt_render_shortcode( $atts ) {
 
 	// CSS inline — cacher le chrome WP + forcer le layout du plugin
 	$hide_css = '<style>
-		body { background: #ffffff !important; margin: 0 !important; }
+		body { background: radial-gradient(ellipse at center, #ffffff 0%, #f8f0ff 50%, #f0e6f6 100%) !important; margin: 0 !important; }
+		.vt-app { background: transparent !important; }
 		body .entry-title, body .page-title, body h1.entry-title,
 		body header.entry-header, body .site-header, body #masthead,
 		body .widget-area, body .sidebar, body #secondary,
