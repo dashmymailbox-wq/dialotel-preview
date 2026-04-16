@@ -60,7 +60,11 @@ function vt_render_shortcode( $atts ) {
 	$html = ob_get_clean();
 
 	// CSS inline — cacher le chrome WP + forcer le layout du plugin
+	// Note : ce style est genere par PHP = jamais mis en cache navigateur
 	$hide_css = '<style>
+		/* Fond body blanc comme la preview */
+		body { background: #ffffff !important; margin: 0 !important; }
+
 		/* Cacher le titre de page (doublon avec le contenu du plugin) */
 		body .entry-title,
 		body .page-title,
@@ -89,6 +93,20 @@ function vt_render_shortcode( $atts ) {
 			margin: 0 !important;
 			height: auto !important;
 			overflow: visible !important;
+		}
+		/*
+		 * FIX CRITIQUE — anneaux mandala centres sur le viewport.
+		 *
+		 * position:fixed est piege par transform/contain sur les ancestors WP.
+		 * Quand piege, top:50% = 50% de la colonne WP (~600px), pas du viewport.
+		 * Solution : vh/vw sont TOUJOURS relatifs au viewport, meme quand piege.
+		 */
+		.vt-app::before,
+		.vt-app .vt-stars-layer,
+		.vt-app .vt-particles,
+		.vt-ring-bg {
+			top: 50vh !important;
+			left: 50vw !important;
 		}
 	</style>';
 
