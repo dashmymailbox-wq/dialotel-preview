@@ -92,7 +92,15 @@ document.addEventListener("DOMContentLoaded",function(){
   var el=app.parentElement,trap=null;
   while(el&&el!==document.documentElement){
     var cs=window.getComputedStyle(el);
-    if(cs.transform!=="none"||cs.filter!=="none"||cs.perspective!=="none"){trap=el;break;}
+    var wc=cs.willChange||"";
+    var ct=cs.contain||"";
+    var trapsFixed=
+      cs.transform!=="none"||
+      cs.filter!=="none"||
+      cs.perspective!=="none"||
+      /transform|perspective|filter/.test(wc)||
+      /layout|paint|strict|content/.test(ct);
+    if(trapsFixed){trap=el;break;}
     el=el.parentElement;
   }
   if(!trap)return;
