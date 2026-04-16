@@ -52,8 +52,6 @@ function vt_enqueue_assets() {
 
 	// Theme Dialotel — chargé APRES global+components (comme dans la preview)
 	wp_enqueue_style( 'vt-theme', VT_PLUGIN_URL . 'assets/css/theme-dialotel.css', array( 'vt-components' ), VT_VERSION );
-	// Supprime le scroll horizontal causé par 100vw > largeur body (scrollbar verticale)
-	wp_add_inline_style( 'vt-theme', 'html { overflow-x: hidden !important; }' );
 
 	// Animations Dialotel
 	wp_enqueue_style( 'vt-anim-transition', VT_PLUGIN_URL . 'animations/transition-dialotel.css', array(), VT_VERSION );
