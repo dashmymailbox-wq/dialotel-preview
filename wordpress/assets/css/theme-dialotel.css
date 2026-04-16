@@ -98,6 +98,39 @@
   display: none !important;
 }
 
+/* ===== Anneaux mandala au niveau body — fix WordPress position:fixed trapping ===== */
+.vt-ring-bg {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  width: 140vmax !important;
+  height: 140vmax !important;
+  transform: translate(-50%, -50%) !important;
+  background-image: var(--vt-mandala) !important;
+  background-size: 100% 100% !important;
+  background-repeat: no-repeat !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+.vt-ring-bg--1 {
+  -webkit-mask-image: radial-gradient(ellipse at center, transparent 2%, rgba(0,0,0,.3) 4%, black 6%, black 38%, rgba(0,0,0,.3) 41%, transparent 44%) !important;
+  mask-image: radial-gradient(ellipse at center, transparent 2%, rgba(0,0,0,.3) 4%, black 6%, black 38%, rgba(0,0,0,.3) 41%, transparent 44%) !important;
+  animation: vt-ring1 45s linear infinite !important;
+}
+
+.vt-ring-bg--2 {
+  -webkit-mask-image: radial-gradient(ellipse at center, transparent 38%, rgba(0,0,0,.3) 41%, black 44%, black 66%, rgba(0,0,0,.3) 69%, transparent 72%) !important;
+  mask-image: radial-gradient(ellipse at center, transparent 38%, rgba(0,0,0,.3) 41%, black 44%, black 66%, rgba(0,0,0,.3) 69%, transparent 72%) !important;
+  animation: vt-ring2 75s linear infinite !important;
+}
+
+.vt-ring-bg--3 {
+  -webkit-mask-image: radial-gradient(ellipse at center, transparent 66%, rgba(0,0,0,.25) 69%, black 72%, black 96%, rgba(0,0,0,.15) 99%, transparent 100%) !important;
+  mask-image: radial-gradient(ellipse at center, transparent 66%, rgba(0,0,0,.25) 69%, black 72%, black 96%, rgba(0,0,0,.15) 99%, transparent 100%) !important;
+  animation: vt-ring3 100s linear infinite !important;
+}
+
 /* ===== Animations — 3 anneaux mandala ===== */
 @keyframes vt-ring1 {
   0%   { transform: translate(-50%, -50%) rotate(0deg) scale(1); opacity: .75; }
