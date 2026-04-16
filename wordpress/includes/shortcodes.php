@@ -73,6 +73,7 @@ function vt_render_shortcode( $atts ) {
 			max-width: 100% !important; width: 100% !important;
 			padding: 0 !important; margin: 0 !important;
 			height: auto !important; overflow: visible !important;
+			background: transparent !important;
 		}
 	</style>';
 
