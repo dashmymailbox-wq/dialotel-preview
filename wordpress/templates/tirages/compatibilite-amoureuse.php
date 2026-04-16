@@ -131,8 +131,8 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 					5 => array( 'q' => "Faut-il connaitre la date de naissance pour utiliser l'outil ?", 'a' => 'Non, les prenoms suffisent pour obtenir un premier tirage. Ajouter les dates de naissance et signes astrologiques permet une analyse plus precise et personnalisee de votre compatibilite.' ),
 				);
 				for ( $i = 1; $i <= 5; $i++ ) :
-					$q = get_option( "vt_faq_q{$i}", $faq_defaults[ $i ]['q'] );
-					$a = get_option( "vt_faq_a{$i}", $faq_defaults[ $i ]['a'] );
+					$q = get_option( "vt_faq_q{$i}" ) ?: $faq_defaults[ $i ]['q'];
+					$a = get_option( "vt_faq_a{$i}" ) ?: $faq_defaults[ $i ]['a'];
 					if ( empty( $q ) ) continue;
 				?>
 				<details class="vt-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
