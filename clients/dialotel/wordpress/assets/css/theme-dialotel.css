@@ -31,8 +31,6 @@
   overflow: hidden !important;
   position: relative !important;
   /* Full-bleed : sort de la colonne de contenu WordPress */
-  width: 100vw !important;
-  max-width: 100vw !important;
   margin-left: calc(50% - 50vw) !important;
   margin-right: calc(50% - 50vw) !important;
   background: radial-gradient(ellipse at center, #ffffff 0%, #f8f0ff 50%, #f0e6f6 100%) !important;
