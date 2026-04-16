@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded",function(){
       cs.filter!=="none"||
       cs.perspective!=="none"||
       /transform|perspective|filter/.test(wc)||
-      /layout|paint|strict|content/.test(ct);
+      /paint|strict|content/.test(ct);
     if(trapsFixed){trap=el;break;}
     el=el.parentElement;
   }
