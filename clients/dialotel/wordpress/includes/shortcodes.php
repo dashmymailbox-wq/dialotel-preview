@@ -59,24 +59,12 @@ function vt_render_shortcode( $atts ) {
 	include $template;
 	$html = ob_get_clean();
 
-	// CSS inline — cacher le chrome WP + sortir .vt-app du flux en position:fixed
+	// CSS inline — cacher le chrome WP + fond dégradé sur body
 	$hide_css = '<style>
-		body { background: #ffffff !important; margin: 0 !important; }
-		.vt-app {
-			position: fixed !important;
-			top: 0 !important;
-			right: 0 !important;
-			bottom: 0 !important;
-			left: 0 !important;
-			width: auto !important;
-			max-width: none !important;
-			height: auto !important;
-			overflow-y: auto !important;
-			z-index: 9999 !important;
-			margin: 0 !important;
-		}
+		body { background: radial-gradient(ellipse at center, #ffffff 0%, #f8f0ff 50%, #f0e6f6 100%) !important; margin: 0 !important; }
+		.vt-app { background: transparent !important; }
 		body .entry-title, body .page-title, body h1.entry-title,
-		body header.entry-header, body .site-header, body #masthead,
+		body header.entry-header,
 		body .widget-area, body .sidebar, body #secondary,
 		body .wp-block-post-title { display: none !important; }
 		body .site-content, body #primary, body #content, body main,
@@ -85,6 +73,7 @@ function vt_render_shortcode( $atts ) {
 			max-width: 100% !important; width: 100% !important;
 			padding: 0 !important; margin: 0 !important;
 			height: auto !important; overflow: visible !important;
+			background: transparent !important;
 		}
 	</style>';
 
