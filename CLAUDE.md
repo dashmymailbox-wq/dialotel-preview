@@ -4,9 +4,9 @@
 ## Stack
 - HTML / CSS / JS pur (pas de framework, pas de build tool)
 - API Mistral (tirage IA)
+- WordPress (Phase 1B en cours)
+- PHP (shortcodes, enqueue) — Phase 1B
 - TTS ElevenLabs (optionnel Phase 3)
-- WordPress (Phase 1B à démarrer)
-- Git local
 
 ## Fichiers clés
 | Fichier/Dossier | Rôle |
@@ -15,22 +15,22 @@
 | assets/js/core.js | Moteur partagé : étapes, TTS, IA, limiteur quota, i18n, analytics |
 | assets/data/ | JSON : tarot, astrologie, config, i18n, prompts |
 | assets/animations/ | Banque CSS : transitions, loaders, cards, reveal |
-| [nom-tirage].html | 4 apps HTML : compatibilité-amoureuse, -astrologique, tarot, numérologie |
-| clients/dialotel/ | White label Dialotel : theme sobre, config, font locale |
-| assets/icons/zodiac-sprite.svg | Sprite SVG 12 signes zodiacaux (style Hybride) |
+| [nom-tirage].html | 4 apps HTML autonomes |
+| clients/dialotel/ | White label Dialotel : config JSON, fonts, theme |
+| voyance-tirages/ | Plugin WordPress — shortcodes.php, enqueue.php, templates |
 
 ## Architecture
-Socle Phase 1 complet : CSS global (variables, reset scopé) + core.js (étapes, IA, limiteur, i18n, analytics) + banque animations CSS. Chaque tirage = HTML autonome + CSS + JS métier. Phase 1B : plugin WordPress avec shortcodes + enqueue assets + thème Dialotel. Monétisation : compteur social-proof, limiteur quota/jour, modale capture email, CTA voyants.
+Phase 1 : socle complet (CSS global variables + core.js moteur + animations CSS + banque data). Chaque tirage = HTML autonome + CSS + JS métier. Phase 1B (en cours) : plugin WordPress avec shortcodes pour intégrer les apps dans n'importe quel thème, enqueue d'assets, adaptation Dialotel. Monétisation : compteur social-proof, limiteur quota/jour, modale capture email, CTA voyants.
 
 ## État actuel
 ✅ Phase 1 : socle, CSS, JS core, animations, SVG zodiac, 4 apps HTML
-❌ **Bloqueurs critiques** : (1) clé API Mistral manquante → l'injecter dans core.js, (2) CatchyMager.woff2 non reçue → à récupérer auprès de Dialotel, (3) counterBase + quotas (freePerDay, extendedPerDay) non définis → à configurer par app dans assets/data/config/
-⏳ Phase 1B : plugin WordPress à créer (shortcodes, enqueue, Dialotel spécifique)
+⏳ **Phase 1B (en cours)** : plugin WordPress, shortcodes.php, enqueue.php, templates Dialotel
+❌ **Bloqueurs** : (1) clé API Mistral à injecter core.js, (2) font CatchyMager.woff2 manquante, (3) quotas (counterBase, freePerDay, extendedPerDay) non définis
 
 ## Prochaines étapes
-1. Récupérer clé API Mistral → injecter dans core.js + tester tirage IA
-2. Obtenir CatchyMager.woff2 → clients/dialotel/fonts/ + vérifier chargement CSS
-3. Configurer counterBase + quotas par tirage (config JSON) + URL CTA voyants
-4. Démarrer Phase 1B : créer plugin WordPress (shortcodes, enqueue, theme Dialotel)
+1. Débloquer clé API Mistral → injecter core.js + tester tirage IA
+2. Récupérer CatchyMager.woff2 → clients/dialotel/fonts/ + vérifier CSS
+3. Configurer counterBase + quotas par tirage (assets/data/config/) + URL CTA voyants
+4. Finaliser Phase 1B : compléter templates, enqueue, shortcodes compatibilité tous thèmes WP
 
 ## Commandes
