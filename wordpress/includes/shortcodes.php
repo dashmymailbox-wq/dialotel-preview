@@ -65,11 +65,15 @@ function vt_render_shortcode( $atts ) {
 		.vt-app {
 			position: fixed !important;
 			top: 0 !important;
+			right: 0 !important;
+			bottom: 0 !important;
 			left: 0 !important;
-			width: 100vw !important;
-			height: 100dvh !important;
+			width: auto !important;
+			max-width: none !important;
+			height: auto !important;
 			overflow-y: auto !important;
-			z-index: 1000 !important;
+			z-index: 9999 !important;
+			margin: 0 !important;
 		}
 		body .entry-title, body .page-title, body h1.entry-title,
 		body header.entry-header, body .site-header, body #masthead,
