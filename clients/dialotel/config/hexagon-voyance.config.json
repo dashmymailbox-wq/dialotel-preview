@@ -5,7 +5,7 @@
   "googleFont": "DM+Sans",
   "ai": {
     "provider": "mistral",
-    "apiKey": "XtsCBn8NEzj7M3d4s3hlUBSYNgH3BHMk",
+    "apiKey": "3f62f57538e44c3c917ca3e3d52eac7a.bfgKDrTmQIHF3acL",
     "model": "mistral-medium-latest"
   },
   "tts": {
