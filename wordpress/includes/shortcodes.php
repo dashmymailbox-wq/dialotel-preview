@@ -59,10 +59,18 @@ function vt_render_shortcode( $atts ) {
 	include $template;
 	$html = ob_get_clean();
 
-	// CSS inline — cacher le chrome WP + forcer le layout du plugin
+	// CSS inline — cacher le chrome WP + sortir .vt-app du flux en position:fixed
 	$hide_css = '<style>
-		body { background: radial-gradient(ellipse at center, #ffffff 0%, #f8f0ff 50%, #f0e6f6 100%) !important; margin: 0 !important; }
-		.vt-app { background: transparent !important; }
+		body { background: #ffffff !important; margin: 0 !important; }
+		.vt-app {
+			position: fixed !important;
+			top: 0 !important;
+			left: 0 !important;
+			width: 100vw !important;
+			height: 100dvh !important;
+			overflow-y: auto !important;
+			z-index: 1000 !important;
+		}
 		body .entry-title, body .page-title, body h1.entry-title,
 		body header.entry-header, body .site-header, body #masthead,
 		body .widget-area, body .sidebar, body #secondary,
@@ -73,47 +81,8 @@ function vt_render_shortcode( $atts ) {
 			max-width: 100% !important; width: 100% !important;
 			padding: 0 !important; margin: 0 !important;
 			height: auto !important; overflow: visible !important;
-			background: transparent !important;
 		}
 	</style>';
 
-	/*
-	 * Fix position:fixed trapping.
-	 *
-	 * Dans WordPress, un ancestor de .vt-app peut avoir transform/filter/perspective,
-	 * ce qui piege les elements position:fixed et les centre sur cet ancestor
-	 * plutot que sur le viewport. Ce script detecte l'ancestor piégeant,
-	 * calcule l'offset exact pour centrer les anneaux sur le viewport,
-	 * et injecte le CSS corrige. S'il n'y a pas de piegeage, le script
-	 * ne fait rien (les anneaux fonctionnent normalement comme dans la preview).
-	 */
-	$ring_fix = '<script>
-document.addEventListener("DOMContentLoaded",function(){
-  var app=document.querySelector(".vt-app");
-  if(!app)return;
-  var el=app.parentElement,trap=null;
-  while(el&&el!==document.documentElement){
-    var cs=window.getComputedStyle(el);
-    var wc=cs.willChange||"";
-    var ct=cs.contain||"";
-    var trapsFixed=
-      cs.transform!=="none"||
-      cs.filter!=="none"||
-      cs.perspective!=="none"||
-      /transform|perspective|filter/.test(wc)||
-      /paint|strict|content/.test(ct);
-    if(trapsFixed){trap=el;break;}
-    el=el.parentElement;
-  }
-  if(!trap)return;
-  var r=trap.getBoundingClientRect();
-  var t=(window.innerHeight/2-r.top).toFixed(2);
-  var l=(window.innerWidth/2-r.left).toFixed(2);
-  var s=document.createElement("style");
-  s.textContent=".vt-app::before,.vt-app .vt-stars-layer,.vt-app .vt-particles{top:"+t+"px!important;left:"+l+"px!important}";
-  document.head.appendChild(s);
-});
-</script>';
-
-	return $hide_css . $html . $ring_fix;
+	return $hide_css . $html;
 }
