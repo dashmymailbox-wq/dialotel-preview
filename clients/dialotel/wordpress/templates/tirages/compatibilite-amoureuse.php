@@ -390,17 +390,4 @@ Tu es un astrologue et expert en compatibilite amoureuse. Redige une analyse de 
 Ton : bienveillant, positif, encourageant. Texte en francais. Reponds UNIQUEMENT avec le JSON.
 </script>
 
-<!-- Anneaux mandala au niveau <body> — fix WordPress position:fixed trapping -->
-<script>
-(function(){
-  if(document.querySelector('.vt-ring-bg'))return;
-  [1,2,3].forEach(function(i){
-    var d=document.createElement('div');
-    d.setAttribute('aria-hidden','true');
-    d.className='vt-ring-bg vt-ring-bg--'+i;
-    document.body.insertBefore(d,document.body.firstChild);
-  });
-})();
-</script>
-
 <!-- JS enqueues + inline scripts added by shortcodes.php via wp_add_inline_script() -->
