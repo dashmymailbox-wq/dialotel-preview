@@ -336,10 +336,10 @@
 /* ===== Responsive ===== */
 @media (max-width: 480px) {
   .vt-app .vt-am-form-persons {
-    grid-template-columns: 1fr;
+    gap: 0.4rem;
   }
   .vt-app .vt-am-form-heart {
-    padding-top: 0;
+    padding-top: 1.4rem;
   }
   .vt-app .vt-am-intro-title {
     font-size: 1.75rem;

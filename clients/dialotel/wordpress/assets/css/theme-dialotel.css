@@ -901,4 +901,9 @@
   .vt-app .vt-faq-q {
     font-size: 0.85rem;
   }
+  .vt-app .vt-container {
+    min-height: auto !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+  }
 }
