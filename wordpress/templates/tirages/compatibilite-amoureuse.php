@@ -147,36 +147,44 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 		<!-- ETAPE 1 : Formulaire -->
 		<div class="vt-step" data-step="form">
 			<div class="vt-am-intro vt-anim-fade-in">
-				<h2 style="font-family:var(--theme-font-title); letter-spacing:0.05em; margin-bottom:0.5rem;">Entrez vos informations</h2>
-				<p style="color:var(--theme-text-muted); font-size:0.85rem; margin-bottom:2rem;">Deux prenoms, un destin</p>
+				<h2 style="font-family:var(--theme-font-title); letter-spacing:0.05em; margin-bottom:0.25rem; font-size:1.4rem;">Entrez vos informations</h2>
+				<p style="color:var(--theme-text-muted); font-size:0.82rem; margin-bottom:0.75rem;">Deux prenoms, un destin</p>
 			</div>
-			<div id="vt-error" class="vt-error vt-hidden" style="margin-bottom:1rem;">
+			<div id="vt-error" class="vt-error vt-hidden" style="margin-bottom:0.75rem;">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
 					<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
 				</svg>
 				<p></p>
 			</div>
 			<form class="vt-am-form" id="vt-am-form" onsubmit="return false;">
-				<div class="vt-am-person-header">Premiere personne</div>
-				<div class="vt-am-field-group">
-					<label for="vt-name1">Prenom</label>
-					<input type="text" id="vt-name1" placeholder="Ex : Marie" required autocomplete="given-name">
+				<div class="vt-am-form-persons">
+					<div class="vt-am-person">
+						<div class="vt-am-person-header">Premiere personne</div>
+						<div class="vt-am-field-group">
+							<label for="vt-name1">Prenom</label>
+							<input type="text" id="vt-name1" placeholder="Ex : Marie" required autocomplete="given-name">
+						</div>
+						<div class="vt-am-field-group">
+							<label for="vt-birth1">Date de naissance (optionnel)</label>
+							<input type="date" id="vt-birth1" autocomplete="bday" value="2000-01-01">
+						</div>
+					</div>
+					<div class="vt-am-form-heart" aria-hidden="true">
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+					</div>
+					<div class="vt-am-person">
+						<div class="vt-am-person-header">Deuxieme personne</div>
+						<div class="vt-am-field-group">
+							<label for="vt-name2">Prenom</label>
+							<input type="text" id="vt-name2" placeholder="Ex : Pierre" required autocomplete="given-name">
+						</div>
+						<div class="vt-am-field-group">
+							<label for="vt-birth2">Date de naissance (optionnel)</label>
+							<input type="date" id="vt-birth2" autocomplete="bday" value="2000-01-01">
+						</div>
+					</div>
 				</div>
-				<div class="vt-am-field-group">
-					<label for="vt-birth1">Date de naissance (optionnel)</label>
-					<input type="date" id="vt-birth1" autocomplete="bday" value="2000-01-01">
-				</div>
-				<div class="vt-am-divider"></div>
-				<div class="vt-am-person-header">Deuxieme personne</div>
-				<div class="vt-am-field-group">
-					<label for="vt-name2">Prenom</label>
-					<input type="text" id="vt-name2" placeholder="Ex : Pierre" required autocomplete="given-name">
-				</div>
-				<div class="vt-am-field-group">
-					<label for="vt-birth2">Date de naissance (optionnel)</label>
-					<input type="date" id="vt-birth2" autocomplete="bday" value="2000-01-01">
-				</div>
-				<div style="text-align:center; margin-top:1.25rem;">
+				<div style="text-align:center; margin-top:1rem;">
 					<button type="button" class="btn-hex" id="vt-btn-tirage">
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
 							<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
