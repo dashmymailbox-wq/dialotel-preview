@@ -161,7 +161,11 @@
           var result = self._parseResponse(response);
           if (result) {
             if (baseScore) result.score = baseScore;
-            self._showResult(result);
+            try {
+              self._showResult(result);
+            } catch (e) {
+              console.error('[VT] Erreur _showResult :', e);
+            }
             VT.RateLimiter.recordTirage(tirageId);
             VT.Counter.increment();
             VT.Analytics.track('vt_tirage_completed', { type: 'compatibilite-astrologique', score: result.score });
@@ -170,7 +174,7 @@
           }
         })
         .catch(function (err) {
-          console.error('[VT] Erreur IA :', err);
+          console.error('[VT] Erreur IA :', err, err && err.message);
           self._showError('Erreur de connexion au service. Verifiez votre cle API ou reessayez.');
         });
     },
