@@ -175,7 +175,13 @@
         })
         .catch(function (err) {
           console.error('[VT] Erreur IA :', err, err && err.message);
-          self._showError('Erreur de connexion au service. Verifiez votre cle API ou reessayez.');
+          var msg = err && err.message || '';
+          var userMsg = msg.indexOf('503') !== -1
+            ? 'Le service est temporairement indisponible. Reessayez dans quelques instants.'
+            : msg.indexOf('401') !== -1 || msg.indexOf('403') !== -1
+              ? 'Cle API invalide. Verifiez la configuration.'
+              : 'Erreur de connexion au service. Reessayez.';
+          self._showError(userMsg);
         });
     },
 
