@@ -218,13 +218,8 @@
       var ttsText = result.profilCombine + ' ' + result.conseils;
       VT.TTS.speak(ttsText);
 
-      var self = this;
-      var emailConfig = this.config.emailCapture || {};
-      if (emailConfig.enabled) {
-        setTimeout(function () {
-          self._showEmailModal();
-          VT.Analytics.track('vt_email_shown');
-        }, 3000);
+      if ((this.config.emailCapture || {}).enabled) {
+        VT.Analytics.track('vt_email_shown');
       }
     },
 
@@ -262,10 +257,6 @@
       if (modal) modal.classList.add('vt-modal--open');
     },
 
-    _showEmailModal: function () {
-      var modal = VT.$('#vt-email-modal');
-      if (modal) modal.classList.add('vt-modal--open');
-    },
 
     _submitEmail: function () {
       var email = VT.$('#vt-email-input').value.trim();
@@ -283,19 +274,6 @@
         .catch(function () {
           self._showError('Erreur lors de l\'envoi. Reessayez.');
         });
-    },
-
-    _extendRateLimit: function () {
-      var email = VT.$('#vt-extend-email').value.trim();
-      if (!email || !email.includes('@')) return;
-
-      var tirageId = this.config.tirageId || 'compat-astro';
-      VT.RateLimiter.extendLimit(tirageId);
-      VT.Analytics.track('vt_rate_limit_extended', { type: 'compatibilite-astrologique' });
-
-      var modal = VT.$('#vt-rate-limit-modal');
-      if (modal) modal.classList.remove('vt-modal--open');
-      this._doTirage();
     },
 
     _restart: function () {
