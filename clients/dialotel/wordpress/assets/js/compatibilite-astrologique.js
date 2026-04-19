@@ -214,9 +214,19 @@
       if (headerEl && this._sign1 && this._sign2) {
         headerEl.innerHTML =
           '<div class="vt-astro-result-duo">' +
-          '<span class="vt-astro-result-sign"><span class="vt-astro-result-sign-emoji">' + (ZODIAC[this._sign1.key] || '★') + '</span><span class="vt-astro-result-sign-name">' + this._sign1.name + '</span></span>' +
-          '<span class="vt-astro-result-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><path d="M16.2 7.8l-2 6.3-6.4 2.1 2-6.3z"/></svg></span>' +
-          '<span class="vt-astro-result-sign"><span class="vt-astro-result-sign-emoji">' + (ZODIAC[this._sign2.key] || '★') + '</span><span class="vt-astro-result-sign-name">' + this._sign2.name + '</span></span>' +
+            '<div class="vt-astro-result-sign">' +
+              '<div class="vt-astro-result-sign-orb">' + (ZODIAC[this._sign1.key] || '★') + '</div>' +
+              '<div class="vt-astro-result-sign-name">' + this._sign1.name + '</div>' +
+            '</div>' +
+            '<div class="vt-astro-result-connector">' +
+              '<div class="vt-astro-connector-line"></div>' +
+              '<div class="vt-astro-connector-star">✦</div>' +
+              '<div class="vt-astro-connector-line"></div>' +
+            '</div>' +
+            '<div class="vt-astro-result-sign">' +
+              '<div class="vt-astro-result-sign-orb">' + (ZODIAC[this._sign2.key] || '★') + '</div>' +
+              '<div class="vt-astro-result-sign-name">' + this._sign2.name + '</div>' +
+            '</div>' +
           '</div>';
       }
 
