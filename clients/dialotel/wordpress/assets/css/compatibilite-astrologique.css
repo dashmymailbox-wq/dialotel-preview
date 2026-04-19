@@ -337,89 +337,6 @@
 }
 
 /* ===== Responsive ===== */
-/* Header résultat — duo de signes */
-.vt-app .vt-astro-result-header {
-  margin-bottom: 1.75rem;
-  padding: 0 0.5rem;
-}
-
-.vt-app .vt-astro-result-duo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.vt-app .vt-astro-result-sign {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.65rem;
-  flex: 1;
-}
-
-.vt-app .vt-astro-result-sign-orb {
-  position: relative;
-  width: 76px;
-  height: 76px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2.2rem;
-  line-height: 1;
-  background: radial-gradient(circle at 35% 30%, rgba(237,140,230,0.18), rgba(26,14,36,0.6) 70%);
-  border: 1px solid rgba(237,140,230,0.35);
-  box-shadow: 0 0 0 6px rgba(237,140,230,0.06), 0 0 28px rgba(237,140,230,0.18);
-  animation: vt-astro-orb-breathe 3s ease-in-out infinite;
-}
-
-.vt-app .vt-astro-result-sign-orb::before {
-  content: '';
-  position: absolute;
-  inset: -6px;
-  border-radius: 50%;
-  border: 1px solid rgba(237,140,230,0.15);
-  animation: vt-astro-ring 4s linear infinite;
-}
-
-@keyframes vt-astro-orb-breathe {
-  0%, 100% { box-shadow: 0 0 0 6px rgba(237,140,230,0.06), 0 0 28px rgba(237,140,230,0.18); }
-  50%       { box-shadow: 0 0 0 10px rgba(237,140,230,0.1), 0 0 42px rgba(237,140,230,0.32); }
-}
-
-.vt-app .vt-astro-result-sign-name {
-  font-family: var(--theme-font-title);
-  font-size: 0.75rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--theme-text-muted);
-}
-
-/* Connecteur central */
-.vt-app .vt-astro-result-connector {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 0.75rem;
-  gap: 0.2rem;
-  flex-shrink: 0;
-  padding-bottom: 1.3rem;
-}
-
-.vt-app .vt-astro-connector-line {
-  width: 1px;
-  height: 20px;
-  background: linear-gradient(180deg, transparent, rgba(237,140,230,0.45), transparent);
-}
-
-.vt-app .vt-astro-connector-star {
-  font-size: 1rem;
-  color: var(--theme-primary);
-  filter: drop-shadow(0 0 8px var(--theme-glow-primary));
-  animation: vt-astro-orbit-link 2.5s ease-in-out infinite;
-  line-height: 1;
-}
-
 @media (max-width: 480px) {
   .vt-app .vt-astro-intro-title {
     font-size: 1.75rem;
@@ -436,10 +353,5 @@
   }
   .vt-app .vt-astro-section {
     padding: 1rem;
-  }
-  .vt-app .vt-astro-result-sign-orb {
-    width: 62px;
-    height: 62px;
-    font-size: 1.8rem;
   }
 }

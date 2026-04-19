@@ -213,20 +213,14 @@
       var headerEl = VT.$('#vt-result-header');
       if (headerEl && this._sign1 && this._sign2) {
         headerEl.innerHTML =
-          '<div class="vt-astro-result-duo">' +
-            '<div class="vt-astro-result-sign">' +
-              '<div class="vt-astro-result-sign-orb">' + (ZODIAC[this._sign1.key] || '★') + '</div>' +
-              '<div class="vt-astro-result-sign-name">' + this._sign1.name + '</div>' +
-            '</div>' +
-            '<div class="vt-astro-result-connector">' +
-              '<div class="vt-astro-connector-line"></div>' +
-              '<div class="vt-astro-connector-star">✦</div>' +
-              '<div class="vt-astro-connector-line"></div>' +
-            '</div>' +
-            '<div class="vt-astro-result-sign">' +
-              '<div class="vt-astro-result-sign-orb">' + (ZODIAC[this._sign2.key] || '★') + '</div>' +
-              '<div class="vt-astro-result-sign-name">' + this._sign2.name + '</div>' +
-            '</div>' +
+          '<div class="vt-result-person">' +
+            '<div class="vt-sign-badge vt-sign-badge--result"><svg><use href="#sign-' + this._sign1.key + '"/></svg></div>' +
+            '<span class="vt-result-person-name">' + this._sign1.name + '</span>' +
+          '</div>' +
+          '<span class="vt-result-person-link" style="font-size:1.1rem;">✦</span>' +
+          '<div class="vt-result-person">' +
+            '<div class="vt-sign-badge vt-sign-badge--result"><svg><use href="#sign-' + this._sign2.key + '"/></svg></div>' +
+            '<span class="vt-result-person-name">' + this._sign2.name + '</span>' +
           '</div>';
       }
 
