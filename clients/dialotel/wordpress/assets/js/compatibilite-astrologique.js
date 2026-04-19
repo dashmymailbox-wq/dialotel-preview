@@ -7,6 +7,8 @@
     promptTemplate: '',
     signsData: null,
     matrixData: null,
+    _sign1: null,
+    _sign2: null,
 
     init: function () {
       this.config = VT.Config.load('vt-config-compat-astro');
@@ -59,6 +61,8 @@
       VT.on('.vt-tts-btn', 'click', function () {
         VT.TTS.toggle();
       });
+
+      window._vtShareImage = function () { self._shareImage(); };
 
       VT.on('#vt-email-form', 'submit', function (e) {
         e.preventDefault();
@@ -134,6 +138,9 @@
         if (s2) sign2Name = s2.name;
       }
 
+      this._sign1 = { key: sign1, name: sign1Name };
+      this._sign2 = { key: sign2, name: sign2Name };
+
       var baseScore = this._lookupScore(sign1, sign2);
 
       // Etape rituelle
@@ -197,6 +204,17 @@
 
     _showResult: function (result) {
       VT.StepEngine.goTo(3);
+
+      var ZODIAC = { aries:'♈', taurus:'♉', gemini:'♊', cancer:'♋', leo:'♌', virgo:'♍', libra:'♎', scorpio:'♏', sagittarius:'♐', capricorn:'♑', aquarius:'♒', pisces:'♓' };
+      var headerEl = VT.$('#vt-result-header');
+      if (headerEl && this._sign1 && this._sign2) {
+        headerEl.innerHTML =
+          '<div class="vt-astro-result-duo">' +
+          '<span class="vt-astro-result-sign"><span class="vt-astro-result-sign-emoji">' + (ZODIAC[this._sign1.key] || '★') + '</span><span class="vt-astro-result-sign-name">' + this._sign1.name + '</span></span>' +
+          '<span class="vt-astro-result-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><path d="M16.2 7.8l-2 6.3-6.4 2.1 2-6.3z"/></svg></span>' +
+          '<span class="vt-astro-result-sign"><span class="vt-astro-result-sign-emoji">' + (ZODIAC[this._sign2.key] || '★') + '</span><span class="vt-astro-result-sign-name">' + this._sign2.name + '</span></span>' +
+          '</div>';
+      }
 
       var scoreEl = VT.$('#vt-result-score');
       if (scoreEl) this._animateScore(scoreEl, result.score);
@@ -274,6 +292,143 @@
         .catch(function () {
           self._showError('Erreur lors de l\'envoi. Reessayez.');
         });
+    },
+
+    _shareImage: function () {
+      var self = this;
+      var scoreText = (VT.$('#vt-result-score') || {}).textContent || '0%';
+      var score = parseInt(scoreText, 10) || 0;
+      var sign1 = this._sign1, sign2 = this._sign2;
+      var ZODIAC = { aries:'♈', taurus:'♉', gemini:'♊', cancer:'♋', leo:'♌', virgo:'♍', libra:'♎', scorpio:'♏', sagittarius:'♐', capricorn:'♑', aquarius:'♒', pisces:'♓' };
+      var profileEl = VT.$('#vt-result-profile');
+      var phrase = profileEl ? profileEl.textContent.trim() : '';
+
+      var SC = 2, W = 512, H = 896;
+
+      function drawMandala(ctx, W, H) {
+        var cx = W/2, cy = H/2, s = Math.max(W,H)*1.4/600, LW = 18;
+        ctx.save(); ctx.translate(cx,cy); ctx.scale(s,s);
+        function hex(r){ ctx.beginPath(); for(var i=0;i<6;i++){var a=Math.PI/3*i;i===0?ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r):ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r);} ctx.closePath(); }
+        function ring(n,sd,dist,sc,fill,stroke,lw){ for(var i=0;i<n;i++){var rad=(sd+360/n*i)*Math.PI/180;ctx.save();ctx.translate(Math.cos(rad)*dist,Math.sin(rad)*dist);hex(sc);if(fill){ctx.fillStyle=fill;ctx.fill();}ctx.strokeStyle=stroke;ctx.lineWidth=lw*LW;ctx.stroke();ctx.restore();} }
+        ring(1,0,0,1.5,null,'rgba(237,140,230,0.45)',0.15); ring(6,0,10,2,null,'rgba(237,140,230,0.45)',0.15);
+        ring(6,30,22,3,'rgba(226,237,119,0.06)','rgba(226,237,119,0.3)',0.18); ring(12,0,35,3.5,null,'rgba(226,237,119,0.4)',0.12);
+        ring(12,15,50,5,'rgba(237,140,230,0.06)','rgba(237,140,230,0.35)',0.14); ring(12,0,60,4,null,'rgba(226,237,119,0.38)',0.1);
+        ring(12,0,72,16,null,'rgba(226,237,119,0.6)',0.035); ring(12,0,72,6,'rgba(237,140,230,0.1)','rgba(237,140,230,0.5)',0.07);
+        ring(12,15,115,22,null,'rgba(237,140,230,0.6)',0.03); ring(12,15,115,8,'rgba(226,237,119,0.08)','rgba(226,237,119,0.5)',0.06);
+        ring(12,0,158,14,null,'rgba(237,140,230,0.55)',0.04); ring(12,0,158,5,'rgba(226,237,119,0.06)','rgba(226,237,119,0.4)',0.09);
+        ring(12,15,200,26,null,'rgba(226,237,119,0.55)',0.025); ring(12,15,200,10,'rgba(237,140,230,0.08)','rgba(237,140,230,0.45)',0.05);
+        ring(12,0,242,14,null,'rgba(237,140,230,0.55)',0.04); ring(12,0,242,5,'rgba(226,237,119,0.06)','rgba(226,237,119,0.4)',0.09);
+        ctx.restore();
+      }
+
+      function doRender(logo) {
+        var canvas = document.createElement('canvas');
+        canvas.width = W*SC; canvas.height = H*SC;
+        var ctx = canvas.getContext('2d');
+        ctx.scale(SC,SC);
+
+        var bg = ctx.createRadialGradient(W/2,H*0.45,0,W/2,H*0.45,H*0.85);
+        bg.addColorStop(0,'#ffffff'); bg.addColorStop(0.5,'#f8f0ff'); bg.addColorStop(1,'#f0e6f6');
+        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+
+        ctx.save(); ctx.globalAlpha=0.5; drawMandala(ctx,W,H); ctx.globalAlpha=1; ctx.restore();
+
+        var veil = ctx.createRadialGradient(W/2,H*0.45,0,W/2,H*0.45,H*0.65);
+        veil.addColorStop(0,'rgba(255,255,255,0.3)'); veil.addColorStop(1,'rgba(255,255,255,0)');
+        ctx.fillStyle=veil; ctx.fillRect(0,0,W,H);
+
+        var MARGIN=30, logoW=200, logoH=Math.round(logoW*216/636), BR=38, urlH=16;
+
+        ctx.save(); ctx.font='16px "Lato",Arial,sans-serif';
+        var phraseMaxW=W-70, pWords=phrase.split(' '), pLine='', pLines=[];
+        pWords.forEach(function(w){var t=pLine+w+' ';if(pLine&&ctx.measureText(t).width>phraseMaxW){pLines.push(pLine.trim());pLine=w+' ';}else pLine=t;});
+        if(pLine.trim())pLines.push(pLine.trim()); ctx.restore();
+        var pLineH=20, phraseH=pLines.length*pLineH;
+
+        function signBlockH(){ return BR*2+50; }
+        var totalContent = logoH + signBlockH() + phraseH + signBlockH() + urlH;
+        var GAP = Math.max(12, Math.floor((H - MARGIN*2 - totalContent) / 5));
+        var cursorY = MARGIN;
+
+        /* Logo */
+        if(logo){ ctx.drawImage(logo,W/2-logoW/2,cursorY,logoW,logoH); }
+        else {
+          ctx.save(); ctx.beginPath();
+          var hcx=W/2,hcy=cursorY+logoH/2,hcr=28;
+          for(var k=0;k<6;k++){var ang=Math.PI/180*(60*k-30);k===0?ctx.moveTo(hcx+hcr*Math.cos(ang),hcy+hcr*Math.sin(ang)):ctx.lineTo(hcx+hcr*Math.cos(ang),hcy+hcr*Math.sin(ang));}
+          ctx.closePath();
+          var hG=ctx.createLinearGradient(hcx-hcr,hcy-hcr,hcx+hcr,hcy+hcr);
+          hG.addColorStop(0,'#c084fc'); hG.addColorStop(1,'#7c3aed');
+          ctx.fillStyle=hG; ctx.fill();
+          ctx.fillStyle='#fff'; ctx.font='bold 16px Arial,sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+          ctx.fillText('HV',hcx,hcy); ctx.restore();
+        }
+        cursorY += logoH + GAP;
+
+        /* Bloc signe (emoji grand + nom) */
+        function drawSignBlock(cx, cy, signData) {
+          ctx.save();
+          ctx.beginPath(); ctx.arc(cx,cy,BR,0,Math.PI*2);
+          var g=ctx.createRadialGradient(cx,cy-8,3,cx,cy,BR);
+          g.addColorStop(0,'#f5a0ef'); g.addColorStop(1,'#ed8ce6');
+          ctx.fillStyle=g; ctx.fill();
+          ctx.beginPath(); ctx.arc(cx,cy,BR+4,0,Math.PI*2);
+          ctx.strokeStyle='rgba(237,140,230,0.4)'; ctx.lineWidth=2; ctx.stroke();
+          ctx.fillStyle='#fff'; ctx.font=(BR*1.1)+'px Arial,sans-serif';
+          ctx.textAlign='center'; ctx.textBaseline='middle';
+          ctx.fillText(signData?(ZODIAC[signData.key]||'★'):'★',cx,cy);
+          ctx.restore();
+          if(signData){
+            ctx.save(); ctx.textAlign='center'; ctx.textBaseline='top';
+            ctx.fillStyle='#2d1b3d'; ctx.font='bold 18px Arial,sans-serif';
+            ctx.fillText(signData.name,cx,cy+BR+12); ctx.restore();
+          }
+        }
+
+        drawSignBlock(W/2, cursorY+BR, sign1);
+        cursorY += signBlockH() + GAP;
+
+        /* Phrase */
+        ctx.save();
+        var tGrad=ctx.createLinearGradient(W/2-130,0,W/2+130,0);
+        tGrad.addColorStop(0,'#c084fc'); tGrad.addColorStop(0.5,'#ed8ce6'); tGrad.addColorStop(1,'#c084fc');
+        ctx.fillStyle=tGrad; ctx.font='16px "Lato",Arial,sans-serif';
+        ctx.textAlign='center'; ctx.textBaseline='top';
+        pLines.forEach(function(ln,i){ ctx.fillText(ln,W/2,cursorY+i*pLineH); });
+        ctx.restore();
+
+        /* Score centré sur la phrase */
+        ctx.save();
+        ctx.fillStyle='rgba(237,140,230,0.15)';
+        ctx.beginPath(); ctx.arc(W/2, cursorY+phraseH/2, 28,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle='#2d1b3d'; ctx.font='bold 22px Arial,sans-serif';
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText(score+'%',W/2,cursorY+phraseH/2); ctx.restore();
+
+        cursorY += phraseH + GAP;
+        drawSignBlock(W/2, cursorY+BR, sign2);
+        cursorY += signBlockH() + GAP;
+
+        /* Footer */
+        ctx.save(); ctx.fillStyle='#a855f7'; ctx.font='13px Arial,sans-serif';
+        ctx.textAlign='center'; ctx.textBaseline='top';
+        ctx.fillText('hexagon-voyance.com',W/2,cursorY); ctx.restore();
+
+        var dataURL = canvas.toDataURL('image/png');
+        var modal = document.getElementById('vt-share-modal');
+        var preview = document.getElementById('vt-share-preview');
+        var dlBtn = document.getElementById('vt-share-download');
+        if(!modal) return;
+        if(preview) preview.src=dataURL;
+        if(dlBtn) dlBtn.href=dataURL;
+        modal.style.display='flex';
+        VT.Analytics.track('vt_share',{platform:'image',type:'compatibilite-astrologique'});
+      }
+
+      var logoImg = new Image();
+      logoImg.onload = function(){ doRender(logoImg); };
+      logoImg.onerror = function(){ doRender(null); };
+      logoImg.src = document.querySelector('.vt-splash-logo') ? document.querySelector('.vt-splash-logo').src : '../wordpress/assets/logo-hexagon-voyance.webp';
     },
 
     _restart: function () {

@@ -241,6 +241,8 @@
           </button>
         </div>
 
+        <div id="vt-result-header" class="vt-astro-result-header"></div>
+
         <div class="vt-astro-result-score vt-anim-dialotel-reveal" id="vt-result-score">0%</div>
         <p class="vt-astro-result-score-label">de compatibilite astrologique</p>
 
@@ -303,6 +305,15 @@
 
         <!-- Actions -->
         <div class="vt-result-actions" style="margin-top:1.5rem;">
+          <div class="vt-share" id="vt-share">
+            <button class="btn-hex btn-hex--secondary" id="vt-btn-share" type="button" onclick="window._vtShareImage && window._vtShareImage()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+              Partager mon score
+            </button>
+          </div>
           <button class="btn-hex" id="vt-btn-restart">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
               <polyline points="23 4 23 10 17 10"/>
@@ -328,6 +339,19 @@
 
   <!-- Modale email — masquee, remplacee par le bloc inline -->
 
+</div>
+
+<!-- Modale partage -->
+<div id="vt-share-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:99999;align-items:center;justify-content:center;padding:1rem;">
+  <div style="background:#fff;border-radius:12px;padding:1.5rem;max-width:360px;width:100%;text-align:center;">
+    <img id="vt-share-preview" alt="Aperçu" style="max-width:100%;border-radius:8px;display:block;margin:0 auto 1rem;">
+    <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
+      <a id="vt-share-download" download="compatibilite-astrologique.png" style="display:inline-flex;align-items:center;gap:0.5rem;text-decoration:none;background:linear-gradient(135deg,#ed8ce6,rgba(237,140,230,0.8));color:#000;font-family:sans-serif;font-size:0.95rem;font-weight:600;padding:0.9rem 2.2rem;border:none;cursor:pointer;clip-path:polygon(8% 0%,92% 0%,100% 50%,92% 100%,8% 100%,0% 50%);white-space:nowrap;">
+        Télécharger
+      </a>
+      <button type="button" onclick="document.getElementById('vt-share-modal').style.display='none'" style="display:inline-flex;align-items:center;background:linear-gradient(135deg,#e2ed77,rgba(226,237,119,0.8));color:#000;font-family:sans-serif;font-size:0.95rem;font-weight:600;padding:0.9rem 2.2rem;border:none;cursor:pointer;clip-path:polygon(8% 0%,92% 0%,100% 50%,92% 100%,8% 100%,0% 50%);white-space:nowrap;">Fermer</button>
+    </div>
+  </div>
 </div>
 
 <!-- Config -->

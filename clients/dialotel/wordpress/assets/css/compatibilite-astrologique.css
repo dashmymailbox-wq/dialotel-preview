@@ -337,6 +337,39 @@
 }
 
 /* ===== Responsive ===== */
+/* Header résultat — duo de signes */
+.vt-app .vt-astro-result-header {
+  margin-bottom: 1.25rem;
+}
+.vt-app .vt-astro-result-duo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.vt-app .vt-astro-result-sign {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+.vt-app .vt-astro-result-sign-emoji {
+  font-size: 2rem;
+  line-height: 1;
+  filter: drop-shadow(0 0 8px rgba(237,140,230,0.5));
+}
+.vt-app .vt-astro-result-sign-name {
+  font-family: var(--theme-font-title);
+  font-size: 0.95rem;
+  color: var(--theme-text);
+  letter-spacing: 0.05em;
+}
+.vt-app .vt-astro-result-link {
+  color: var(--theme-primary);
+  display: flex;
+  align-items: center;
+}
+
 @media (max-width: 480px) {
   .vt-app .vt-astro-intro-title {
     font-size: 1.75rem;
