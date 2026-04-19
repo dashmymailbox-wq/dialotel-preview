@@ -59,7 +59,9 @@
       "Read(//home/caums/.wp-now/wp-content/wordpress-58a0de3ff792fb69572a41323da239eb1f5479f7/database/**)",
       "Bash(python3:*)",
       "Bash(npx claude-mem:*)",
-      "Bash(bash)"
+      "Bash(bash)",
+      "Bash(cp /home/caums/.claude/projects/-mnt-c-Users-Olivier-Desktop-CLAUDE-Z-AI-PLUGIN-TIRAGES/memory/MEMORY.md /home/caums/.claude/projects/-mnt-c-Users-Olivier-desktop-claude-Z-AI-PLUGIN-TIRAGES/memory/MEMORY.md)",
+      "Bash(cp /home/caums/.claude/projects/-mnt-c-Users-Olivier-Desktop-CLAUDE-Z-AI-PLUGIN-TIRAGES/memory/feedback_wp_menu_footer.md /home/caums/.claude/projects/-mnt-c-Users-Olivier-desktop-claude-Z-AI-PLUGIN-TIRAGES/memory/feedback_wp_menu_footer.md)"
     ]
   }
 }
