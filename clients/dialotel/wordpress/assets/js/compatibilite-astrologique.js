@@ -9,6 +9,7 @@
     matrixData: null,
     _sign1: null,
     _sign2: null,
+    _theme: 'amour',
 
     init: function () {
       this.config = VT.Config.load('vt-config-compat-astro');
@@ -72,6 +73,15 @@
       VT.on('#vt-extend-form', 'submit', function (e) {
         e.preventDefault();
         self._extendRateLimit();
+      });
+
+      // Selection du theme
+      VT.$$('.vt-astro-theme-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          VT.$$('.vt-astro-theme-btn').forEach(function (b) { b.classList.remove('vt-astro-theme-btn--selected'); });
+          btn.classList.add('vt-astro-theme-btn--selected');
+          self._theme = btn.dataset.theme;
+        });
       });
 
       // Selection des signes
@@ -151,6 +161,10 @@
       if (nameEls[0]) nameEls[0].textContent = sign1Name;
       if (nameEls[1]) nameEls[1].textContent = sign2Name;
 
+      var themeLabels = { amour: 'Amour', amitie: 'Amitié', travail: 'Travail', famille: 'Famille' };
+      var ritualThemeEl = VT.$('#vt-astro-ritual-theme');
+      if (ritualThemeEl) ritualThemeEl.textContent = themeLabels[this._theme] || 'Amour';
+
       var prompt = this._buildPrompt(sign1Name, sign2Name, baseScore);
 
       var aiConfig = this.config.ai || {};
@@ -186,9 +200,11 @@
     },
 
     _buildPrompt: function (name1, name2, baseScore) {
+      var themeLabels = { amour: 'Amour', amitie: 'Amitie', travail: 'Travail', famille: 'Famille' };
       var parts = [
         'Signe 1 : ' + name1,
-        'Signe 2 : ' + name2
+        'Signe 2 : ' + name2,
+        'Theme : ' + (themeLabels[this._theme] || 'Amour')
       ];
       if (baseScore) parts.push('Score de base : ' + baseScore + '/100');
       return parts.join('\n');

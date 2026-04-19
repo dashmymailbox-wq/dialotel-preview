@@ -155,6 +155,17 @@
         <p></p>
       </div>
 
+      <!-- Theme -->
+      <div class="vt-astro-theme-selector">
+        <div class="vt-astro-sign-group-title">Thème de la compatibilité</div>
+        <div class="vt-astro-theme-grid">
+          <button type="button" class="vt-astro-theme-btn vt-astro-theme-btn--selected" data-theme="amour">❤️ Amour</button>
+          <button type="button" class="vt-astro-theme-btn" data-theme="amitie">🤝 Amitié</button>
+          <button type="button" class="vt-astro-theme-btn" data-theme="travail">💼 Travail</button>
+          <button type="button" class="vt-astro-theme-btn" data-theme="famille">🌿 Famille</button>
+        </div>
+      </div>
+
       <!-- Premier signe -->
       <div class="vt-astro-sign-group" data-group="1">
         <div class="vt-astro-sign-group-title">Premier signe</div>
@@ -222,7 +233,7 @@
             <div class="vt-anim-dialotel-loader"></div>
           </div>
         </div>
-        <p class="vt-astro-ritual-text">Les astres convergent...</p>
+        <p class="vt-astro-ritual-text">Compatibilité <span id="vt-astro-ritual-theme">Amour</span> — Les astres convergent...</p>
         <div class="vt-anim-dots"><span></span><span></span><span></span></div>
       </div>
     </div>
@@ -416,9 +427,13 @@
 </script>
 
 <script type="text/plain" id="vt-prompt-compat-astro">
-Tu es un astrologue expert. A partir des deux signes astrologiques et de leur score de compatibilite de base, redige une analyse detaillee en JSON uniquement :
-{ "score": <1-100>, "profilCombine": "<description du couple astrologique en 2-3 phrases>", "traits": ["<trait partage 1>", "<trait partage 2>", "<trait partage 3>"], "conseils": "<conseils pratiques pour ce couple en 2-3 phrases>" }
-Ton : bienveillant, positif, encourageant. Texte en francais. Reponds UNIQUEMENT avec le JSON.
+Tu es un astrologue expert. A partir des deux signes et de leur score de compatibilite, redige une analyse JSON contextualise selon le theme indique :
+{ "score": <1-100>, "profilCombine": "<profil du duo en 2-3 phrases selon le theme>", "traits": ["<point fort 1>", "<point fort 2>", "<point fort 3>"], "conseils": "<conseils pratiques selon le theme en 2-3 phrases>" }
+- Theme Amour : analyse romantique, attirance, vie de couple
+- Theme Amitie : complicite, confiance, longevite du lien
+- Theme Travail : collaboration, complementarite, gestion des conflits professionnels
+- Theme Famille : dynamique familiale, soutien mutuel, incomprehensions possibles
+Ton : bienveillant, positif. Texte en francais. Reponds UNIQUEMENT avec le JSON.
 </script>
 
 <script>if(!localStorage.getItem('vt_theme'))localStorage.setItem('vt_theme','light');</script>

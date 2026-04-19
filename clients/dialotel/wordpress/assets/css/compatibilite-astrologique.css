@@ -52,6 +52,43 @@
   filter: drop-shadow(0 0 6px var(--theme-glow-primary));
 }
 
+/* ===== Selecteur de theme ===== */
+.vt-app .vt-astro-theme-selector {
+  margin-bottom: 1.75rem;
+}
+
+.vt-app .vt-astro-theme-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.vt-app .vt-astro-theme-btn {
+  padding: 0.6rem 0.5rem;
+  border: 1px solid var(--theme-border);
+  border-radius: 10px;
+  background: rgba(26, 14, 36, 0.4);
+  color: var(--theme-text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 300ms ease;
+  letter-spacing: 0.02em;
+}
+
+.vt-app .vt-astro-theme-btn:hover {
+  border-color: var(--theme-primary);
+  background: rgba(237, 140, 230, 0.08);
+}
+
+.vt-app .vt-astro-theme-btn--selected {
+  border-color: var(--theme-primary);
+  background: rgba(237, 140, 230, 0.15);
+  color: var(--theme-primary);
+  box-shadow: 0 0 12px var(--theme-glow-primary);
+}
+
 /* ===== Grille de selection des signes ===== */
 .vt-app .vt-astro-sign-group {
   margin-bottom: 1.5rem;
