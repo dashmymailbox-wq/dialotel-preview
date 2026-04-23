@@ -497,20 +497,23 @@
         ctx.textAlign='center'; ctx.textBaseline='top';
         ctx.fillText('hexagon-voyance.com',W/2,cursorY); ctx.restore();
 
-        var dataURL=canvas.toDataURL('image/png');
+        var dataURL;
+        try { dataURL=canvas.toDataURL('image/png'); }
+        catch(e) { console.error('[VT] canvas.toDataURL failed:',e); return; }
         var modal=document.getElementById('vt-share-modal');
         var preview=document.getElementById('vt-share-preview');
         var dlBtn=document.getElementById('vt-share-download');
         if(!modal) return;
         if(preview) preview.src=dataURL;
-        if(dlBtn) dlBtn.href=dataURL;
+        if(dlBtn){ dlBtn.href=dataURL; dlBtn.download='compatibilite-astrologique.png'; }
         modal.style.display='flex';
         VT.Analytics.track('vt_share',{platform:'image',type:'compatibilite-astrologique'});
       }
 
       var logoImg=new Image();
-      logoImg.onload=function(){ doRender(logoImg); };
-      logoImg.onerror=function(){ doRender(null); };
+      logoImg.crossOrigin='anonymous';
+      logoImg.onload=function(){ try{ doRender(logoImg); }catch(e){ console.error('[VT] doRender(logo) failed:',e); doRender(null); } };
+      logoImg.onerror=function(){ try{ doRender(null); }catch(e){ console.error('[VT] doRender(null) failed:',e); } };
       logoImg.src=(app.config&&app.config.logoUrl)||'../wordpress/assets/logo-hexagon-voyance.webp';
     },
 
