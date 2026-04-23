@@ -6,6 +6,15 @@
   padding: 3rem 1rem 2rem;
 }
 
+.vt-app .vt-astro-intro-theme-hint {
+  font-size: 0.82rem;
+  color: var(--theme-primary);
+  letter-spacing: 0.04em;
+  margin-top: 0.75rem;
+  margin-bottom: 0;
+  opacity: 0.85;
+}
+
 .vt-app .vt-astro-intro-title {
   font-size: 2.5rem;
   font-weight: 700;

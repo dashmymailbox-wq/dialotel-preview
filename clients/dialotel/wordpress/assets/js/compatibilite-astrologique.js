@@ -365,7 +365,7 @@
         ctx.restore();
       }
 
-      function doRender(logo) {
+      function doRender() {
         var canvas = document.createElement('canvas');
         canvas.width = W*SC; canvas.height = H*SC;
         var ctx = canvas.getContext('2d');
@@ -397,19 +397,30 @@
         var GAP=Math.max(12,Math.floor((H-MARGIN*2-totalContent)/5));
         var cursorY=MARGIN;
 
-        /* 1. Logo */
-        if(logo){ ctx.drawImage(logo,W/2-logoW/2,cursorY,logoW,logoH); }
-        else {
-          ctx.save(); ctx.beginPath();
-          var hcx=W/2,hcy=cursorY+logoH/2,hcr=28;
-          for(var k=0;k<6;k++){var ang=Math.PI/180*(60*k-30);k===0?ctx.moveTo(hcx+hcr*Math.cos(ang),hcy+hcr*Math.sin(ang)):ctx.lineTo(hcx+hcr*Math.cos(ang),hcy+hcr*Math.sin(ang));}
-          ctx.closePath();
-          var hG=ctx.createLinearGradient(hcx-hcr,hcy-hcr,hcx+hcr,hcy+hcr);
-          hG.addColorStop(0,'#c084fc'); hG.addColorStop(1,'#7c3aed');
-          ctx.fillStyle=hG; ctx.fill();
-          ctx.fillStyle='#fff'; ctx.font='bold 16px Arial,sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
-          ctx.fillText('HV',hcx,hcy); ctx.restore();
-        }
+        /* 1. Badge theme */
+        var themeLabels2={'amour':'Amour','amitie':'Amitie','travail':'Travail','famille':'Famille'};
+        var themeLabel=themeLabels2[self._theme]||'Amour';
+        var pillW=140,pillH=46,pillR=23;
+        var pillX=W/2-pillW/2,pillY=cursorY+(logoH-pillH)/2;
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(pillX+pillR,pillY);
+        ctx.lineTo(pillX+pillW-pillR,pillY);
+        ctx.arcTo(pillX+pillW,pillY,pillX+pillW,pillY+pillH,pillR);
+        ctx.lineTo(pillX+pillW,pillY+pillH-pillR);
+        ctx.arcTo(pillX+pillW,pillY+pillH,pillX+pillW-pillR,pillY+pillH,pillR);
+        ctx.lineTo(pillX+pillR,pillY+pillH);
+        ctx.arcTo(pillX,pillY+pillH,pillX,pillY+pillH-pillR,pillR);
+        ctx.lineTo(pillX,pillY+pillR);
+        ctx.arcTo(pillX,pillY,pillX+pillR,pillY,pillR);
+        ctx.closePath();
+        var pillG=ctx.createLinearGradient(pillX,pillY,pillX+pillW,pillY+pillH);
+        pillG.addColorStop(0,'#f5a0ef'); pillG.addColorStop(1,'#c055b8');
+        ctx.fillStyle=pillG; ctx.fill();
+        ctx.fillStyle='#fff'; ctx.font='bold 20px Arial,sans-serif';
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText(themeLabel,W/2,pillY+pillH/2);
+        ctx.restore();
         cursorY+=logoH+GAP;
 
         /* 2. Orbe central avec score */
@@ -510,11 +521,7 @@
         VT.Analytics.track('vt_share',{platform:'image',type:'compatibilite-astrologique'});
       }
 
-      var logoImg=new Image();
-      logoImg.crossOrigin='anonymous';
-      logoImg.onload=function(){ try{ doRender(logoImg); }catch(e){ console.error('[VT] doRender(logo) failed:',e); doRender(null); } };
-      logoImg.onerror=function(){ try{ doRender(null); }catch(e){ console.error('[VT] doRender(null) failed:',e); } };
-      logoImg.src=(app.config&&app.config.logoUrl)||'../wordpress/assets/logo-hexagon-voyance.webp';
+      try { doRender(); } catch(e) { console.error('[VT] doRender failed:',e); }
     },
 
     _restart: function () {
