@@ -233,6 +233,19 @@
 }
 
 /* ===== Resultat ===== */
+
+/* Sphere qui materialise — remplace vt-heart-pop de theme-dialotel.css */
+@keyframes vt-sphere-pop {
+  0%   { opacity: 0; transform: scale(0); filter: blur(10px); }
+  55%  { opacity: 1; transform: scale(1.1); filter: blur(0); }
+  75%  { transform: scale(0.96); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.vt-app .vt-step[data-step="result"].vt-step--active .vt-astro-result-score {
+  animation: vt-sphere-pop 0.95s 0.4s cubic-bezier(0.23, 1, 0.32, 1) both !important;
+}
+
 .vt-app .vt-astro-result-score {
   font-size: 4rem;
   font-weight: 700;
