@@ -158,8 +158,8 @@
 
       // Mettre a jour les noms dans le rituel
       var nameEls = VT.$$('.vt-astro-ritual-name');
-      if (nameEls[0]) nameEls[0].textContent = sign1Name;
-      if (nameEls[1]) nameEls[1].textContent = sign2Name;
+      if (nameEls[0]) nameEls[0].innerHTML = '<svg class="vt-astro-ritual-sign-icon"><use href="#sign-' + sign1 + '"/></svg><span>' + sign1Name + '</span>';
+      if (nameEls[1]) nameEls[1].innerHTML = '<svg class="vt-astro-ritual-sign-icon"><use href="#sign-' + sign2 + '"/></svg><span>' + sign2Name + '</span>';
 
       var themeLabels = { amour: 'Amour', amitie: 'Amitié', travail: 'Travail', famille: 'Famille' };
       var ritualThemeEl = VT.$('#vt-astro-ritual-theme');
