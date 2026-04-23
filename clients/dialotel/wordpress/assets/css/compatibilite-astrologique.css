@@ -459,6 +459,7 @@
   .vt-app .vt-astro-sign-groups-row {
     flex-direction: column;
     gap: 0.75rem;
+    align-items: stretch;
   }
   .vt-app .vt-astro-sign-groups-row .vt-astro-sign-group-title {
     text-align: center;
