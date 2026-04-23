@@ -234,7 +234,16 @@
 
 /* ===== Resultat ===== */
 
-/* Sphere qui materialise — remplace vt-heart-pop de theme-dialotel.css */
+/* Sphere — remplace le clip-path coeur de theme-dialotel.css */
+.vt-app .vt-astro-result-score {
+  clip-path: circle(50% at 50% 50%) !important;
+  border-radius: 50% !important;
+  width: 160px !important;
+  height: 160px !important;
+  background: radial-gradient(circle at 38% 36%, #f5c4f0 0%, #ed8ce6 42%, #c055b8 78%, #8b1fa0 100%) !important;
+}
+
+/* Animation sphere — remplace vt-heart-pop de theme-dialotel.css */
 @keyframes vt-sphere-pop {
   0%   { opacity: 0; transform: scale(0); filter: blur(10px); }
   55%  { opacity: 1; transform: scale(1.1); filter: blur(0); }
