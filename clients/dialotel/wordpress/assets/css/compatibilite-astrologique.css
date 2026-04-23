@@ -441,6 +441,25 @@
 }
 
 /* ===== Responsive ===== */
+
+/* Mobile : groupes empilés, 6 colonnes + noms masqués pour tenir above the fold */
+@media (max-width: 540px) {
+  .vt-app .vt-astro-sign-groups-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .vt-app .vt-astro-sign-groups-row .vt-astro-sign-grid {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.3rem;
+  }
+  .vt-app .vt-astro-sign-groups-row .vt-astro-sign {
+    padding: 0.4rem 0.15rem;
+  }
+  .vt-app .vt-astro-sign-groups-row .vt-astro-sign-name {
+    display: none;
+  }
+}
+
 @media (max-width: 480px) {
   .vt-app .vt-astro-intro-title {
     font-size: 1.75rem;
