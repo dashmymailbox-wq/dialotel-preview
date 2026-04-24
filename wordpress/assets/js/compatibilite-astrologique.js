@@ -406,29 +406,16 @@
         var GAP=Math.max(12,Math.floor((H-MARGIN*2-totalContent)/5));
         var cursorY=MARGIN;
 
-        /* 1. Badge theme */
-        var themeLabels2={'amour':'Amour','amitie':'Amitie','travail':'Travail','famille':'Famille'};
+        /* 1. Titre theme — h1 style */
+        var themeLabels2={'amour':'Amour','amitie':'Amitié','travail':'Travail','famille':'Famille'};
         var themeLabel=themeLabels2[self._theme]||'Amour';
-        var pillW=140,pillH=46,pillR=23;
-        var pillX=W/2-pillW/2,pillY=cursorY+(logoH-pillH)/2;
+        var themeColors={'amour':'#c026d3','amitie':'#2563eb','travail':'#d97706','famille':'#059669'};
+        var themeColor=themeColors[self._theme]||'#c026d3';
         ctx.save();
-        ctx.beginPath();
-        ctx.moveTo(pillX+pillR,pillY);
-        ctx.lineTo(pillX+pillW-pillR,pillY);
-        ctx.arcTo(pillX+pillW,pillY,pillX+pillW,pillY+pillH,pillR);
-        ctx.lineTo(pillX+pillW,pillY+pillH-pillR);
-        ctx.arcTo(pillX+pillW,pillY+pillH,pillX+pillW-pillR,pillY+pillH,pillR);
-        ctx.lineTo(pillX+pillR,pillY+pillH);
-        ctx.arcTo(pillX,pillY+pillH,pillX,pillY+pillH-pillR,pillR);
-        ctx.lineTo(pillX,pillY+pillR);
-        ctx.arcTo(pillX,pillY,pillX+pillR,pillY,pillR);
-        ctx.closePath();
-        var pillG=ctx.createLinearGradient(pillX,pillY,pillX+pillW,pillY+pillH);
-        pillG.addColorStop(0,'#f5a0ef'); pillG.addColorStop(1,'#c055b8');
-        ctx.fillStyle=pillG; ctx.fill();
-        ctx.fillStyle='#fff'; ctx.font='bold 20px Arial,sans-serif';
+        ctx.fillStyle=themeColor;
+        ctx.font='bold 30px "Cinzel",Georgia,serif';
         ctx.textAlign='center'; ctx.textBaseline='middle';
-        ctx.fillText(themeLabel,W/2,pillY+pillH/2);
+        ctx.fillText(themeLabel,W/2,cursorY+logoH/2);
         ctx.restore();
         cursorY+=logoH+GAP;
 
