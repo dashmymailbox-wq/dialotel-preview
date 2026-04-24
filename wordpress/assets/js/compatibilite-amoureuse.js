@@ -192,7 +192,7 @@
         })
         .catch(function (err) {
           console.error('[VT] Erreur IA :', err);
-          self._showError('Erreur de connexion au service. Verifiez votre cle API ou reessayez.');
+          self._showError('Nos voyants sont tres sollicites en ce moment. Reessayez dans quelques instants.');
         });
     },
 
