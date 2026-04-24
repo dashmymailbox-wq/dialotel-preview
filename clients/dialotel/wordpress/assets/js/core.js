@@ -13,6 +13,8 @@
     container: null,
 
     init: function (containerSelector, stepSelectors) {
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+      window.scrollTo(0, 0);
       this.container = document.querySelector(containerSelector);
       this.steps = Array.prototype.slice.call(
         this.container ? this.container.querySelectorAll(stepSelectors) : []
