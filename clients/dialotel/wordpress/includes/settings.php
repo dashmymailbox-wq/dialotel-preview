@@ -148,12 +148,16 @@ function vt_register_settings() {
 		'vt_cta_enabled', 'vt_cta_hook', 'vt_cta_btn_text', 'vt_cta_url',
 		'vt_faq_enabled', 'vt_faq_title',
 		'vt_share_enabled', 'vt_share_facebook', 'vt_share_whatsapp', 'vt_share_tiktok', 'vt_share_instagram', 'vt_share_snapchat',
+		// App — Toggles
+		'vt_app_amoureuse_enabled', 'vt_app_astro_enabled',
 		// App — Compat. Astrologique
 		'vt_astro_app_title', 'vt_astro_app_desc', 'vt_astro_app_btn_text', 'vt_astro_counter_base',
 		'vt_astro_discount_pct', 'vt_astro_email_title', 'vt_astro_email_desc', 'vt_astro_email_btn', 'vt_astro_email_legal',
 		'vt_astro_cta_enabled', 'vt_astro_cta_hook', 'vt_astro_cta_btn_text', 'vt_astro_cta_url',
 		'vt_astro_faq_enabled', 'vt_astro_faq_title',
 		'vt_astro_share_enabled', 'vt_astro_default_theme',
+		// Page & SEO — Compat. Astrologique
+		'vt_astro_page_title', 'vt_astro_page_slug', 'vt_astro_meta_title', 'vt_astro_meta_desc',
 		// APIs
 		'vt_ai_provider',
 		'vt_ai_mistral_key', 'vt_ai_mistral_model',
@@ -167,6 +171,7 @@ function vt_register_settings() {
 
 	// Checkboxes — gerer "unchecked" (absent du POST = 0)
 	$checkboxes = array(
+		'vt_app_amoureuse_enabled', 'vt_app_astro_enabled',
 		'vt_cta_enabled', 'vt_faq_enabled', 'vt_share_enabled',
 		'vt_share_facebook', 'vt_share_whatsapp', 'vt_share_tiktok', 'vt_share_instagram', 'vt_share_snapchat',
 		'vt_astro_cta_enabled', 'vt_astro_faq_enabled', 'vt_astro_share_enabled',
@@ -211,7 +216,7 @@ add_action( 'admin_init', function() {
 add_action( 'admin_init', function() {
 	if ( isset( $_GET['vt_create_page'] ) && isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'vt_create_page' ) ) {
 		$page_id = vt_ensure_page_exists();
-		$redirect = admin_url( 'admin.php?page=voyance-tirages&tab=page-seo&vt_page_created=' . ( $page_id ? '1' : '0' ) );
+		$redirect = admin_url( 'admin.php?page=voyance-tirages&tab=applications&vt_page_created=' . ( $page_id ? '1' : '0' ) );
 		wp_safe_redirect( $redirect );
 		exit;
 	}
@@ -240,22 +245,17 @@ add_action( 'admin_notices', function() {
    RENDER ADMIN PAGE
    ============================================================ */
 function vt_render_admin_page() {
-	$active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'page-seo';
+	$active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'applications';
 	$tabs = array(
-		'page-seo'  => 'Page & SEO',
-		'branding'  => 'Branding',
-		'app'       => 'App',
-		'apis'      => 'APIs',
-		'advanced'  => 'Avance',
-		'logs'      => 'Logs',
+		'applications' => 'Applications',
+		'branding'     => 'Branding',
+		'app'          => 'App',
+		'apis'         => 'APIs',
+		'advanced'     => 'Avance',
+		'logs'         => 'Logs',
 	);
 
-	// Statut de la page
-	$page_slug  = get_option( 'vt_page_slug', 'compatibilite-amoureuse' );
-	$page_obj   = get_page_by_path( $page_slug, OBJECT, 'page' );
-	$page_status = $page_obj ? get_post_status( $page_obj ) : 'not_found';
-	$page_url    = $page_obj ? get_permalink( $page_obj->ID ) : '';
-	$just_saved  = isset( $_GET['settings-updated'] ) && $_GET['settings-updated'];
+	$just_saved = isset( $_GET['settings-updated'] ) && $_GET['settings-updated'];
 	?>
 	<style>
 	.vt-admin-subtabs{display:flex;gap:0.5rem;margin-bottom:1.5rem;border-bottom:2px solid rgba(237,140,230,0.2);padding-bottom:0;}
@@ -304,57 +304,71 @@ function vt_render_admin_page() {
 		<form id="vt-settings-form" method="post" action="options.php">
 			<?php settings_fields( 'vt_settings_group' ); ?>
 
-			<!-- Onglet 1 : Page & SEO -->
-			<div class="vt-admin-panel <?php echo $active_tab === 'page-seo' ? 'active' : ''; ?>">
+			<!-- Onglet 1 : Applications -->
+			<div class="vt-admin-panel <?php echo $active_tab === 'applications' ? 'active' : ''; ?>">
 
-				<?php if ( $page_obj ) : ?>
-				<div class="vt-admin-info-box">
-					<svg viewBox="0 0 24 24" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-					<p>Page <strong><?php echo esc_html( get_option('vt_page_title') ); ?></strong> :
-						<code><?php echo esc_html( $page_slug ); ?></code> —
-						<a href="<?php echo esc_url( $page_url ); ?>" target="_blank">Voir la page</a> —
-						Statut : <strong><?php echo 'publish' === $page_status ? 'Publiee' : esc_html( $page_status ); ?></strong>
-					</p>
-				</div>
-				<?php else : ?>
-				<div class="vt-admin-info-box" style="background:rgba(237,140,230,0.1);border-color:rgba(237,140,230,0.3);">
-					<svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-					<p>Aucune page creee. <strong>Enregistrez les reglages</strong> pour creer automatiquement la page, ou
-						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=voyance-tirages&tab=page-seo&vt_create_page=1' ), 'vt_create_page' ) ); ?>">cliquez ici</a>.
-					</p>
-				</div>
-				<?php endif; ?>
+				<?php
+				$vt_am_slug   = get_option( 'vt_page_slug', 'compatibilite-amoureuse' );
+				$vt_am_page   = get_page_by_path( $vt_am_slug, OBJECT, 'page' );
+				$vt_am_url    = $vt_am_page ? get_permalink( $vt_am_page->ID ) : '';
+				$vt_as_slug   = get_option( 'vt_astro_page_slug', 'compatibilite-astrologique' );
+				$vt_as_page   = get_page_by_path( $vt_as_slug, OBJECT, 'page' );
+				$vt_as_url    = $vt_as_page ? get_permalink( $vt_as_page->ID ) : '';
+				?>
 
+				<!-- App : Compat. Amoureuse -->
 				<div class="vt-admin-card">
-					<h3 class="vt-admin-card-title">
-						<svg viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
-						Page WordPress
-					</h3>
-					<div class="vt-admin-field">
-						<label for="vt_page_title">Titre de la page</label>
-						<input type="text" name="vt_page_title" id="vt_page_title" value="<?php echo esc_attr( get_option('vt_page_title', 'Compatibilite Amoureuse') ); ?>">
+					<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+						<div>
+							<h3 class="vt-admin-card-title" style="margin:0 0 0.25rem;">
+								<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+								Compatibilite Amoureuse
+							</h3>
+							<p style="font-size:0.82rem;color:var(--vt-admin-text-muted);margin:0;">Analyse de compatibilite entre deux prenoms</p>
+						</div>
+						<label class="vt-admin-toggle">
+							<input type="hidden" name="vt_app_amoureuse_enabled" value="0">
+							<input type="checkbox" name="vt_app_amoureuse_enabled" value="1" <?php checked( get_option( 'vt_app_amoureuse_enabled', '1' ), '1' ); ?>>
+							<span class="vt-admin-toggle-slider"></span>
+						</label>
 					</div>
-					<div class="vt-admin-field">
-						<label for="vt_page_slug">Slug (URL)</label>
-						<input type="text" name="vt_page_slug" id="vt_page_slug" value="<?php echo esc_attr( get_option('vt_page_slug', 'compatibilite-amoureuse') ); ?>">
-						<p class="description">L'URL sera : <?php echo esc_url( home_url('/') ); ?><span id="vt-slug-preview"><?php echo esc_html( get_option('vt_page_slug', 'compatibilite-amoureuse') ); ?></span></p>
+					<div style="display:flex;align-items:center;gap:0.75rem;font-size:0.83rem;">
+						<?php if ( $vt_am_page ) : ?>
+						<span style="color:#16a34a;">&#10003; Page publiee — <code><?php echo esc_html( $vt_am_slug ); ?></code></span>
+						<a href="<?php echo esc_url( $vt_am_url ); ?>" target="_blank" style="color:var(--vt-admin-accent);">Voir</a>
+						<?php else : ?>
+						<span style="color:#d97706;">Page absente</span>
+						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=voyance-tirages&tab=applications&vt_create_page=1' ), 'vt_create_page' ) ); ?>" style="color:var(--vt-admin-accent);font-weight:600;">Creer la page</a>
+						<?php endif; ?>
 					</div>
 				</div>
 
+				<!-- App : Compat. Astrologique -->
 				<div class="vt-admin-card">
-					<h3 class="vt-admin-card-title">
-						<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-						SEO
-					</h3>
-					<div class="vt-admin-field">
-						<label for="vt_meta_title">Balise meta title</label>
-						<input type="text" name="vt_meta_title" id="vt_meta_title" value="<?php echo esc_attr( get_option('vt_meta_title') ); ?>">
+					<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+						<div>
+							<h3 class="vt-admin-card-title" style="margin:0 0 0.25rem;">
+								<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+								Compatibilite Astrologique
+							</h3>
+							<p style="font-size:0.82rem;color:var(--vt-admin-text-muted);margin:0;">Analyse de compatibilite entre deux signes du zodiaque</p>
+						</div>
+						<label class="vt-admin-toggle">
+							<input type="hidden" name="vt_app_astro_enabled" value="0">
+							<input type="checkbox" name="vt_app_astro_enabled" value="1" <?php checked( get_option( 'vt_app_astro_enabled', '1' ), '1' ); ?>>
+							<span class="vt-admin-toggle-slider"></span>
+						</label>
 					</div>
-					<div class="vt-admin-field">
-						<label for="vt_meta_desc">Meta description</label>
-						<textarea name="vt_meta_desc" id="vt_meta_desc" rows="3"><?php echo esc_textarea( get_option('vt_meta_desc') ); ?></textarea>
+					<div style="display:flex;align-items:center;gap:0.75rem;font-size:0.83rem;">
+						<?php if ( $vt_as_page ) : ?>
+						<span style="color:#16a34a;">&#10003; Page publiee — <code><?php echo esc_html( $vt_as_slug ); ?></code></span>
+						<a href="<?php echo esc_url( $vt_as_url ); ?>" target="_blank" style="color:var(--vt-admin-accent);">Voir</a>
+						<?php else : ?>
+						<span style="color:#d97706;">Page absente — configurez le slug dans l'onglet App puis enregistrez</span>
+						<?php endif; ?>
 					</div>
 				</div>
+
 			</div>
 
 			<!-- Onglet 2 : Branding -->
@@ -390,6 +404,31 @@ function vt_render_admin_page() {
 				</div>
 
 				<div class="vt-admin-subtab-panel active" data-subtab="amoureuse">
+
+				<!-- Page & SEO -->
+				<div class="vt-admin-card">
+					<h3 class="vt-admin-card-title">
+						<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+						Page &amp; SEO
+					</h3>
+					<div class="vt-admin-field">
+						<label for="vt_page_title">Titre de la page</label>
+						<input type="text" name="vt_page_title" id="vt_page_title" value="<?php echo esc_attr( get_option( 'vt_page_title', 'Compatibilite Amoureuse' ) ); ?>">
+					</div>
+					<div class="vt-admin-field">
+						<label for="vt_page_slug">Slug (URL)</label>
+						<input type="text" name="vt_page_slug" id="vt_page_slug" value="<?php echo esc_attr( get_option( 'vt_page_slug', 'compatibilite-amoureuse' ) ); ?>">
+						<p class="description">L'URL sera : <?php echo esc_url( home_url( '/' ) ); ?><span id="vt-slug-preview"><?php echo esc_html( get_option( 'vt_page_slug', 'compatibilite-amoureuse' ) ); ?></span></p>
+					</div>
+					<div class="vt-admin-field">
+						<label for="vt_meta_title">Meta title</label>
+						<input type="text" name="vt_meta_title" id="vt_meta_title" value="<?php echo esc_attr( get_option( 'vt_meta_title' ) ); ?>">
+					</div>
+					<div class="vt-admin-field">
+						<label for="vt_meta_desc">Meta description</label>
+						<textarea name="vt_meta_desc" id="vt_meta_desc" rows="3"><?php echo esc_textarea( get_option( 'vt_meta_desc' ) ); ?></textarea>
+					</div>
+				</div>
 
 				<!-- Accueil -->
 				<div class="vt-admin-card">
@@ -535,6 +574,31 @@ function vt_render_admin_page() {
 
 				<!-- Compat. Astrologique -->
 				<div class="vt-admin-subtab-panel" data-subtab="astrologique">
+
+					<!-- Page & SEO -->
+					<div class="vt-admin-card">
+						<h3 class="vt-admin-card-title">
+							<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+							Page &amp; SEO
+						</h3>
+						<div class="vt-admin-field">
+							<label for="vt_astro_page_title">Titre de la page</label>
+							<input type="text" name="vt_astro_page_title" id="vt_astro_page_title" value="<?php echo esc_attr( get_option( 'vt_astro_page_title', 'Compatibilite Astrologique' ) ); ?>">
+						</div>
+						<div class="vt-admin-field">
+							<label for="vt_astro_page_slug">Slug (URL)</label>
+							<input type="text" name="vt_astro_page_slug" id="vt_astro_page_slug" value="<?php echo esc_attr( get_option( 'vt_astro_page_slug', 'compatibilite-astrologique' ) ); ?>">
+							<p class="description">L'URL sera : <?php echo esc_url( home_url( '/' ) ); ?><span id="vt-astro-slug-preview"><?php echo esc_html( get_option( 'vt_astro_page_slug', 'compatibilite-astrologique' ) ); ?></span></p>
+						</div>
+						<div class="vt-admin-field">
+							<label for="vt_astro_meta_title">Meta title</label>
+							<input type="text" name="vt_astro_meta_title" id="vt_astro_meta_title" value="<?php echo esc_attr( get_option( 'vt_astro_meta_title' ) ); ?>">
+						</div>
+						<div class="vt-admin-field">
+							<label for="vt_astro_meta_desc">Meta description</label>
+							<textarea name="vt_astro_meta_desc" id="vt_astro_meta_desc" rows="3"><?php echo esc_textarea( get_option( 'vt_astro_meta_desc' ) ); ?></textarea>
+						</div>
+					</div>
 
 					<!-- Accueil -->
 					<div class="vt-admin-card">
@@ -975,6 +1039,9 @@ function vt_render_admin_page() {
 		// Live preview slug
 		$('#vt_page_slug').on('input', function() {
 			$('#vt-slug-preview').text($(this).val());
+		});
+		$('#vt_astro_page_slug').on('input', function() {
+			$('#vt-astro-slug-preview').text($(this).val());
 		});
 
 		// === Log viewer (AJAX) ===
