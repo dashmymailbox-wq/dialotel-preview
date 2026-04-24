@@ -9,26 +9,27 @@ $assets_url  = VT_PLUGIN_URL . 'assets/';
 $proxy_url   = admin_url( 'admin-ajax.php?action=vt_ai_proxy' );
 $email_proxy = admin_url( 'admin-ajax.php?action=vt_email_proxy' );
 
-$counter_base   = get_option( 'vt_counter_base', 3800 );
-$discount_pct   = get_option( 'vt_discount_pct', 30 );
-$cta_enabled    = get_option( 'vt_cta_enabled', true );
-$cta_hook       = get_option( 'vt_cta_hook', 'Votre duo astrologique vous intrigue ? Parlez a un expert' );
-$cta_btn_text   = get_option( 'vt_cta_btn_text', 'Consulter un voyant specialiste en astrologie' );
-$cta_url        = get_option( 'vt_cta_url', '#' );
-$faq_enabled    = get_option( 'vt_faq_enabled', true );
+$counter_base   = get_option( 'vt_astro_counter_base', 3800 );
+$discount_pct   = get_option( 'vt_astro_discount_pct', 30 );
+$cta_enabled    = get_option( 'vt_astro_cta_enabled', true );
+$cta_hook       = get_option( 'vt_astro_cta_hook', 'Votre duo astrologique vous intrigue ? Parlez a un expert' );
+$cta_btn_text   = get_option( 'vt_astro_cta_btn_text', 'Consulter un voyant specialiste en astrologie' );
+$cta_url        = get_option( 'vt_astro_cta_url', '#' );
+$faq_enabled    = get_option( 'vt_astro_faq_enabled', true );
+$share_enabled  = get_option( 'vt_astro_share_enabled', true );
 $tts_enabled    = get_option( 'vt_tts_enabled', false );
 $rate_enabled   = get_option( 'vt_rate_limit_enabled', false );
 $rate_free      = get_option( 'vt_rate_free', 3 );
 $rate_extended  = get_option( 'vt_rate_extended', 8 );
-$default_theme  = get_option( 'vt_default_theme', 'light' );
+$default_theme  = get_option( 'vt_astro_default_theme', get_option( 'vt_default_theme', 'light' ) );
 $theme_toggle   = get_option( 'vt_theme_toggle', true );
-$app_title      = get_option( 'vt_app_title', 'Compatibilite Astrologique' );
-$app_desc       = get_option( 'vt_app_desc', "Decouvrez l'alchimie entre deux signes du zodiaque. Notre analyse celeste revele l'harmonie et les defis de votre duo astrologique." );
-$app_btn_text   = get_option( 'vt_app_btn_text', 'Decouvrir ma compatibilite' );
-$email_title    = get_option( 'vt_email_title', 'Obtenez -' . $discount_pct . '% sur votre consultation' );
-$email_desc     = get_option( 'vt_email_desc', 'Recevez votre bon de reduction exclusif par email et parlez de votre couple avec un expert.' );
-$email_btn      = get_option( 'vt_email_btn', 'Recevoir mon bon -' . $discount_pct . '%' );
-$email_legal    = get_option( 'vt_email_legal', 'En soumettant votre email, vous acceptez de recevoir des communications de Hexagon Voyance. Desabonnement possible a tout moment.' );
+$app_title      = get_option( 'vt_astro_app_title', 'Compatibilite Astrologique' );
+$app_desc       = get_option( 'vt_astro_app_desc', "Decouvrez l'alchimie entre deux signes du zodiaque. Notre analyse celeste revele l'harmonie et les defis de votre duo astrologique." );
+$app_btn_text   = get_option( 'vt_astro_app_btn_text', 'Decouvrir ma compatibilite' );
+$email_title    = get_option( 'vt_astro_email_title', 'Obtenez -' . $discount_pct . '% sur votre consultation' );
+$email_desc     = get_option( 'vt_astro_email_desc', 'Recevez votre bon de reduction exclusif par email et parlez de votre couple avec un expert.' );
+$email_btn      = get_option( 'vt_astro_email_btn', 'Recevoir mon bon -' . $discount_pct . '%' );
+$email_legal    = get_option( 'vt_astro_email_legal', 'En soumettant votre email, vous acceptez de recevoir des communications de Hexagon Voyance. Desabonnement possible a tout moment.' );
 $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 ?>
 
@@ -103,13 +104,25 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 		<div class="vt-step" data-step="form">
 			<div class="vt-astro-intro vt-anim-fade-in">
 				<h2 style="font-family:var(--theme-font-title); letter-spacing:0.05em; margin-bottom:0.5rem;">Choisissez vos signes</h2>
-				<p style="color:var(--theme-text-muted); font-size:0.85rem; margin-bottom:2rem;">Selectionnez un signe dans chaque colonne</p>
+				<p style="color:var(--theme-text-muted); font-size:0.85rem; margin-bottom:1.5rem;">Selectionnez un signe dans chaque colonne</p>
+			</div>
+
+			<div class="vt-astro-theme-selector" style="margin-bottom:1.5rem;">
+				<div class="vt-astro-sign-group-title" style="margin-bottom:0.6rem;">Theme de la compatibilite</div>
+				<div class="vt-astro-theme-grid">
+					<button type="button" class="vt-astro-theme-btn vt-astro-theme-btn--selected" data-theme="amour">&#10084;&#65039; Amour</button>
+					<button type="button" class="vt-astro-theme-btn" data-theme="amitie">🤝 Amitie</button>
+					<button type="button" class="vt-astro-theme-btn" data-theme="travail">💼 Travail</button>
+					<button type="button" class="vt-astro-theme-btn" data-theme="famille">🌿 Famille</button>
+				</div>
 			</div>
 
 			<div id="vt-error" class="vt-error vt-hidden" style="margin-bottom:1rem;">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
 				<p></p>
 			</div>
+
+			<div class="vt-astro-sign-groups-row">
 
 			<div class="vt-astro-sign-group" data-group="1">
 				<div class="vt-astro-sign-group-title">Premier signe</div>
@@ -129,8 +142,6 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 				</div>
 			</div>
 
-			<div class="vt-astro-divider"></div>
-
 			<div class="vt-astro-sign-group" data-group="2">
 				<div class="vt-astro-sign-group-title">Deuxieme signe</div>
 				<div class="vt-astro-sign-grid">
@@ -148,6 +159,8 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 					<button type="button" class="vt-astro-sign" data-sign="pisces"><svg><use href="#sign-pisces"/></svg><span class="vt-astro-sign-name">Poissons</span></button>
 				</div>
 			</div>
+
+			</div><!-- /vt-astro-sign-groups-row -->
 
 			<div style="text-align:center; margin-top:1.25rem;">
 				<button type="button" class="btn-hex" id="vt-btn-tirage">
@@ -172,7 +185,7 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 						<div class="vt-anim-dialotel-loader"></div>
 					</div>
 				</div>
-				<p class="vt-astro-ritual-text">Les astres convergent...</p>
+				<p class="vt-astro-ritual-text">Compatibilite <span id="vt-astro-ritual-theme">Amour</span> — Les astres convergent...</p>
 				<div class="vt-anim-dots"><span></span><span></span><span></span></div>
 			</div>
 		</div>
@@ -181,6 +194,7 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 		<div class="vt-step" data-step="result">
 			<div class="vt-result" style="text-align:center;">
 
+				<div id="vt-result-header" class="vt-result-header"></div>
 				<div class="vt-astro-result-score vt-anim-dialotel-reveal" id="vt-result-score">0%</div>
 				<p class="vt-astro-result-score-label">de compatibilite astrologique</p>
 				<div class="vt-astro-score-bar"><div class="vt-astro-score-bar-fill" style="width:0%"></div></div>
@@ -235,11 +249,34 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 						</a>
 					</div>
 					<?php endif; ?>
+					<?php if ( $share_enabled ) : ?>
+					<button class="btn-hex btn-hex--outline" id="vt-btn-share" type="button">
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+						Partager mon resultat
+					</button>
+					<?php endif; ?>
 					<button class="btn-hex" id="vt-btn-restart">
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
 						Refaire un tirage
 					</button>
 				</div>
+
+				<?php if ( $faq_enabled ) : ?>
+				<div class="vt-faq" style="margin-top:2.5rem; text-align:left;">
+					<h2 class="vt-astro-section-title" style="margin-bottom:1.25rem;"><?php echo esc_html( get_option( 'vt_astro_faq_title', 'Questions frequentes' ) ); ?></h2>
+					<?php for ( $i = 1; $i <= 5; $i++ ) :
+						$faq_q = get_option( "vt_astro_faq_q{$i}" );
+						$faq_a = get_option( "vt_astro_faq_a{$i}" );
+						if ( ! $faq_q ) continue;
+					?>
+					<details class="vt-faq-item">
+						<summary class="vt-faq-q"><?php echo esc_html( $faq_q ); ?></summary>
+						<p class="vt-faq-a"><?php echo esc_html( $faq_a ); ?></p>
+					</details>
+					<?php endfor; ?>
+				</div>
+				<?php endif; ?>
+
 			</div>
 		</div>
 
@@ -258,6 +295,30 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 	</div>
 
 </div>
+
+<?php if ( $share_enabled ) : ?>
+<!-- Modal partage -->
+<div class="vt-modal-overlay" id="vt-share-modal">
+	<div class="vt-modal">
+		<button type="button" class="vt-modal-close" id="vt-share-modal-close" aria-label="Fermer">
+			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+		</button>
+		<h3 style="margin-bottom:1rem;">Partager mon resultat</h3>
+		<div class="vt-share-btns" style="display:flex;flex-direction:column;gap:0.75rem;">
+			<a id="vt-share-whatsapp" href="#" target="_blank" rel="noopener" class="btn-hex btn-hex--secondary" style="background:#25D366;border-color:#25D366;text-decoration:none;">
+				WhatsApp
+			</a>
+			<a id="vt-share-facebook" href="#" target="_blank" rel="noopener" class="btn-hex btn-hex--secondary" style="background:#1877F2;border-color:#1877F2;text-decoration:none;">
+				Facebook
+			</a>
+			<button type="button" id="vt-share-copy" class="btn-hex">
+				<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+				Copier le lien
+			</button>
+		</div>
+	</div>
+</div>
+<?php endif; ?>
 
 <!-- Config -->
 <script type="application/json" id="vt-config-compat-astro">
@@ -294,8 +355,27 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 }
 </script>
 
+<script type="application/json" id="vt-data-matrix">
+{
+	"aries":      {"aries":75,"taurus":62,"gemini":82,"cancer":52,"leo":90,"virgo":58,"libra":78,"scorpio":48,"sagittarius":88,"capricorn":62,"aquarius":80,"pisces":50},
+	"taurus":     {"aries":62,"taurus":75,"gemini":68,"cancer":82,"leo":58,"virgo":92,"libra":65,"scorpio":82,"sagittarius":58,"capricorn":88,"aquarius":62,"pisces":82},
+	"gemini":     {"aries":82,"taurus":68,"gemini":75,"cancer":60,"leo":78,"virgo":65,"libra":90,"scorpio":55,"sagittarius":82,"capricorn":62,"aquarius":88,"pisces":58},
+	"cancer":     {"aries":52,"taurus":82,"gemini":60,"cancer":75,"leo":52,"virgo":82,"libra":58,"scorpio":90,"sagittarius":48,"capricorn":78,"aquarius":55,"pisces":92},
+	"leo":        {"aries":90,"taurus":58,"gemini":78,"cancer":52,"leo":75,"virgo":60,"libra":82,"scorpio":50,"sagittarius":90,"capricorn":60,"aquarius":80,"pisces":52},
+	"virgo":      {"aries":58,"taurus":92,"gemini":65,"cancer":82,"leo":60,"virgo":75,"libra":68,"scorpio":82,"sagittarius":60,"capricorn":90,"aquarius":65,"pisces":80},
+	"libra":      {"aries":78,"taurus":65,"gemini":90,"cancer":58,"leo":82,"virgo":68,"libra":75,"scorpio":62,"sagittarius":80,"capricorn":65,"aquarius":92,"pisces":60},
+	"scorpio":    {"aries":48,"taurus":82,"gemini":55,"cancer":90,"leo":50,"virgo":82,"libra":62,"scorpio":75,"sagittarius":50,"capricorn":80,"aquarius":58,"pisces":92},
+	"sagittarius":{"aries":88,"taurus":58,"gemini":82,"cancer":48,"leo":90,"virgo":60,"libra":80,"scorpio":50,"sagittarius":75,"capricorn":60,"aquarius":82,"pisces":50},
+	"capricorn":  {"aries":62,"taurus":88,"gemini":62,"cancer":78,"leo":60,"virgo":90,"libra":65,"scorpio":80,"sagittarius":60,"capricorn":75,"aquarius":65,"pisces":80},
+	"aquarius":   {"aries":80,"taurus":62,"gemini":88,"cancer":55,"leo":80,"virgo":65,"libra":92,"scorpio":58,"sagittarius":82,"capricorn":65,"aquarius":75,"pisces":60},
+	"pisces":     {"aries":50,"taurus":82,"gemini":58,"cancer":92,"leo":52,"virgo":80,"libra":60,"scorpio":92,"sagittarius":50,"capricorn":80,"aquarius":60,"pisces":75}
+}
+</script>
+
 <script type="text/plain" id="vt-prompt-compat-astro">
-Tu es un astrologue expert. Redige une analyse de compatibilite astrologique en JSON uniquement :
-{ "score": <1-100>, "profil": "<2-3 phrases sur le duo>", "traits": ["<trait1>", "<trait2>", "<trait3>"], "conseil": "<2-3 phrases>" }
-Ton : bienveillant, poetique, precis. Texte en francais. Reponds UNIQUEMENT avec le JSON.
+Tu es un astrologue expert. Le theme choisi est : {theme}.
+Analyse la compatibilite {sign1} / {sign2} selon ce theme et reponds UNIQUEMENT en JSON :
+{ "score": <1-100>, "profil": "<2-3 phrases sur le duo selon le theme>", "traits": ["<trait1>", "<trait2>", "<trait3>"], "conseil": "<2-3 phrases adaptees au theme>" }
+Themes : amour (relation romantique), amitie (liens amicaux), travail (collaboration pro), famille (liens familiaux).
+Ton : bienveillant, poetique, precis. Texte en francais. Aucun texte en dehors du JSON.
 </script>

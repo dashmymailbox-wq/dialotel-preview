@@ -142,12 +142,18 @@ function vt_register_settings() {
 		'vt_page_slug', 'vt_page_title', 'vt_meta_title', 'vt_meta_desc',
 		// Branding
 		'vt_brand_name', 'vt_brand_logo', 'vt_brand_favicon',
-		// App
+		// App — Compat. Amoureuse
 		'vt_app_title', 'vt_app_desc', 'vt_app_btn_text', 'vt_counter_base',
 		'vt_discount_pct', 'vt_email_title', 'vt_email_desc', 'vt_email_btn', 'vt_email_legal',
 		'vt_cta_enabled', 'vt_cta_hook', 'vt_cta_btn_text', 'vt_cta_url',
 		'vt_faq_enabled', 'vt_faq_title',
 		'vt_share_enabled', 'vt_share_facebook', 'vt_share_whatsapp', 'vt_share_tiktok', 'vt_share_instagram', 'vt_share_snapchat',
+		// App — Compat. Astrologique
+		'vt_astro_app_title', 'vt_astro_app_desc', 'vt_astro_app_btn_text', 'vt_astro_counter_base',
+		'vt_astro_discount_pct', 'vt_astro_email_title', 'vt_astro_email_desc', 'vt_astro_email_btn', 'vt_astro_email_legal',
+		'vt_astro_cta_enabled', 'vt_astro_cta_hook', 'vt_astro_cta_btn_text', 'vt_astro_cta_url',
+		'vt_astro_faq_enabled', 'vt_astro_faq_title',
+		'vt_astro_share_enabled', 'vt_astro_default_theme',
 		// APIs
 		'vt_ai_provider',
 		'vt_ai_mistral_key', 'vt_ai_mistral_model',
@@ -163,6 +169,7 @@ function vt_register_settings() {
 	$checkboxes = array(
 		'vt_cta_enabled', 'vt_faq_enabled', 'vt_share_enabled',
 		'vt_share_facebook', 'vt_share_whatsapp', 'vt_share_tiktok', 'vt_share_instagram', 'vt_share_snapchat',
+		'vt_astro_cta_enabled', 'vt_astro_faq_enabled', 'vt_astro_share_enabled',
 		'vt_tts_enabled', 'vt_rate_limit_enabled', 'vt_theme_toggle',
 	);
 
@@ -176,10 +183,16 @@ function vt_register_settings() {
 		register_setting( 'vt_settings_group', $setting, $args );
 	}
 
-	// FAQ Q/R
+	// FAQ Q/R — Compat. Amoureuse
 	for ( $i = 1; $i <= 5; $i++ ) {
 		register_setting( 'vt_settings_group', "vt_faq_q{$i}" );
 		register_setting( 'vt_settings_group', "vt_faq_a{$i}" );
+	}
+
+	// FAQ Q/R — Compat. Astrologique
+	for ( $i = 1; $i <= 5; $i++ ) {
+		register_setting( 'vt_settings_group', "vt_astro_faq_q{$i}" );
+		register_setting( 'vt_settings_group', "vt_astro_faq_a{$i}" );
 	}
 }
 
@@ -244,6 +257,13 @@ function vt_render_admin_page() {
 	$page_url    = $page_obj ? get_permalink( $page_obj->ID ) : '';
 	$just_saved  = isset( $_GET['settings-updated'] ) && $_GET['settings-updated'];
 	?>
+	<style>
+	.vt-admin-subtabs{display:flex;gap:0.5rem;margin-bottom:1.5rem;border-bottom:2px solid rgba(237,140,230,0.2);padding-bottom:0;}
+	.vt-admin-subtab{background:none;border:none;padding:0.6rem 1.25rem;font-size:0.875rem;font-weight:600;color:#646970;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s;}
+	.vt-admin-subtab.active,.vt-admin-subtab:hover{color:#ed8ce6;border-bottom-color:#ed8ce6;}
+	.vt-admin-subtab-panel{display:none;}
+	.vt-admin-subtab-panel.active{display:block;}
+	</style>
 	<div class="vt-admin-wrap">
 		<!-- Header -->
 		<div class="vt-admin-header">
@@ -253,7 +273,7 @@ function vt_render_admin_page() {
 				</div>
 				<div>
 					<h1 class="vt-admin-title">Voyance Tirages</h1>
-					<p class="vt-admin-subtitle">Compatibilite Amoureuse — Reglages</p>
+					<p class="vt-admin-subtitle">Voyance Tirages — Reglages</p>
 				</div>
 			</div>
 			<div style="display:flex;align-items:center;gap:0.75rem;">
@@ -362,6 +382,14 @@ function vt_render_admin_page() {
 
 			<!-- Onglet 3 : App -->
 			<div class="vt-admin-panel <?php echo $active_tab === 'app' ? 'active' : ''; ?>">
+
+				<!-- Sous-onglets App -->
+				<div class="vt-admin-subtabs">
+					<button type="button" class="vt-admin-subtab active" data-subtab="amoureuse">Compat. Amoureuse</button>
+					<button type="button" class="vt-admin-subtab" data-subtab="astrologique">Compat. Astrologique</button>
+				</div>
+
+				<div class="vt-admin-subtab-panel active" data-subtab="amoureuse">
 
 				<!-- Accueil -->
 				<div class="vt-admin-card">
@@ -502,6 +530,162 @@ function vt_render_admin_page() {
 						<?php endforeach; ?>
 					</div>
 				</div>
+
+				</div><!-- /subtab-panel amoureuse -->
+
+				<!-- Compat. Astrologique -->
+				<div class="vt-admin-subtab-panel" data-subtab="astrologique">
+
+					<!-- Accueil -->
+					<div class="vt-admin-card">
+						<h3 class="vt-admin-card-title">
+							<svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+							Ecran d'accueil
+						</h3>
+						<div class="vt-admin-field">
+							<label for="vt_astro_app_title">Titre principal</label>
+							<input type="text" name="vt_astro_app_title" id="vt_astro_app_title" value="<?php echo esc_attr( get_option('vt_astro_app_title', 'Compatibilite Astrologique') ); ?>">
+						</div>
+						<div class="vt-admin-field">
+							<label for="vt_astro_app_desc">Description</label>
+							<textarea name="vt_astro_app_desc" id="vt_astro_app_desc" rows="2"><?php echo esc_textarea( get_option('vt_astro_app_desc') ); ?></textarea>
+						</div>
+						<div class="vt-admin-field">
+							<label for="vt_astro_app_btn_text">Texte du bouton</label>
+							<input type="text" name="vt_astro_app_btn_text" id="vt_astro_app_btn_text" value="<?php echo esc_attr( get_option('vt_astro_app_btn_text', 'Decouvrir ma compatibilite') ); ?>">
+						</div>
+						<div class="vt-admin-field">
+							<label for="vt_astro_counter_base">Compteur (nombre de base)</label>
+							<input type="number" name="vt_astro_counter_base" id="vt_astro_counter_base" value="<?php echo esc_attr( get_option('vt_astro_counter_base', 4200) ); ?>">
+							<p class="description">Le compteur affiche ce nombre + un increment aleatoire.</p>
+						</div>
+					</div>
+
+					<!-- Theme par defaut -->
+					<div class="vt-admin-card">
+						<h3 class="vt-admin-card-title">
+							<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+							Theme par defaut
+						</h3>
+						<div class="vt-admin-radio-group">
+							<label class="vt-admin-radio">
+								<input type="radio" name="vt_astro_default_theme" value="light" <?php checked( get_option('vt_astro_default_theme', 'light'), 'light' ); ?>>
+								<div class="vt-admin-radio-card">
+									<div class="vt-admin-radio-dot"></div>
+									<span class="vt-admin-radio-name">Clair</span>
+								</div>
+							</label>
+							<label class="vt-admin-radio">
+								<input type="radio" name="vt_astro_default_theme" value="dark" <?php checked( get_option('vt_astro_default_theme'), 'dark' ); ?>>
+								<div class="vt-admin-radio-card">
+									<div class="vt-admin-radio-dot"></div>
+									<span class="vt-admin-radio-name">Sombre</span>
+								</div>
+							</label>
+						</div>
+					</div>
+
+					<!-- Bon de reduction (email) -->
+					<div class="vt-admin-card">
+						<h3 class="vt-admin-card-title">
+							<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+							Bon de reduction (email)
+						</h3>
+						<div class="vt-admin-field">
+							<label for="vt_astro_discount_pct">Reduction (%)</label>
+							<input type="number" name="vt_astro_discount_pct" id="vt_astro_discount_pct" value="<?php echo esc_attr( get_option('vt_astro_discount_pct', 30) ); ?>" min="1" max="99">
+						</div>
+						<div class="vt-admin-field">
+							<label for="vt_astro_email_title">Titre</label>
+							<input type="text" name="vt_astro_email_title" id="vt_astro_email_title" value="<?php echo esc_attr( get_option('vt_astro_email_title') ); ?>">
+						</div>
+						<div class="vt-admin-field">
+							<label for="vt_astro_email_desc">Description</label>
+							<textarea name="vt_astro_email_desc" id="vt_astro_email_desc" rows="2"><?php echo esc_textarea( get_option('vt_astro_email_desc') ); ?></textarea>
+						</div>
+						<div class="vt-admin-field">
+							<label for="vt_astro_email_btn">Texte bouton</label>
+							<input type="text" name="vt_astro_email_btn" id="vt_astro_email_btn" value="<?php echo esc_attr( get_option('vt_astro_email_btn') ); ?>">
+						</div>
+						<div class="vt-admin-field">
+							<label for="vt_astro_email_legal">Mentions legales</label>
+							<textarea name="vt_astro_email_legal" id="vt_astro_email_legal" rows="2"><?php echo esc_textarea( get_option('vt_astro_email_legal') ); ?></textarea>
+						</div>
+					</div>
+
+					<!-- CTA Voyants -->
+					<div class="vt-admin-card">
+						<h3 class="vt-admin-card-title">
+							<svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+							CTA Voyants
+						</h3>
+						<div class="vt-admin-toggle-row">
+							<span class="vt-admin-toggle-label">Activer le CTA voyants</span>
+							<label class="vt-admin-toggle">
+								<input type="hidden" name="vt_astro_cta_enabled" value="0">
+								<input type="checkbox" name="vt_astro_cta_enabled" value="1" <?php checked( get_option('vt_astro_cta_enabled', true) ); ?>>
+								<span class="vt-admin-toggle-slider"></span>
+							</label>
+						</div>
+						<div class="vt-admin-field" style="margin-top:0.75rem;">
+							<label for="vt_astro_cta_hook">Texte d'accroche</label>
+							<input type="text" name="vt_astro_cta_hook" id="vt_astro_cta_hook" value="<?php echo esc_attr( get_option('vt_astro_cta_hook') ); ?>">
+						</div>
+						<div class="vt-admin-field">
+							<label for="vt_astro_cta_btn_text">Texte du bouton</label>
+							<input type="text" name="vt_astro_cta_btn_text" id="vt_astro_cta_btn_text" value="<?php echo esc_attr( get_option('vt_astro_cta_btn_text') ); ?>">
+						</div>
+						<div class="vt-admin-field">
+							<label for="vt_astro_cta_url">URL destination</label>
+							<input type="url" name="vt_astro_cta_url" id="vt_astro_cta_url" value="<?php echo esc_attr( get_option('vt_astro_cta_url', '#') ); ?>">
+						</div>
+					</div>
+
+					<!-- FAQ -->
+					<div class="vt-admin-card">
+						<h3 class="vt-admin-card-title">
+							<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+							FAQ SEO
+						</h3>
+						<div class="vt-admin-toggle-row">
+							<span class="vt-admin-toggle-label">Afficher la FAQ</span>
+							<label class="vt-admin-toggle">
+								<input type="hidden" name="vt_astro_faq_enabled" value="0">
+								<input type="checkbox" name="vt_astro_faq_enabled" value="1" <?php checked( get_option('vt_astro_faq_enabled', true) ); ?>>
+								<span class="vt-admin-toggle-slider"></span>
+							</label>
+						</div>
+						<div class="vt-admin-field" style="margin-top:0.75rem;">
+							<label for="vt_astro_faq_title">Titre de la section</label>
+							<input type="text" name="vt_astro_faq_title" id="vt_astro_faq_title" value="<?php echo esc_attr( get_option('vt_astro_faq_title') ); ?>">
+						</div>
+						<?php for ( $i = 1; $i <= 5; $i++ ) : ?>
+						<div class="vt-admin-field">
+							<label>Question <?php echo $i; ?></label>
+							<input type="text" name="vt_astro_faq_q<?php echo $i; ?>" value="<?php echo esc_attr( get_option("vt_astro_faq_q{$i}") ); ?>">
+							<label style="margin-top:0.5rem;">Reponse <?php echo $i; ?></label>
+							<textarea name="vt_astro_faq_a<?php echo $i; ?>" rows="2"><?php echo esc_textarea( get_option("vt_astro_faq_a{$i}") ); ?></textarea>
+						</div>
+						<?php endfor; ?>
+					</div>
+
+					<!-- Partage social -->
+					<div class="vt-admin-card">
+						<h3 class="vt-admin-card-title">
+							<svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+							Partage social
+						</h3>
+						<div class="vt-admin-toggle-row">
+							<span class="vt-admin-toggle-label">Activer les boutons de partage</span>
+							<label class="vt-admin-toggle">
+								<input type="hidden" name="vt_astro_share_enabled" value="0">
+								<input type="checkbox" name="vt_astro_share_enabled" value="1" <?php checked( get_option('vt_astro_share_enabled', true) ); ?>>
+								<span class="vt-admin-toggle-slider"></span>
+							</label>
+						</div>
+					</div>
+
+				</div><!-- /subtab-panel astrologique -->
 			</div>
 
 			<!-- Onglet 4 : APIs -->
@@ -813,6 +997,15 @@ function vt_render_admin_page() {
 
 		$('#vt-refresh-log-btn').on('click', function() {
 			location.reload();
+		});
+
+		// === Sous-onglets App ===
+		$('.vt-admin-subtab').on('click', function() {
+			var target = $(this).data('subtab');
+			$(this).siblings().removeClass('active');
+			$(this).addClass('active');
+			$(this).closest('.vt-admin-panel').find('.vt-admin-subtab-panel').removeClass('active');
+			$(this).closest('.vt-admin-panel').find('.vt-admin-subtab-panel[data-subtab="' + target + '"]').addClass('active');
 		});
 
 		// === Test de cle API ===
