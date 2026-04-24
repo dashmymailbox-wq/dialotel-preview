@@ -348,6 +348,7 @@
     },
 
     _shareImage: function () {
+      var self = this;
       var scoreText = (VT.$('#vt-result-score') || {}).textContent || '0%';
       var score = parseInt(scoreText, 10) || 0;
       var sign1 = this._sign1, sign2 = this._sign2;
