@@ -137,13 +137,38 @@
         </div>
         <p class="vt-rate-info"></p>
       </div>
+
+      <!-- FAQ SEO — Compatibilite astrologique -->
+      <section class="vt-faq" itemscope itemtype="https://schema.org/FAQPage">
+        <h2 class="vt-faq-title">Compatibilite astrologique — Questions frequentes</h2>
+        <details class="vt-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <summary class="vt-faq-q" itemprop="name">Comment fonctionne le test de compatibilite astrologique ?</summary>
+          <p class="vt-faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><span itemprop="text">Notre analyse croise les profils astrologiques de deux signes du zodiaque pour calculer un score de compatibilite. Le resultat tient compte de la nature des elements (feu, terre, air, eau), des affinites planetaires et du theme choisi (Amour, Amitie, Travail ou Famille).</span></p>
+        </details>
+        <details class="vt-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <summary class="vt-faq-q" itemprop="name">A quoi servent les themes Amour, Amitie, Travail et Famille ?</summary>
+          <p class="vt-faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><span itemprop="text">Chaque theme oriente l'analyse astrologique selon un angle specifique : Amour pour l'alchimie romantique, Amitie pour la complicite et la confiance, Travail pour la complementarite professionnelle, Famille pour la dynamique relationnelle au sein du cercle proche.</span></p>
+        </details>
+        <details class="vt-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <summary class="vt-faq-q" itemprop="name">Le test de compatibilite astrologique est-il fiable ?</summary>
+          <p class="vt-faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><span itemprop="text">Notre analyse s'appuie sur les traditions astrologiques reconnues, enrichies par une intelligence artificielle qui personnalise le profil de chaque duo selon le theme selectionne. Le resultat est indicatif et vise a ouvrir la reflexion sur la dynamique de la relation.</span></p>
+        </details>
+        <details class="vt-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <summary class="vt-faq-q" itemprop="name">Puis-je tester plusieurs combinaisons de signes ?</summary>
+          <p class="vt-faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><span itemprop="text">Oui, notre test astrologique est entierement gratuit et sans limite. Testez autant de paires de signes que vous le souhaitez, changez de theme a chaque tirage et partagez vos resultats sur vos reseaux sociaux.</span></p>
+        </details>
+        <details class="vt-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <summary class="vt-faq-q" itemprop="name">Mes donnees sont-elles protegees lors du test ?</summary>
+          <p class="vt-faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><span itemprop="text">Aucune donnee personnelle n'est collectee pour le calcul astrologique : seuls les signes zodiacaux selectionnes et le theme choisi sont utilises. Les resultats ne sont pas stockes et ne sont jamais transmis a des tiers.</span></p>
+        </details>
+      </section>
     </div>
 
     <!-- ETAPE 1 : Selection des signes -->
     <div class="vt-step" data-step="form">
       <div class="vt-astro-intro vt-anim-fade-in">
-        <h2 style="font-family:var(--theme-font-title); letter-spacing:0.05em; margin-bottom:0.5rem;">Choisissez vos signes</h2>
-        <p style="color:var(--theme-text-muted); font-size:0.85rem; margin-bottom:2rem;">
+        <h2 style="font-family:var(--theme-font-title); letter-spacing:0.05em; margin-bottom:0.2rem;">Choisissez vos signes</h2>
+        <p style="color:var(--theme-text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
           Selectionnez un signe dans chaque colonne
         </p>
       </div>
@@ -155,43 +180,55 @@
         <p></p>
       </div>
 
-      <!-- Premier signe -->
-      <div class="vt-astro-sign-group" data-group="1">
-        <div class="vt-astro-sign-group-title">Premier signe</div>
-        <div class="vt-astro-sign-grid">
-          <button type="button" class="vt-astro-sign" data-sign="aries"><svg><use href="#sign-aries"/></svg><span class="vt-astro-sign-name">Belier</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="taurus"><svg><use href="#sign-taurus"/></svg><span class="vt-astro-sign-name">Taureau</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="gemini"><svg><use href="#sign-gemini"/></svg><span class="vt-astro-sign-name">Gemeaux</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="cancer"><svg><use href="#sign-cancer"/></svg><span class="vt-astro-sign-name">Cancer</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="leo"><svg><use href="#sign-leo"/></svg><span class="vt-astro-sign-name">Lion</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="virgo"><svg><use href="#sign-virgo"/></svg><span class="vt-astro-sign-name">Vierge</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="libra"><svg><use href="#sign-libra"/></svg><span class="vt-astro-sign-name">Balance</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="scorpio"><svg><use href="#sign-scorpio"/></svg><span class="vt-astro-sign-name">Scorpion</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="sagittarius"><svg><use href="#sign-sagittarius"/></svg><span class="vt-astro-sign-name">Sagittaire</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="capricorn"><svg><use href="#sign-capricorn"/></svg><span class="vt-astro-sign-name">Capricorne</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="aquarius"><svg><use href="#sign-aquarius"/></svg><span class="vt-astro-sign-name">Verseau</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="pisces"><svg><use href="#sign-pisces"/></svg><span class="vt-astro-sign-name">Poissons</span></button>
+      <!-- Theme -->
+      <div class="vt-astro-theme-selector">
+        <div class="vt-astro-sign-group-title">Thème de la compatibilité</div>
+        <p class="vt-astro-theme-hint">Choisissez l'angle de votre analyse avant de selectionner vos signes.</p>
+        <div class="vt-astro-theme-grid">
+          <button type="button" class="vt-astro-theme-btn vt-astro-theme-btn--selected" data-theme="amour">❤️ Amour</button>
+          <button type="button" class="vt-astro-theme-btn" data-theme="amitie">🤝 Amitié</button>
+          <button type="button" class="vt-astro-theme-btn" data-theme="travail">💼 Travail</button>
+          <button type="button" class="vt-astro-theme-btn" data-theme="famille">🌿 Famille</button>
         </div>
       </div>
 
-      <div class="vt-astro-divider"></div>
+      <div class="vt-astro-sign-groups-row">
+        <!-- Premier signe -->
+        <div class="vt-astro-sign-group" data-group="1">
+          <div class="vt-astro-sign-group-title">Premier signe</div>
+          <div class="vt-astro-sign-grid">
+            <button type="button" class="vt-astro-sign" data-sign="aries"><svg><use href="#sign-aries"/></svg><span class="vt-astro-sign-name">Belier</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="taurus"><svg><use href="#sign-taurus"/></svg><span class="vt-astro-sign-name">Taureau</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="gemini"><svg><use href="#sign-gemini"/></svg><span class="vt-astro-sign-name">Gemeaux</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="cancer"><svg><use href="#sign-cancer"/></svg><span class="vt-astro-sign-name">Cancer</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="leo"><svg><use href="#sign-leo"/></svg><span class="vt-astro-sign-name">Lion</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="virgo"><svg><use href="#sign-virgo"/></svg><span class="vt-astro-sign-name">Vierge</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="libra"><svg><use href="#sign-libra"/></svg><span class="vt-astro-sign-name">Balance</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="scorpio"><svg><use href="#sign-scorpio"/></svg><span class="vt-astro-sign-name">Scorpion</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="sagittarius"><svg><use href="#sign-sagittarius"/></svg><span class="vt-astro-sign-name">Sagittaire</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="capricorn"><svg><use href="#sign-capricorn"/></svg><span class="vt-astro-sign-name">Capricorne</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="aquarius"><svg><use href="#sign-aquarius"/></svg><span class="vt-astro-sign-name">Verseau</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="pisces"><svg><use href="#sign-pisces"/></svg><span class="vt-astro-sign-name">Poissons</span></button>
+          </div>
+        </div>
 
-      <!-- Deuxieme signe -->
-      <div class="vt-astro-sign-group" data-group="2">
-        <div class="vt-astro-sign-group-title">Deuxieme signe</div>
-        <div class="vt-astro-sign-grid">
-          <button type="button" class="vt-astro-sign" data-sign="aries"><svg><use href="#sign-aries"/></svg><span class="vt-astro-sign-name">Belier</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="taurus"><svg><use href="#sign-taurus"/></svg><span class="vt-astro-sign-name">Taureau</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="gemini"><svg><use href="#sign-gemini"/></svg><span class="vt-astro-sign-name">Gemeaux</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="cancer"><svg><use href="#sign-cancer"/></svg><span class="vt-astro-sign-name">Cancer</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="leo"><svg><use href="#sign-leo"/></svg><span class="vt-astro-sign-name">Lion</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="virgo"><svg><use href="#sign-virgo"/></svg><span class="vt-astro-sign-name">Vierge</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="libra"><svg><use href="#sign-libra"/></svg><span class="vt-astro-sign-name">Balance</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="scorpio"><svg><use href="#sign-scorpio"/></svg><span class="vt-astro-sign-name">Scorpion</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="sagittarius"><svg><use href="#sign-sagittarius"/></svg><span class="vt-astro-sign-name">Sagittaire</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="capricorn"><svg><use href="#sign-capricorn"/></svg><span class="vt-astro-sign-name">Capricorne</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="aquarius"><svg><use href="#sign-aquarius"/></svg><span class="vt-astro-sign-name">Verseau</span></button>
-          <button type="button" class="vt-astro-sign" data-sign="pisces"><svg><use href="#sign-pisces"/></svg><span class="vt-astro-sign-name">Poissons</span></button>
+        <!-- Deuxieme signe -->
+        <div class="vt-astro-sign-group" data-group="2">
+          <div class="vt-astro-sign-group-title">Deuxieme signe</div>
+          <div class="vt-astro-sign-grid">
+            <button type="button" class="vt-astro-sign" data-sign="aries"><svg><use href="#sign-aries"/></svg><span class="vt-astro-sign-name">Belier</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="taurus"><svg><use href="#sign-taurus"/></svg><span class="vt-astro-sign-name">Taureau</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="gemini"><svg><use href="#sign-gemini"/></svg><span class="vt-astro-sign-name">Gemeaux</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="cancer"><svg><use href="#sign-cancer"/></svg><span class="vt-astro-sign-name">Cancer</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="leo"><svg><use href="#sign-leo"/></svg><span class="vt-astro-sign-name">Lion</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="virgo"><svg><use href="#sign-virgo"/></svg><span class="vt-astro-sign-name">Vierge</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="libra"><svg><use href="#sign-libra"/></svg><span class="vt-astro-sign-name">Balance</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="scorpio"><svg><use href="#sign-scorpio"/></svg><span class="vt-astro-sign-name">Scorpion</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="sagittarius"><svg><use href="#sign-sagittarius"/></svg><span class="vt-astro-sign-name">Sagittaire</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="capricorn"><svg><use href="#sign-capricorn"/></svg><span class="vt-astro-sign-name">Capricorne</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="aquarius"><svg><use href="#sign-aquarius"/></svg><span class="vt-astro-sign-name">Verseau</span></button>
+            <button type="button" class="vt-astro-sign" data-sign="pisces"><svg><use href="#sign-pisces"/></svg><span class="vt-astro-sign-name">Poissons</span></button>
+          </div>
         </div>
       </div>
 
@@ -222,7 +259,7 @@
             <div class="vt-anim-dialotel-loader"></div>
           </div>
         </div>
-        <p class="vt-astro-ritual-text">Les astres convergent...</p>
+        <p class="vt-astro-ritual-text">Compatibilité <span id="vt-astro-ritual-theme">Amour</span> — Les astres convergent...</p>
         <div class="vt-anim-dots"><span></span><span></span><span></span></div>
       </div>
     </div>
@@ -240,6 +277,8 @@
             </svg>
           </button>
         </div>
+
+        <div id="vt-result-header" class="vt-result-header"></div>
 
         <div class="vt-astro-result-score vt-anim-dialotel-reveal" id="vt-result-score">0%</div>
         <p class="vt-astro-result-score-label">de compatibilite astrologique</p>
@@ -303,6 +342,15 @@
 
         <!-- Actions -->
         <div class="vt-result-actions" style="margin-top:1.5rem;">
+          <div class="vt-share" id="vt-share">
+            <button class="btn-hex btn-hex--secondary" id="vt-btn-share" type="button" onclick="window._vtShareImage && window._vtShareImage()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+              Partager mon score
+            </button>
+          </div>
           <button class="btn-hex" id="vt-btn-restart">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
               <polyline points="23 4 23 10 17 10"/>
@@ -330,13 +378,26 @@
 
 </div>
 
+<!-- Modale partage -->
+<div id="vt-share-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:99999;align-items:center;justify-content:center;padding:1rem;">
+  <div style="background:#fff;border-radius:12px;padding:1.5rem;max-width:360px;width:100%;text-align:center;">
+    <img id="vt-share-preview" alt="Aperçu" style="max-width:100%;border-radius:8px;display:block;margin:0 auto 1rem;">
+    <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
+      <a id="vt-share-download" download="compatibilite-astrologique.png" style="display:inline-flex;align-items:center;gap:0.5rem;text-decoration:none;background:linear-gradient(135deg,#ed8ce6,rgba(237,140,230,0.8));color:#000;font-family:sans-serif;font-size:0.95rem;font-weight:600;padding:0.9rem 2.2rem;border:none;cursor:pointer;clip-path:polygon(8% 0%,92% 0%,100% 50%,92% 100%,8% 100%,0% 50%);white-space:nowrap;">
+        Télécharger
+      </a>
+      <button type="button" onclick="document.getElementById('vt-share-modal').style.display='none'" style="display:inline-flex;align-items:center;background:linear-gradient(135deg,#e2ed77,rgba(226,237,119,0.8));color:#000;font-family:sans-serif;font-size:0.95rem;font-weight:600;padding:0.9rem 2.2rem;border:none;cursor:pointer;clip-path:polygon(8% 0%,92% 0%,100% 50%,92% 100%,8% 100%,0% 50%);white-space:nowrap;">Fermer</button>
+    </div>
+  </div>
+</div>
+
 <!-- Config -->
 <script type="application/json" id="vt-config-compat-astro">
   {
     "tirageId": "compat-astro",
     "theme": "dialotel",
     "counterBase": 3800,
-    "ai": { "provider": "mistral", "apiKey": "REMPLACER_ICI", "model": "mistral-small-latest" },
+    "ai": { "provider": "mistral", "apiKey": "XtsCBn8NEzj7M3d4s3hlUBSYNgH3BHMk", "model": "mistral-small-latest" },
     "tts": { "enabled": true, "autoplay": false },
     "rateLimit": { "enabled": false, "freePerDay": 3, "extendedPerDay": 8 },
     "emailCapture": { "enabled": true, "provider": "brevo", "apiKey": "REMPLACER_ICI" },
@@ -367,41 +428,45 @@
 
 <script type="application/json" id="vt-data-matrix">
   {
-    "belier-taureau": 55, "belier-gemeaux": 83, "belier-cancer": 45, "belier-lion": 95,
-    "belier-vierge": 50, "belier-balance": 65, "belier-scorpion": 70, "belier-sagittaire": 93,
-    "belier-capricorne": 47, "belier-verseau": 72, "belier-poissons": 60,
-    "taureau-gemeaux": 40, "taureau-cancer": 90, "taureau-lion": 55, "taureau-vierge": 95,
-    "taureau-balance": 60, "taureau-scorpion": 88, "taureau-sagittaire": 35, "taureau-capricorne": 98,
-    "taureau-verseau": 48, "taureau-poissons": 75,
-    "gemeaux-cancer": 42, "gemeaux-lion": 85, "gemeaux-vierge": 38, "gemeaux-balance": 92,
-    "gemeaux-scorpion": 50, "gemeaux-sagittaire": 73, "gemeaux-capricorne": 40, "gemeaux-verseau": 96,
-    "gemeaux-poissons": 55,
-    "cancer-lion": 78, "cancer-vierge": 88, "cancer-balance": 45, "cancer-scorpion": 94,
-    "cancer-sagittaire": 32, "cancer-capricorne": 72, "cancer-verseau": 38, "cancer-poissons": 97,
-    "lion-vierge": 52, "lion-balance": 82, "lion-scorpion": 75, "lion-sagittaire": 93,
-    "lion-capricorne": 48, "lion-verseau": 65, "lion-poissons": 55,
-    "vierge-balance": 58, "vierge-scorpion": 82, "vierge-sagittaire": 30, "vierge-capricorne": 95,
-    "vierge-verseau": 42, "vierge-poissons": 62,
-    "balance-scorpion": 68, "balance-sagittaire": 70, "balance-capricorne": 55, "balance-verseau": 85,
-    "balance-poissons": 60,
-    "scorpion-sagittaire": 45, "scorpion-capricorne": 80, "scorpion-verseau": 40, "scorpion-poissons": 88,
-    "sagittaire-capricorne": 35, "sagittaire-verseau": 90, "sagittaire-poissons": 50,
-    "capricorne-verseau": 52, "capricorne-poissons": 72,
-    "verseau-poissons": 58
+    "aries-taurus": 55, "aries-gemini": 83, "aries-cancer": 45, "aries-leo": 95,
+    "aries-virgo": 50, "aries-libra": 65, "aries-scorpio": 70, "aries-sagittarius": 93,
+    "aries-capricorn": 47, "aries-aquarius": 72, "aries-pisces": 60,
+    "taurus-gemini": 40, "taurus-cancer": 90, "taurus-leo": 55, "taurus-virgo": 95,
+    "taurus-libra": 60, "taurus-scorpio": 88, "taurus-sagittarius": 35, "taurus-capricorn": 98,
+    "taurus-aquarius": 48, "taurus-pisces": 75,
+    "gemini-cancer": 42, "gemini-leo": 85, "gemini-virgo": 38, "gemini-libra": 92,
+    "gemini-scorpio": 50, "gemini-sagittarius": 73, "gemini-capricorn": 40, "gemini-aquarius": 96,
+    "gemini-pisces": 55,
+    "cancer-leo": 78, "cancer-virgo": 88, "cancer-libra": 45, "cancer-scorpio": 94,
+    "cancer-sagittarius": 32, "cancer-capricorn": 72, "cancer-aquarius": 38, "cancer-pisces": 97,
+    "leo-virgo": 52, "leo-libra": 82, "leo-scorpio": 75, "leo-sagittarius": 93,
+    "leo-capricorn": 48, "leo-aquarius": 65, "leo-pisces": 55,
+    "virgo-libra": 58, "virgo-scorpio": 82, "virgo-sagittarius": 30, "virgo-capricorn": 95,
+    "virgo-aquarius": 42, "virgo-pisces": 62,
+    "libra-scorpio": 68, "libra-sagittarius": 70, "libra-capricorn": 55, "libra-aquarius": 85,
+    "libra-pisces": 60,
+    "scorpio-sagittarius": 45, "scorpio-capricorn": 80, "scorpio-aquarius": 40, "scorpio-pisces": 88,
+    "sagittarius-capricorn": 35, "sagittarius-aquarius": 90, "sagittarius-pisces": 50,
+    "capricorn-aquarius": 52, "capricorn-pisces": 72,
+    "aquarius-pisces": 58
   }
 </script>
 
 <script type="text/plain" id="vt-prompt-compat-astro">
-Tu es un astrologue expert. A partir des deux signes astrologiques et de leur score de compatibilite de base, redige une analyse detaillee en JSON uniquement :
-{ "score": <1-100>, "profilCombine": "<description du couple astrologique en 2-3 phrases>", "traits": ["<trait partage 1>", "<trait partage 2>", "<trait partage 3>"], "conseils": "<conseils pratiques pour ce couple en 2-3 phrases>" }
-Ton : bienveillant, positif, encourageant. Texte en francais. Reponds UNIQUEMENT avec le JSON.
+Tu es un astrologue expert. A partir des deux signes et de leur score de compatibilite, redige une analyse JSON contextualise selon le theme indique :
+{ "score": <1-100>, "profilCombine": "<profil du duo en 2-3 phrases selon le theme>", "traits": ["<point fort 1>", "<point fort 2>", "<point fort 3>"], "conseils": "<conseils pratiques selon le theme en 2-3 phrases>" }
+- Theme Amour : analyse romantique, attirance, vie de couple
+- Theme Amitie : complicite, confiance, longevite du lien
+- Theme Travail : collaboration, complementarite, gestion des conflits professionnels
+- Theme Famille : dynamique familiale, soutien mutuel, incomprehensions possibles
+Ton : bienveillant, positif. Texte en francais. Reponds UNIQUEMENT avec le JSON.
 </script>
 
 <script>if(!localStorage.getItem('vt_theme'))localStorage.setItem('vt_theme','light');</script>
 <script src="../wordpress/assets/js/core.js"></script>
 <script src="../wordpress/assets/js/compatibilite-astrologique.js"></script>
 <script>(function(){var splash=document.getElementById('vt-splash'),container=document.querySelector('.vt-container');if(!splash){if(container)container.classList.add('vt-ready')}else{setTimeout(function(){splash.classList.add('vt-splash--hiding');setTimeout(function(){splash.remove();if(container)container.classList.add('vt-ready')},600)},2600)}
-function rainHearts(){var s=['\u2764','\u2665','\u2763'];for(var i=0;i<25;i++){var h=document.createElement('span');h.className='vt-heart-particle';h.textContent=s[i%3];h.style.left=(5+Math.random()*90)+'vw';h.style.top='-30px';h.style.fontSize=(12+Math.random()*16)+'px';h.style.animationDuration=(3+Math.random()*3)+'s';h.style.animationDelay=(0.1+Math.random()*1.8)+'s';document.body.appendChild(h);(function(el){setTimeout(function(){el.remove()},8000)})(h)}}
-var rained=false;new MutationObserver(function(){if(!rained&&document.querySelector('.vt-step[data-step="result"].vt-step--active')){rained=true;setTimeout(function(){var s=document.getElementById('vt-result-score');var pct=s?parseInt(s.textContent):0;if(pct>65)rainHearts()},1700)}}).observe(document.body,{attributes:true,subtree:true,attributeFilter:['class']})})()</script>
+function rainSpheres(){var c=[['#f5a0ef','#c055b8'],['#c084fc','#7c3aed'],['#e2ed77','#a3b346']];for(var i=0;i<25;i++){var h=document.createElement('span');h.className='vt-heart-particle';var cl=c[i%3];var sz=(8+Math.random()*12);h.style.left=(5+Math.random()*90)+'vw';h.style.top='-30px';h.style.width=sz+'px';h.style.height=sz+'px';h.style.background='radial-gradient(circle at 35% 35%,'+cl[0]+','+cl[1]+')';h.style.borderRadius='50%';h.style.display='inline-block';h.style.animationDuration=(3+Math.random()*3)+'s';h.style.animationDelay=(0.1+Math.random()*1.8)+'s';document.body.appendChild(h);(function(el){setTimeout(function(){el.remove()},8000)})(h)}}
+var rained=false;new MutationObserver(function(){if(!rained&&document.querySelector('.vt-step[data-step="result"].vt-step--active')){rained=true;setTimeout(function(){var s=document.getElementById('vt-result-score');var pct=s?parseInt(s.textContent):0;if(pct>65)rainSpheres()},1700)}}).observe(document.body,{attributes:true,subtree:true,attributeFilter:['class']})})()</script>
 </body>
 </html>
