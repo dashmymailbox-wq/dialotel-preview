@@ -36,6 +36,40 @@ function vt_check_rate_limit( $action = 'ai', $max = 10, $window = 60 ) {
 }
 
 /* ============================================================
+   PROXY IA — helpers retry/fallback
+   ============================================================ */
+
+// Retourne la liste ordonnee des providers a essayer :
+// le provider actif en premier, puis ceux qui ont une cle configuree.
+function vt_build_provider_chain() {
+	$primary = get_option( 'vt_ai_provider', 'mistral' );
+	$chain   = array( $primary );
+	foreach ( array( 'mistral', 'openai', 'claude' ) as $p ) {
+		if ( $p !== $primary && ! empty( get_option( "vt_ai_{$p}_key", '' ) ) ) {
+			$chain[] = $p;
+		}
+	}
+	return $chain;
+}
+
+// Retourne array('key'=>..., 'model'=>...) ou false si cle absente.
+function vt_get_provider_config( $provider ) {
+	$defaults = array(
+		'mistral' => array( 'key_opt' => 'vt_ai_mistral_key', 'model_opt' => 'vt_ai_mistral_model', 'model_default' => 'mistral-small-latest' ),
+		'openai'  => array( 'key_opt' => 'vt_ai_openai_key',  'model_opt' => 'vt_ai_openai_model',  'model_default' => 'gpt-4o-mini' ),
+		'claude'  => array( 'key_opt' => 'vt_ai_claude_key',  'model_opt' => 'vt_ai_claude_model',  'model_default' => 'claude-sonnet-4-6-20250514' ),
+	);
+	if ( ! isset( $defaults[ $provider ] ) ) return false;
+	$d   = $defaults[ $provider ];
+	$key = get_option( $d['key_opt'], '' );
+	if ( empty( $key ) ) return false;
+	return array(
+		'key'   => $key,
+		'model' => get_option( $d['model_opt'], $d['model_default'] ),
+	);
+}
+
+/* ============================================================
    PROXY IA
    ============================================================ */
 add_action( 'wp_ajax_vt_ai_proxy', 'vt_ai_proxy' );
@@ -66,59 +100,59 @@ function vt_ai_proxy() {
 		wp_send_json_error( array( 'message' => 'Prompt trop long (max 4000 caracteres).' ), 400 );
 	}
 
-	$provider = get_option( 'vt_ai_provider', 'mistral' );
-	$api_key  = '';
-	$model    = '';
-
-	switch ( $provider ) {
-		case 'mistral':
-			$api_key = get_option( 'vt_ai_mistral_key', '' );
-			$model   = get_option( 'vt_ai_mistral_model', 'mistral-small-latest' );
-			break;
-		case 'openai':
-			$api_key = get_option( 'vt_ai_openai_key', '' );
-			$model   = get_option( 'vt_ai_openai_model', 'gpt-4o-mini' );
-			break;
-		case 'claude':
-			$api_key = get_option( 'vt_ai_claude_key', '' );
-			$model   = get_option( 'vt_ai_claude_model', 'claude-sonnet-4-6-20250514' );
-			break;
-		default:
-			wp_send_json_error( array( 'message' => 'Provider non supporte.' ), 400 );
-	}
-
-	if ( empty( $api_key ) ) {
-		wp_send_json_error( array( 'message' => 'Cle API non configuree.' ), 500 );
-	}
-
-	// Construction messages
+	// Construction messages (base commune pour tous les providers)
 	$messages = array();
 	if ( ! empty( $system_prompt ) ) {
 		$messages[] = array( 'role' => 'system', 'content' => $system_prompt );
 	}
 	$messages[] = array( 'role' => 'user', 'content' => $prompt );
 
-	// Appel selon le provider
-	$response = null;
-	switch ( $provider ) {
-		case 'mistral':
-			$response = vt_call_mistral( $api_key, $model, $messages );
-			break;
-		case 'openai':
-			$response = vt_call_openai( $api_key, $model, $messages );
-			break;
-		case 'claude':
-			$response = vt_call_claude( $api_key, $model, $prompt, $system_prompt );
-			break;
+	// Retry + fallback : provider actif en premier, puis backup si cle configuree
+	$chain       = vt_build_provider_chain();
+	$max_retries = 2;
+
+	foreach ( $chain as $provider ) {
+		$config = vt_get_provider_config( $provider );
+		if ( ! $config ) continue;
+
+		$api_key = $config['key'];
+		$model   = $config['model'];
+
+		for ( $attempt = 1; $attempt <= $max_retries; $attempt++ ) {
+			if ( $attempt > 1 ) sleep( 1 );
+
+			switch ( $provider ) {
+				case 'mistral':
+					$response = vt_call_mistral( $api_key, $model, $messages );
+					break;
+				case 'openai':
+					$response = vt_call_openai( $api_key, $model, $messages );
+					break;
+				case 'claude':
+					$response = vt_call_claude( $api_key, $model, $prompt, $system_prompt );
+					break;
+				default:
+					continue 2;
+			}
+
+			if ( ! is_wp_error( $response ) ) {
+				VT_Logger::log( 'IA OK (' . $provider . '/' . $model . ', tentative ' . $attempt . ')', 'success' );
+				wp_send_json_success( array( 'content' => $response ) );
+				return;
+			}
+
+			$error_data = $response->get_error_data();
+			$http_code  = isset( $error_data['http_code'] ) ? (int) $error_data['http_code'] : 0;
+			VT_Logger::log( 'IA erreur ' . ( $http_code ?: 'reseau' ) . ' (' . $provider . ', tentative ' . $attempt . ')', 'warning' );
+
+			// Erreur d'authentification : inutile de retenter ce provider
+			if ( in_array( $http_code, array( 401, 403 ), true ) ) break;
+		}
 	}
 
-	if ( is_wp_error( $response ) ) {
-		VT_Logger::log( 'IA Erreur (' . $provider . ') : ' . $response->get_error_message(), 'error' );
-		wp_send_json_error( array( 'message' => 'Erreur lors de la consultation IA. Reessayez.' ), 500 );
-	}
-
-	VT_Logger::log( 'IA OK (' . $provider . '/' . $model . ')', 'success' );
-	wp_send_json_success( array( 'content' => $response ) );
+	// Tous les providers/retries ont echoue
+	VT_Logger::log( 'IA : tous les providers ont echoue', 'error' );
+	wp_send_json_error( array( 'message' => 'Service momentanement indisponible. Reessayez dans quelques instants.' ), 503 );
 }
 
 /* --- Mistral --- */
@@ -141,9 +175,8 @@ function vt_call_mistral( $api_key, $model, $messages ) {
 	$data = json_decode( wp_remote_retrieve_body( $response ), true );
 
 	if ( $code >= 400 ) {
-		// FIX 3 : Logger le detail, retourner un message generique
 		VT_Logger::log( 'Mistral API ' . $code . ' : ' . wp_json_encode( $data ), 'error' );
-		return new WP_Error( 'mistral_error', 'Erreur temporaire du service IA.' );
+		return new WP_Error( 'mistral_error', 'Erreur temporaire du service IA.', array( 'http_code' => $code ) );
 	}
 
 	if ( isset( $data['choices'][0]['message']['content'] ) ) {
@@ -174,7 +207,7 @@ function vt_call_openai( $api_key, $model, $messages ) {
 
 	if ( $code >= 400 ) {
 		VT_Logger::log( 'OpenAI API ' . $code . ' : ' . wp_json_encode( $data ), 'error' );
-		return new WP_Error( 'openai_error', 'Erreur temporaire du service IA.' );
+		return new WP_Error( 'openai_error', 'Erreur temporaire du service IA.', array( 'http_code' => $code ) );
 	}
 
 	if ( isset( $data['choices'][0]['message']['content'] ) ) {
@@ -214,7 +247,7 @@ function vt_call_claude( $api_key, $model, $prompt, $system_prompt ) {
 
 	if ( $code >= 400 ) {
 		VT_Logger::log( 'Claude API ' . $code . ' : ' . wp_json_encode( $data ), 'error' );
-		return new WP_Error( 'claude_error', 'Erreur temporaire du service IA.' );
+		return new WP_Error( 'claude_error', 'Erreur temporaire du service IA.', array( 'http_code' => $code ) );
 	}
 
 	if ( isset( $data['content'][0]['text'] ) ) {

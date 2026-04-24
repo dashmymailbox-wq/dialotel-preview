@@ -174,8 +174,23 @@
       var ritualStart = Date.now();
       var MIN_RITUAL = 6000;
 
+      // Messages de patience cycles pendant l'appel IA
+      var _pMsgs = [
+        'Les astres analysent votre compatibilite...',
+        'L\'energie de l\'amour se concentre...',
+        'Les esprits s\'alignent pour vous...',
+        'Votre destinee se revele...',
+      ];
+      var _pIdx = 0;
+      var _pEl = VT.$('.vt-am-ritual-text');
+      var _pTimer = setInterval(function () {
+        _pIdx = (_pIdx + 1) % _pMsgs.length;
+        if (_pEl) _pEl.textContent = _pMsgs[_pIdx];
+      }, 3000);
+
       VT.AI.generate(prompt, this.promptTemplate)
         .then(function (response) {
+          clearInterval(_pTimer);
           var result = self._parseResponse(response);
           if (result) {
             var elapsed = Date.now() - ritualStart;
@@ -191,8 +206,9 @@
           }
         })
         .catch(function (err) {
+          clearInterval(_pTimer);
           console.error('[VT] Erreur IA :', err);
-          self._showError('Erreur de connexion au service. Verifiez votre cle API ou reessayez.');
+          self._showError('Nos voyants sont tres sollicites en ce moment. Reessayez dans quelques instants.');
         });
     },
 

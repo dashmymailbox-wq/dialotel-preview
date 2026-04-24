@@ -170,8 +170,23 @@
       var aiConfig = this.config.ai || {};
       VT.AI.init(aiConfig);
 
+      // Messages de patience cycles pendant l'appel IA
+      var _pMsgs = [
+        'Les astres consultent votre destinee...',
+        'L\'energie cosmique se concentre...',
+        'Les constellations s\'alignent pour vous...',
+        'Votre avenir se revele dans les etoiles...',
+      ];
+      var _pIdx = 0;
+      var _pEl = VT.$('.vt-astro-ritual-text');
+      var _pTimer = setInterval(function () {
+        _pIdx = (_pIdx + 1) % _pMsgs.length;
+        if (_pEl) _pEl.textContent = _pMsgs[_pIdx];
+      }, 3000);
+
       VT.AI.generate(prompt, this.promptTemplate)
         .then(function (response) {
+          clearInterval(_pTimer);
           var result = self._parseResponse(response);
           if (result) {
             if (baseScore) result.score = baseScore;
@@ -188,14 +203,9 @@
           }
         })
         .catch(function (err) {
-          console.error('[VT] Erreur IA :', err, err && err.message);
-          var msg = err && err.message || '';
-          var userMsg = msg.indexOf('503') !== -1
-            ? 'Le service est temporairement indisponible. Reessayez dans quelques instants.'
-            : msg.indexOf('401') !== -1 || msg.indexOf('403') !== -1
-              ? 'Cle API invalide. Verifiez la configuration.'
-              : 'Erreur de connexion au service. Reessayez.';
-          self._showError(userMsg);
+          clearInterval(_pTimer);
+          console.error('[VT] Erreur IA :', err);
+          self._showError('Nos voyants sont tres sollicites en ce moment. Reessayez dans quelques instants.');
         });
     },
 
