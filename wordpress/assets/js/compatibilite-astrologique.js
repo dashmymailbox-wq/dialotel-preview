@@ -410,10 +410,8 @@
         /* 1. Titre theme — h1 style */
         var themeLabels2={'amour':'Amour','amitie':'Amitié','travail':'Travail','famille':'Famille'};
         var themeLabel=themeLabels2[self._theme]||'Amour';
-        var themeColors={'amour':'#c026d3','amitie':'#2563eb','travail':'#d97706','famille':'#059669'};
-        var themeColor=themeColors[self._theme]||'#c026d3';
         ctx.save();
-        ctx.fillStyle=themeColor;
+        ctx.fillStyle='#ed8ce6';
         ctx.font='bold 30px "Cinzel",Georgia,serif';
         ctx.textAlign='center'; ctx.textBaseline='middle';
         ctx.fillText(themeLabel,W/2,cursorY+logoH/2);
