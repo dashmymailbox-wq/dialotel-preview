@@ -30,6 +30,7 @@
           step.classList.add('vt-step--active', 'vt-step--enter');
         }
       });
+      window.scrollTo(0, 0);
     },
 
     goTo: function (index) {
