@@ -522,7 +522,7 @@ function vt_render_admin_page() {
 						</div>
 						<div class="vt-admin-field">
 							<label for="vt_cta_url">URL destination</label>
-							<input type="url" name="vt_cta_url" id="vt_cta_url" value="<?php echo esc_attr( get_option('vt_cta_url', '#') ); ?>">
+							<input type="text" name="vt_cta_url" id="vt_cta_url" value="<?php echo esc_attr( get_option('vt_cta_url', '#') ); ?>">
 						</div>
 					</fieldset>
 				</div>
