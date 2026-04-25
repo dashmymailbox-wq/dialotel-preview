@@ -9,7 +9,6 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 $assets_url  = VT_PLUGIN_URL . 'assets/';
-$dialotel_url = VT_PLUGIN_URL . 'assets/';
 $proxy_url   = admin_url( 'admin-ajax.php?action=vt_ai_proxy' );
 $email_proxy = admin_url( 'admin-ajax.php?action=vt_email_proxy' );
 
@@ -50,7 +49,7 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 	<div class="vt-splash" id="vt-splash" aria-hidden="true">
 		<?php
 		$brand_logo = get_option( 'vt_brand_logo', '' );
-		$logo_src   = ! empty( $brand_logo ) ? $brand_logo : $dialotel_url . 'logo-hexagon-voyance.webp';
+		$logo_src   = ! empty( $brand_logo ) ? $brand_logo : $assets_url . 'logo-hexagon-voyance.webp';
 		?>
 		<img class="vt-splash-logo" src="<?php echo esc_url( $logo_src ); ?>" alt="<?php echo esc_attr( $brand_name ); ?>">
 	</div>
@@ -383,7 +382,7 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 	"tts": { "enabled": <?php echo $tts_enabled ? 'true' : 'false'; ?>, "autoplay": false },
 	"rateLimit": { "enabled": <?php echo $rate_enabled ? 'true' : 'false'; ?>, "freePerDay": <?php echo intval( $rate_free ); ?>, "extendedPerDay": <?php echo intval( $rate_extended ); ?> },
 	"emailCapture": { "enabled": true, "emailProxyUrl": "<?php echo esc_url( $email_proxy ); ?>", "provider": "proxy" },
-	"logoUrl": "<?php echo esc_url( $dialotel_url . 'logo-hexagon-voyance.webp' ); ?>",
+	"logoUrl": "<?php echo esc_url( $assets_url . 'logo-hexagon-voyance.webp' ); ?>",
 	"ctaVoyants": { "enabled": <?php echo $cta_enabled ? 'true' : 'false'; ?>, "url": "<?php echo esc_url( $cta_url ); ?>" }
 }
 </script>

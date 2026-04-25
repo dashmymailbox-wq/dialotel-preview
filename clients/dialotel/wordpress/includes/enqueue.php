@@ -53,28 +53,8 @@ function vt_enqueue_assets() {
 	// Theme Dialotel — chargé APRES global+components (comme dans la preview)
 	wp_enqueue_style( 'vt-theme', VT_PLUGIN_URL . 'assets/css/theme-dialotel.css', array( 'vt-components' ), VT_VERSION );
 
-	// Neutralise les propriétés WP qui piègent position:fixed + supprime les anneaux originaux piégés
-	wp_add_inline_style( 'vt-theme', '
-body { background-color: #ffffff !important; margin: 0 !important; }
-#page, .wp-site-blocks, #content, #primary, main,
-.site-main, .entry-content, .wp-block-post-content,
-.is-layout-constrained, .has-global-padding,
-.wp-block-group, .wp-block-template-part,
-.wp-block-query, .wp-block-post, .wp-block-page-list {
-    transform: none !important;
-    filter: none !important;
-    contain: none !important;
-    will-change: auto !important;
-    perspective: none !important;
-}
-
-' );
-
-	// Animations Dialotel
-	wp_enqueue_style( 'vt-anim-transition', VT_PLUGIN_URL . 'animations/transition-dialotel.css', array(), VT_VERSION );
-	wp_enqueue_style( 'vt-anim-loader', VT_PLUGIN_URL . 'animations/loader-dialotel.css', array(), VT_VERSION );
-	wp_enqueue_style( 'vt-anim-reveal', VT_PLUGIN_URL . 'animations/reveal-dialotel.css', array(), VT_VERSION );
-	wp_enqueue_style( 'vt-anim-card', VT_PLUGIN_URL . 'animations/card-dialotel.css', array(), VT_VERSION );
+	// Animations Dialotel (consolidated)
+	wp_enqueue_style( 'vt-anim-dialotel', VT_PLUGIN_URL . 'animations/animations-dialotel.css', array(), VT_VERSION );
 
 	// Core JS (dans le footer)
 	wp_enqueue_script( 'vt-core', VT_PLUGIN_URL . 'assets/js/core.js', array(), VT_VERSION, true );

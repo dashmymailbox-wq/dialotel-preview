@@ -1,0 +1,183 @@
+/* animations-dialotel.css — Consolidated animations for Dialotel theme */
+
+/* ============================================================
+   Card Animations — "Silk Flip"
+   ============================================================ */
+
+.vt-app .vt-anim-dialotel-card-container {
+  perspective: 800px;
+}
+
+.vt-app .vt-anim-dialotel-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.vt-app .vt-anim-dialotel-card-container--flipped .vt-anim-dialotel-card-inner {
+  transform: rotateY(180deg);
+}
+
+.vt-app .vt-anim-dialotel-card-front,
+.vt-app .vt-anim-dialotel-card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.vt-app .vt-anim-dialotel-card-back {
+  background: linear-gradient(135deg, rgba(237, 140, 230, 0.08), rgba(226, 237, 119, 0.05));
+  border: 1px solid var(--theme-border);
+}
+
+.vt-app .vt-anim-dialotel-card-back::before {
+  content: '';
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(237, 140, 230, 0.2);
+  border-radius: 50%;
+}
+
+.vt-app .vt-anim-dialotel-card-front {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--theme-primary);
+  transform: rotateY(180deg);
+  box-shadow: 0 0 16px var(--theme-glow-primary);
+  overflow: hidden;
+}
+
+.vt-app .vt-anim-dialotel-card-container--flipped .vt-anim-dialotel-card-front::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(237, 140, 230, 0.1) 50%, transparent 60%);
+  animation: vt-dialotel-shimmer 1.2s ease forwards;
+}
+
+@keyframes vt-dialotel-shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ============================================================
+   Loader Animations — "Breathing Ring"
+   ============================================================ */
+
+.vt-app .vt-anim-dialotel-loader {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--theme-primary);
+  position: relative;
+  animation: vt-dialotel-breathe 2s ease-in-out infinite;
+  box-shadow: 0 0 20px var(--theme-glow-primary);
+}
+
+.vt-app .vt-anim-dialotel-loader::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  border: 1px solid var(--theme-secondary);
+  animation: vt-dialotel-inner-spin 3s linear infinite;
+}
+
+@keyframes vt-dialotel-breathe {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 16px var(--theme-glow-primary);
+  }
+  50% {
+    transform: scale(1.12);
+    box-shadow: 0 0 32px var(--theme-glow-primary), 0 0 8px var(--theme-glow-secondary);
+  }
+}
+
+@keyframes vt-dialotel-inner-spin {
+  0%   { transform: rotate(0deg); opacity: 0.5; }
+  50%  { opacity: 1; }
+  100% { transform: rotate(360deg); opacity: 0.5; }
+}
+
+/* ============================================================
+   Reveal Animations — "Rising Glow"
+   ============================================================ */
+
+.vt-app .vt-anim-dialotel-reveal {
+  animation: vt-dialotel-rising-glow 800ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@keyframes vt-dialotel-rising-glow {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+    box-shadow: none;
+  }
+  70% {
+    box-shadow: 0 0 30px var(--theme-glow-primary), 0 0 8px var(--theme-glow-secondary);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    box-shadow: 0 0 12px var(--theme-glow-primary);
+  }
+}
+
+/* ============================================================
+   Transition Animations — "Soft Radiance"
+   ============================================================ */
+
+.vt-app .vt-anim-dialotel-transition {
+  animation: vt-dialotel-soft-radiance 500ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@keyframes vt-dialotel-soft-radiance {
+  0% {
+    opacity: 0;
+    transform: scale(0.97);
+    filter: brightness(1);
+  }
+  60% {
+    filter: brightness(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+/* ============================================================
+   Reduced Motion Media Query
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .vt-app .vt-anim-dialotel-card-inner {
+    transition: none;
+  }
+
+  .vt-app .vt-anim-dialotel-loader {
+    animation: none;
+  }
+
+  .vt-app .vt-anim-dialotel-loader::after {
+    animation: none;
+  }
+
+  .vt-app .vt-anim-dialotel-reveal {
+    animation: none;
+    opacity: 1;
+  }
+
+  .vt-app .vt-anim-dialotel-transition {
+    animation: none;
+    opacity: 1;
+  }
+}

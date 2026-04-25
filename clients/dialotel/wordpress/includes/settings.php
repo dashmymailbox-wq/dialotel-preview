@@ -72,7 +72,7 @@ function vt_ajax_test_api_key() {
 					'anthropic-version' => '2023-06-01',
 					'content-type'      => 'application/json',
 				),
-				'body'    => json_encode( array(
+				'body'    => wp_json_encode( array(
 					'model'      => 'claude-haiku-4-5-20251001',
 					'max_tokens' => 1,
 					'messages'   => array( array( 'role' => 'user', 'content' => 'Hi' ) ),

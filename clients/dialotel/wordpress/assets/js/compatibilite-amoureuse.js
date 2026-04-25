@@ -36,7 +36,7 @@
       this._bindEvents();
 
       // Verifier le limiteur
-      this._checkRateLimit();
+      VT.App.checkRateLimit(this);
     },
 
     _bindEvents: function () {
@@ -66,13 +66,13 @@
       // Email form submit
       VT.on('#vt-email-form', 'submit', function (e) {
         e.preventDefault();
-        self._submitEmail();
+        VT.App.submitEmail(self);
       });
 
       // Rate limit email extend
       VT.on('#vt-extend-form', 'submit', function (e) {
         e.preventDefault();
-        self._extendRateLimit();
+        VT.App.extendRateLimit(self);
       });
 
       // Bouton "Partager mon score"
@@ -99,15 +99,6 @@
         .replace(/'/g, '&#x27;');
     },
 
-    _checkRateLimit: function () {
-      var tirageId = this.config.tirageId || 'compat-amour';
-      var remaining = VT.RateLimiter.getRemaining(tirageId);
-      var infoEl = VT.$('.vt-rate-info');
-      if (infoEl && remaining !== Infinity) {
-        infoEl.textContent = VT.I18n.t('rateLimiter.remaining', { count: remaining });
-      }
-    },
-
     _doTirage: function () {
       var self = this;
       var tirageId = this.config.tirageId || 'compat-amour';
@@ -115,7 +106,7 @@
       // Verifier limite
       if (!VT.RateLimiter.canDoTirage(tirageId)) {
         VT.Analytics.track('vt_rate_limit_hit', { type: 'compatibilite-amoureuse' });
-        this._showRateLimitModal();
+        VT.App.showRateLimitModal();
         return;
       }
 
@@ -126,22 +117,22 @@
       var birth2 = VT.$('#vt-birth2').value;
 
       if (!name1 || !name2) {
-        this._showError('Veuillez entrer les deux prenoms.');
+        VT.App.showError(this, 'Veuillez entrer les deux prenoms.');
         return;
       }
 
       var namePattern = /^[a-zA-ZÀ-ÿ\s\-']{1,50}$/;
       if (!namePattern.test(name1) || !namePattern.test(name2)) {
-        this._showError('Les prenoms ne doivent contenir que des lettres (50 caracteres max).');
+        VT.App.showError(this, 'Les prenoms ne doivent contenir que des lettres (50 caracteres max).');
         return;
       }
 
       if (birth1 && !/^\d{4}-\d{2}-\d{2}$/.test(birth1)) {
-        this._showError('Format de date invalide.');
+        VT.App.showError(this, 'Format de date invalide.');
         return;
       }
       if (birth2 && !/^\d{4}-\d{2}-\d{2}$/.test(birth2)) {
-        this._showError('Format de date invalide.');
+        VT.App.showError(this, 'Format de date invalide.');
         return;
       }
 
@@ -202,13 +193,13 @@
               VT.Analytics.track('vt_tirage_completed', { type: 'compatibilite-amoureuse', score: result.score });
             }, wait);
           } else {
-            self._showError('Impossible d\'interpreter le resultat. Reessayez.');
+            VT.App.showError(self, 'Impossible d\'interpreter le resultat. Reessayez.');
           }
         })
         .catch(function (err) {
           clearInterval(_pTimer);
           console.error('[VT] Erreur IA :', err);
-          self._showError('Nos voyants sont tres sollicites en ce moment. Reessayez dans quelques instants.');
+          VT.App.showError(self, 'Nos voyants sont tres sollicites en ce moment. Reessayez dans quelques instants.');
         });
     },
 
@@ -260,7 +251,7 @@
 
       // Score
       var scoreEl = VT.$('#vt-result-score');
-      if (scoreEl) this._animateScore(scoreEl, result.score);
+      if (scoreEl) VT.App.animateScore(scoreEl, result.score);
 
       // Barre
       var barFill = VT.$('.vt-am-score-bar-fill');
@@ -296,41 +287,10 @@
       var emailConfig = this.config.emailCapture || {};
       if (emailConfig.enabled) {
         setTimeout(function () {
-          self._showEmailModal();
+          VT.App.showEmailModal();
           VT.Analytics.track('vt_email_shown');
         }, 3000);
       }
-    },
-
-    _animateScore: function (el, target) {
-      var start = 0;
-      var duration = 1500;
-      var startTime = null;
-
-      function step(ts) {
-        if (!startTime) startTime = ts;
-        var progress = Math.min((ts - startTime) / duration, 1);
-        var eased = 1 - Math.pow(1 - progress, 3);
-        el.textContent = Math.floor(eased * target) + '%';
-        if (progress < 1) requestAnimationFrame(step);
-      }
-
-      requestAnimationFrame(step);
-    },
-
-    _showError: function (message) {
-      // Revenir a l'etape formulaire pour afficher l'erreur
-      VT.StepEngine.goTo(1);
-      var errorEl = VT.$('#vt-error');
-      if (errorEl) {
-        errorEl.querySelector('p').textContent = message;
-        errorEl.classList.remove('vt-hidden');
-      }
-    },
-
-    _hideError: function () {
-      var errorEl = VT.$('#vt-error');
-      if (errorEl) errorEl.classList.add('vt-hidden');
     },
 
     _getZodiacSign: function (dateStr) {
@@ -352,51 +312,6 @@
       if (d >= 1222 || d <= 119) return { key: 'capricorn', name: 'Capricorne' };
       if (d >= 120 && d <= 218) return { key: 'aquarius', name: 'Verseau' };
       return { key: 'pisces', name: 'Poissons' };
-    },
-
-    _showRateLimitModal: function () {
-      var modal = VT.$('#vt-rate-limit-modal');
-      if (modal) modal.classList.add('vt-modal--open');
-    },
-
-    _showEmailModal: function () {
-      var modal = VT.$('#vt-email-modal');
-      if (modal) modal.classList.add('vt-modal--open');
-    },
-
-    _submitEmail: function () {
-      var email = VT.$('#vt-email-input').value.trim();
-      if (!email || !email.includes('@')) return;
-
-      var self = this;
-      var emailConfig = this.config.emailCapture || {};
-
-      VT.Email.submit(email)
-        .then(function () {
-          VT.Analytics.track('vt_email_submitted', { type: 'compatibilite-amoureuse' });
-          var formEl = VT.$('#vt-email-form');
-          var successEl = VT.$('.vt-email-success');
-          if (formEl) formEl.classList.add('vt-hidden');
-          if (successEl) successEl.classList.remove('vt-hidden');
-        })
-        .catch(function () {
-          self._showError('Erreur lors de l\'envoi. Reessayez.');
-        });
-    },
-
-    _extendRateLimit: function () {
-      var email = VT.$('#vt-extend-email').value.trim();
-      if (!email || !email.includes('@')) return;
-
-      var tirageId = this.config.tirageId || 'compat-amour';
-      VT.RateLimiter.extendLimit(tirageId);
-      VT.Analytics.track('vt_rate_limit_extended', { type: 'compatibilite-amoureuse' });
-
-      // Fermer la modale et lancer le tirage
-      var modal = VT.$('#vt-rate-limit-modal');
-      if (modal) modal.classList.remove('vt-modal--open');
-
-      this._doTirage();
     },
 
     _restart: function () {
@@ -428,8 +343,8 @@
       if (emailForm) emailForm.classList.remove('vt-hidden');
       if (emailSuccess) emailSuccess.classList.add('vt-hidden');
 
-      this._hideError();
-      this._checkRateLimit();
+      VT.App.hideError(this);
+      VT.App.checkRateLimit(this);
 
       // Re-afficher le splash
       var appEl = VT.$('.vt-app');
@@ -557,64 +472,6 @@
       /* --- Dimensions 9:16 --- */
       var SC = 2, W = 512, H = 896;
 
-      /* Dessin du mandala hexagonal directement en Canvas */
-      function drawMandala(ctx, W, H) {
-        var cx = W / 2, cy = H / 2;
-        var s = Math.max(W, H) * 1.4 / 600;
-        var LW = 18;
-
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.scale(s, s);
-
-        function hex(r) {
-          ctx.beginPath();
-          for (var i = 0; i < 6; i++) {
-            var a = Math.PI / 3 * i;
-            var x = Math.cos(a) * r, y = Math.sin(a) * r;
-            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-          }
-          ctx.closePath();
-        }
-
-        function ring(n, startDeg, dist, sc, fill, stroke, lw) {
-          for (var i = 0; i < n; i++) {
-            var deg = startDeg + (360 / n) * i;
-            var rad = deg * Math.PI / 180;
-            var tx = Math.cos(rad) * dist, ty = Math.sin(rad) * dist;
-            ctx.save();
-            ctx.translate(tx, ty);
-            hex(sc);
-            if (fill) { ctx.fillStyle = fill; ctx.fill(); }
-            ctx.strokeStyle = stroke;
-            ctx.lineWidth = lw * LW;
-            ctx.stroke();
-            ctx.restore();
-          }
-        }
-
-        /* Anneaux du mandala (reproduction exacte du SVG) */
-        ring(1,  0,   0,   1.5,  null,                            'rgba(237,140,230,0.45)', 0.15);
-        ring(6,  0,   10,  2,    null,                            'rgba(237,140,230,0.45)', 0.15);
-        ring(6,  30,  22,  3,    'rgba(226,237,119,0.06)',        'rgba(226,237,119,0.3)',  0.18);
-        ring(12, 0,   35,  3.5,  null,                            'rgba(226,237,119,0.4)',  0.12);
-        ring(12, 15,  50,  5,    'rgba(237,140,230,0.06)',        'rgba(237,140,230,0.35)', 0.14);
-        ring(12, 0,   60,  4,    null,                            'rgba(226,237,119,0.38)', 0.1);
-        ring(12, 0,   72,  16,   null,                            'rgba(226,237,119,0.6)',  0.035);
-        ring(12, 0,   72,  6,    'rgba(237,140,230,0.1)',         'rgba(237,140,230,0.5)',  0.07);
-        ring(12, 15,  115, 22,   null,                            'rgba(237,140,230,0.6)',  0.03);
-        ring(12, 15,  115, 8,    'rgba(226,237,119,0.08)',        'rgba(226,237,119,0.5)',  0.06);
-        ring(12, 0,   158, 14,   null,                            'rgba(237,140,230,0.55)', 0.04);
-        ring(12, 0,   158, 5,    'rgba(226,237,119,0.06)',        'rgba(226,237,119,0.4)',  0.09);
-        ring(12, 15,  200, 26,   null,                            'rgba(226,237,119,0.55)', 0.025);
-        ring(12, 15,  200, 10,   'rgba(237,140,230,0.08)',        'rgba(237,140,230,0.45)', 0.05);
-        ring(12, 0,   242, 14,   null,                            'rgba(237,140,230,0.55)', 0.04);
-        ring(12, 0,   242, 5,    'rgba(226,237,119,0.06)',        'rgba(226,237,119,0.4)',  0.09);
-        ring(12, 15,  280, 10,   null,                            'rgba(226,237,119,0.45)', 0.04);
-
-        ctx.restore();
-      }
-
       /* --- Rendu principal --- */
       function doRender(logo) {
         var canvas = document.createElement('canvas');
@@ -634,7 +491,7 @@
         /* Mandala hexagonal en fond */
         ctx.save();
         ctx.globalAlpha = 0.5;
-        drawMandala(ctx, W, H);
+        VT.App.drawMandala(ctx, W, H);
         ctx.globalAlpha = 1;
         ctx.restore();
 

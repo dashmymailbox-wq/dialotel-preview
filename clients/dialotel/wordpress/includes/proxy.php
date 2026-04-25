@@ -119,7 +119,7 @@ function vt_ai_proxy() {
 		$model   = $config['model'];
 
 		for ( $attempt = 1; $attempt <= $max_retries; $attempt++ ) {
-			if ( $attempt > 1 ) sleep( 1 );
+			if ( $attempt > 1 ) usleep( 250000 );
 
 			switch ( $provider ) {
 				case 'mistral':

@@ -585,7 +585,157 @@
   };
 
   /* ============================================================
-     11. HELPERS
+     11. APP HELPER — Methodes communes (factorisation)
+     ============================================================ */
+  VT.App = {
+    checkRateLimit: function (app) {
+      var tirageId = app.config.tirageId || 'tirage';
+      var remaining = VT.RateLimiter.getRemaining(tirageId);
+      var infoEl = VT.$('.vt-rate-info');
+      if (infoEl && remaining !== Infinity) {
+        infoEl.textContent = VT.I18n.t('rateLimiter.remaining', { count: remaining });
+      }
+    },
+
+    showError: function (app, message) {
+      VT.StepEngine.goTo(1);
+      var errorEl = VT.$('#vt-error');
+      if (errorEl) {
+        errorEl.querySelector('p').textContent = message;
+        errorEl.classList.remove('vt-hidden');
+      }
+    },
+
+    hideError: function (app) {
+      var errorEl = VT.$('#vt-error');
+      if (errorEl) errorEl.classList.add('vt-hidden');
+    },
+
+    showRateLimitModal: function () {
+      var modal = VT.$('#vt-rate-limit-modal');
+      if (modal) modal.classList.add('vt-modal--open');
+    },
+
+    showEmailModal: function () {
+      var modal = VT.$('#vt-email-modal');
+      if (modal) modal.classList.add('vt-modal--open');
+    },
+
+    submitEmail: function (app) {
+      var email = VT.$('#vt-email-input').value.trim();
+      if (!email || !email.includes('@')) return;
+
+      var tirageId = app.config.tirageId || 'tirage';
+      VT.Email.submit(email)
+        .then(function () {
+          VT.Analytics.track('vt_email_submitted', { type: tirageId });
+          var formEl = VT.$('#vt-email-form');
+          var successEl = VT.$('.vt-email-success');
+          if (formEl) formEl.classList.add('vt-hidden');
+          if (successEl) successEl.classList.remove('vt-hidden');
+        })
+        .catch(function () {
+          VT.App.showError(app, 'Erreur lors de l\'envoi. Reessayez.');
+        });
+    },
+
+    extendRateLimit: function (app) {
+      var email = VT.$('#vt-extend-email').value.trim();
+      if (!email || !email.includes('@')) return;
+
+      var tirageId = app.config.tirageId || 'tirage';
+      VT.RateLimiter.extendLimit(tirageId);
+      VT.Analytics.track('vt_rate_limit_extended', { type: tirageId });
+
+      var modal = VT.$('#vt-rate-limit-modal');
+      if (modal) modal.classList.remove('vt-modal--open');
+
+      app._doTirage();
+    },
+
+    animateScore: function (el, target) {
+      var start = 0;
+      var duration = 1500;
+      var startTime = null;
+
+      function step(ts) {
+        if (!startTime) startTime = ts;
+        var progress = Math.min((ts - startTime) / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.floor(eased * target) + '%';
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    },
+
+    sanitize: function (str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;');
+    },
+
+    drawMandala: function (ctx, W, H) {
+      var cx = W / 2, cy = H / 2;
+      var s = Math.max(W, H) * 1.4 / 600;
+      var LW = 18;
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.scale(s, s);
+
+      function hex(r) {
+        ctx.beginPath();
+        for (var i = 0; i < 6; i++) {
+          var a = Math.PI / 3 * i;
+          var x = Math.cos(a) * r, y = Math.sin(a) * r;
+          i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+      }
+
+      function ring(n, startDeg, dist, sc, fill, stroke, lw) {
+        for (var i = 0; i < n; i++) {
+          var deg = startDeg + (360 / n) * i;
+          var rad = deg * Math.PI / 180;
+          var tx = Math.cos(rad) * dist, ty = Math.sin(rad) * dist;
+          ctx.save();
+          ctx.translate(tx, ty);
+          hex(sc);
+          if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+          ctx.strokeStyle = stroke;
+          ctx.lineWidth = lw * LW;
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+
+      ring(1,  0,   0,   1.5,  null,                            'rgba(237,140,230,0.45)', 0.15);
+      ring(6,  0,   10,  2,    null,                            'rgba(237,140,230,0.45)', 0.15);
+      ring(6,  30,  22,  3,    'rgba(226,237,119,0.06)',        'rgba(226,237,119,0.3)',  0.18);
+      ring(12, 0,   35,  3.5,  null,                            'rgba(226,237,119,0.4)',  0.12);
+      ring(12, 15,  50,  5,    'rgba(237,140,230,0.06)',        'rgba(237,140,230,0.35)', 0.14);
+      ring(12, 0,   60,  4,    null,                            'rgba(226,237,119,0.38)', 0.1);
+      ring(12, 0,   72,  16,   null,                            'rgba(226,237,119,0.6)',  0.035);
+      ring(12, 0,   72,  6,    'rgba(237,140,230,0.1)',         'rgba(237,140,230,0.5)',  0.07);
+      ring(12, 15,  115, 22,   null,                            'rgba(237,140,230,0.6)',  0.03);
+      ring(12, 15,  115, 8,    'rgba(226,237,119,0.08)',        'rgba(226,237,119,0.5)',  0.06);
+      ring(12, 0,   158, 14,   null,                            'rgba(237,140,230,0.55)', 0.04);
+      ring(12, 0,   158, 5,    'rgba(226,237,119,0.06)',        'rgba(226,237,119,0.4)',  0.09);
+      ring(12, 15,  200, 26,   null,                            'rgba(226,237,119,0.55)', 0.025);
+      ring(12, 15,  200, 10,   'rgba(237,140,230,0.08)',        'rgba(237,140,230,0.45)', 0.05);
+      ring(12, 0,   242, 14,   null,                            'rgba(237,140,230,0.55)', 0.04);
+      ring(12, 0,   242, 5,    'rgba(226,237,119,0.06)',        'rgba(226,237,119,0.4)',  0.09);
+      ring(12, 15,  280, 10,   null,                            'rgba(226,237,119,0.45)', 0.04);
+
+      ctx.restore();
+    }
+  };
+
+  /* ============================================================
+     12. HELPERS
      ============================================================ */
   VT.$ = function (selector) {
     return document.querySelector(selector);

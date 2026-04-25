@@ -14,9 +14,6 @@ function vt_register_shortcodes() {
 }
 
 function vt_render_shortcode( $atts ) {
-	global $vt_shortcode_active;
-	$vt_shortcode_active = true;
-
 	$atts = shortcode_atts( array(
 		'type' => 'compatibilite-amoureuse',
 	), $atts, 'tirage_voyance' );

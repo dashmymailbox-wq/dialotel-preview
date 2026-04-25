@@ -36,7 +36,7 @@
       this._bindEvents();
 
       // Verifier le limiteur
-      this._checkRateLimit();
+      VT.App.checkRateLimit(this);
     },
 
     _bindEvents: function () {
@@ -66,26 +66,17 @@
       // Email form submit
       VT.on('#vt-email-form', 'submit', function (e) {
         e.preventDefault();
-        self._submitEmail();
+        VT.App.submitEmail(self);
       });
 
       // Rate limit email extend
       VT.on('#vt-extend-form', 'submit', function (e) {
         e.preventDefault();
-        self._extendRateLimit();
+        VT.App.extendRateLimit(self);
       });
 
       // Exposer _shareImage globalement pour le onclick inline
       window._vtShareImage = function () { self._shareImage(); };
-    },
-
-    _checkRateLimit: function () {
-      var tirageId = this.config.tirageId || 'compat-amour';
-      var remaining = VT.RateLimiter.getRemaining(tirageId);
-      var infoEl = VT.$('.vt-rate-info');
-      if (infoEl && remaining !== Infinity) {
-        infoEl.textContent = VT.I18n.t('rateLimiter.remaining', { count: remaining });
-      }
     },
 
     _doTirage: function () {
@@ -95,7 +86,7 @@
       // Verifier limite
       if (!VT.RateLimiter.canDoTirage(tirageId)) {
         VT.Analytics.track('vt_rate_limit_hit', { type: 'compatibilite-amoureuse' });
-        this._showRateLimitModal();
+        VT.App.showRateLimitModal();
         return;
       }
 
@@ -106,7 +97,7 @@
       var birth2 = VT.$('#vt-birth2').value;
 
       if (!name1 || !name2) {
-        this._showError('Veuillez entrer les deux prenoms.');
+        VT.App.showError(this, 'Veuillez entrer les deux prenoms.');
         return;
       }
 
@@ -152,12 +143,12 @@
               VT.Analytics.track('vt_tirage_completed', { type: 'compatibilite-amoureuse', score: result.score });
             }, wait);
           } else {
-            self._showError('Impossible d\'interpreter le resultat. Reessayez.');
+            VT.App.showError(self, 'Impossible d\'interpreter le resultat. Reessayez.');
           }
         })
         .catch(function (err) {
           console.error('[VT] Erreur IA :', err);
-          self._showError('Erreur de connexion au service. Verifiez votre cle API ou reessayez.');
+          VT.App.showError(self, 'Nos voyants sont tres sollicites en ce moment. Reessayez dans quelques instants.');
         });
     },
 
@@ -209,7 +200,7 @@
 
       // Score
       var scoreEl = VT.$('#vt-result-score');
-      if (scoreEl) this._animateScore(scoreEl, result.score);
+      if (scoreEl) VT.App.animateScore(scoreEl, result.score);
 
       // Barre
       var barFill = VT.$('.vt-am-score-bar-fill');
@@ -244,41 +235,10 @@
       var emailConfig = this.config.emailCapture || {};
       if (emailConfig.enabled) {
         setTimeout(function () {
-          self._showEmailModal();
+          VT.App.showEmailModal();
           VT.Analytics.track('vt_email_shown');
         }, 3000);
       }
-    },
-
-    _animateScore: function (el, target) {
-      var start = 0;
-      var duration = 1500;
-      var startTime = null;
-
-      function step(ts) {
-        if (!startTime) startTime = ts;
-        var progress = Math.min((ts - startTime) / duration, 1);
-        var eased = 1 - Math.pow(1 - progress, 3);
-        el.textContent = Math.floor(eased * target) + '%';
-        if (progress < 1) requestAnimationFrame(step);
-      }
-
-      requestAnimationFrame(step);
-    },
-
-    _showError: function (message) {
-      // Revenir a l'etape formulaire pour afficher l'erreur
-      VT.StepEngine.goTo(1);
-      var errorEl = VT.$('#vt-error');
-      if (errorEl) {
-        errorEl.querySelector('p').textContent = message;
-        errorEl.classList.remove('vt-hidden');
-      }
-    },
-
-    _hideError: function () {
-      var errorEl = VT.$('#vt-error');
-      if (errorEl) errorEl.classList.add('vt-hidden');
     },
 
     _getZodiacSign: function (dateStr) {
@@ -300,51 +260,6 @@
       if (d >= 1222 || d <= 119) return { key: 'capricorn', name: 'Capricorne' };
       if (d >= 120 && d <= 218) return { key: 'aquarius', name: 'Verseau' };
       return { key: 'pisces', name: 'Poissons' };
-    },
-
-    _showRateLimitModal: function () {
-      var modal = VT.$('#vt-rate-limit-modal');
-      if (modal) modal.classList.add('vt-modal--open');
-    },
-
-    _showEmailModal: function () {
-      var modal = VT.$('#vt-email-modal');
-      if (modal) modal.classList.add('vt-modal--open');
-    },
-
-    _submitEmail: function () {
-      var email = VT.$('#vt-email-input').value.trim();
-      if (!email || !email.includes('@')) return;
-
-      var self = this;
-      var emailConfig = this.config.emailCapture || {};
-
-      VT.Email.submit(email)
-        .then(function () {
-          VT.Analytics.track('vt_email_submitted', { type: 'compatibilite-amoureuse' });
-          var formEl = VT.$('#vt-email-form');
-          var successEl = VT.$('.vt-email-success');
-          if (formEl) formEl.classList.add('vt-hidden');
-          if (successEl) successEl.classList.remove('vt-hidden');
-        })
-        .catch(function () {
-          self._showError('Erreur lors de l\'envoi. Reessayez.');
-        });
-    },
-
-    _extendRateLimit: function () {
-      var email = VT.$('#vt-extend-email').value.trim();
-      if (!email || !email.includes('@')) return;
-
-      var tirageId = this.config.tirageId || 'compat-amour';
-      VT.RateLimiter.extendLimit(tirageId);
-      VT.Analytics.track('vt_rate_limit_extended', { type: 'compatibilite-amoureuse' });
-
-      // Fermer la modale et lancer le tirage
-      var modal = VT.$('#vt-rate-limit-modal');
-      if (modal) modal.classList.remove('vt-modal--open');
-
-      this._doTirage();
     },
 
     _restart: function () {
@@ -376,8 +291,8 @@
       if (emailForm) emailForm.classList.remove('vt-hidden');
       if (emailSuccess) emailSuccess.classList.add('vt-hidden');
 
-      this._hideError();
-      this._checkRateLimit();
+      VT.App.hideError(this);
+      VT.App.checkRateLimit(this);
 
       // Re-afficher le splash
       var appEl = VT.$('.vt-app');

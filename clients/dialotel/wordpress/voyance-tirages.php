@@ -12,7 +12,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'VT_VERSION', '2.0.0' );
+define( 'VT_VERSION', '2.1.0' );
 define( 'VT_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'VT_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
