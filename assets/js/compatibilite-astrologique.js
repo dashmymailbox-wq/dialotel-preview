@@ -37,7 +37,7 @@
       VT.StepEngine.init('.vt-app', '.vt-step');
       VT.Theme.init();
       this._bindEvents();
-      this._checkRateLimit();
+      VT.App.checkRateLimit(this);
     },
 
     _bindEvents: function () {
@@ -284,7 +284,7 @@
       if (emailSuccess) emailSuccess.classList.add('vt-hidden');
 
       this._hideError();
-      this._checkRateLimit();
+      VT.App.checkRateLimit(this);
       VT.StepEngine.goTo(0);
     }
   };

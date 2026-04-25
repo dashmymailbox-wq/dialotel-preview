@@ -25,7 +25,7 @@
       VT.StepEngine.init('.vt-app', '.vt-step');
       VT.Theme.init();
       this._bindEvents();
-      this._checkRateLimit();
+      VT.App.checkRateLimit(this);
     },
 
     _bindEvents: function () {
@@ -94,7 +94,7 @@
 
       if (!VT.RateLimiter.canDoTirage(tirageId)) {
         VT.Analytics.track('vt_rate_limit_hit', { type: 'numerologie' });
-        this._showRateLimitModal();
+        VT.App.showRateLimitModal();
         return;
       }
 
@@ -107,17 +107,17 @@
       if (birthEl) birthDate = birthEl.value;
 
       if (!fullName) {
-        this._showError('Veuillez entrer votre prenom complet.');
+        VT.App.showError(this,'Veuillez entrer votre prenom complet.');
         return;
       }
       if (!birthDate) {
-        this._showError('Veuillez entrer votre date de naissance.');
+        VT.App.showError(this,'Veuillez entrer votre date de naissance.');
         return;
       }
 
       var lifePath = this._calculateLifePath(birthDate);
       if (!lifePath) {
-        this._showError('Date de naissance invalide.');
+        VT.App.showError(this,'Date de naissance invalide.');
         return;
       }
 
@@ -317,7 +317,7 @@
       if (emailSuccess) emailSuccess.classList.add('vt-hidden');
 
       this._hideError();
-      this._checkRateLimit();
+      VT.App.checkRateLimit(this);
       VT.StepEngine.goTo(0);
     }
   };
