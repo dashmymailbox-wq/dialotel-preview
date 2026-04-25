@@ -1,0 +1,46 @@
+/* loader-dialotel.css — "Breathing Ring" : anneau qui pulse avec ombre rose */
+
+.vt-app .vt-anim-dialotel-loader {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--theme-primary);
+  position: relative;
+  animation: vt-dialotel-breathe 2s ease-in-out infinite;
+  box-shadow: 0 0 20px var(--theme-glow-primary);
+}
+
+.vt-app .vt-anim-dialotel-loader::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  border: 1px solid var(--theme-secondary);
+  animation: vt-dialotel-inner-spin 3s linear infinite;
+}
+
+@keyframes vt-dialotel-breathe {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 16px var(--theme-glow-primary);
+  }
+  50% {
+    transform: scale(1.12);
+    box-shadow: 0 0 32px var(--theme-glow-primary), 0 0 8px var(--theme-glow-secondary);
+  }
+}
+
+@keyframes vt-dialotel-inner-spin {
+  0%   { transform: rotate(0deg); opacity: 0.5; }
+  50%  { opacity: 1; }
+  100% { transform: rotate(360deg); opacity: 0.5; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vt-app .vt-anim-dialotel-loader {
+    animation: none;
+  }
+  .vt-app .vt-anim-dialotel-loader::after {
+    animation: none;
+  }
+}
