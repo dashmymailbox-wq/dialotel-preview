@@ -90,15 +90,6 @@
       window._vtShareImage = function () { self._shareImage(); };
     },
 
-    _sanitize: function (str) {
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#x27;');
-    },
-
     _doTirage: function () {
       var self = this;
       var tirageId = this.config.tirageId || 'compat-amour';
@@ -241,11 +232,11 @@
       if (headerEl) {
         var html = '<div class="vt-result-person">';
         if (this._sign1) html += '<div class="vt-sign-badge vt-sign-badge--result"><svg><use href="#sign-' + this._sign1.key + '"/></svg></div>';
-        html += '<span class="vt-result-person-name">' + this._sanitize(this._name1 || '') + '</span></div>';
+        html += '<span class="vt-result-person-name">' + VT.App.sanitize(this._name1 || '') + '</span></div>';
         html += '<span class="vt-result-person-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>';
         html += '<div class="vt-result-person">';
         if (this._sign2) html += '<div class="vt-sign-badge vt-sign-badge--result"><svg><use href="#sign-' + this._sign2.key + '"/></svg></div>';
-        html += '<span class="vt-result-person-name">' + this._sanitize(this._name2 || '') + '</span></div>';
+        html += '<span class="vt-result-person-name">' + VT.App.sanitize(this._name2 || '') + '</span></div>';
         headerEl.innerHTML = html;
       }
 

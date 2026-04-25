@@ -99,15 +99,6 @@
       });
     },
 
-    _sanitize: function (str) {
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#x27;');
-    },
-
     _getSelectedSign: function (groupId) {
       var group = VT.$('.vt-astro-sign-group[data-group="' + groupId + '"]');
       if (!group) return null;
@@ -120,15 +111,6 @@
       var key1 = sign1 + '-' + sign2;
       var key2 = sign2 + '-' + sign1;
       return this.matrixData[key1] || this.matrixData[key2] || null;
-    },
-
-    _checkRateLimit: function () {
-      var tirageId = this.config.tirageId || 'compat-astro';
-      var remaining = VT.RateLimiter.getRemaining(tirageId);
-      var infoEl = VT.$('.vt-rate-info');
-      if (infoEl && remaining !== Infinity) {
-        infoEl.textContent = VT.I18n.t('rateLimiter.remaining', { count: remaining });
-      }
     },
 
     _doTirage: function () {
@@ -272,7 +254,7 @@
       }
 
       var scoreEl = VT.$('#vt-result-score');
-      if (scoreEl) this._animateScore(scoreEl, result.score);
+      if (scoreEl) VT.App.animateScore(scoreEl, result.score);
 
       var barFill = VT.$('.vt-astro-score-bar-fill');
       if (barFill) barFill.style.width = result.score + '%';
@@ -282,9 +264,8 @@
 
       var traitsEl = VT.$('#vt-result-traits');
       if (traitsEl) {
-        var self = this;
         traitsEl.innerHTML = result.traits.map(function (t) {
-          return '<li>' + self._sanitize(t) + '</li>';
+          return '<li>' + VT.App.sanitize(t) + '</li>';
         }).join('');
       }
 
@@ -299,38 +280,9 @@
       }
     },
 
-    _animateScore: function (el, target) {
-      var start = 0;
-      var duration = 1500;
-      var startTime = null;
-
-      function step(ts) {
-        if (!startTime) startTime = ts;
-        var progress = Math.min((ts - startTime) / duration, 1);
-        var eased = 1 - Math.pow(1 - progress, 3);
-        el.textContent = Math.floor(eased * target) + '%';
-        if (progress < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    },
-
-    _showError: function (message) {
-      VT.StepEngine.goTo(1);
-      var errorEl = VT.$('#vt-error');
-      if (errorEl) {
-        errorEl.querySelector('p').textContent = message;
-        errorEl.classList.remove('vt-hidden');
-      }
-    },
-
     _hideError: function () {
       var errorEl = VT.$('#vt-error');
       if (errorEl) errorEl.classList.add('vt-hidden');
-    },
-
-    _showRateLimitModal: function () {
-      var modal = VT.$('#vt-rate-limit-modal');
-      if (modal) modal.classList.add('vt-modal--open');
     },
 
     _extendRateLimit: function () {
@@ -362,7 +314,7 @@
           if (successEl) successEl.classList.remove('vt-hidden');
         })
         .catch(function () {
-          self._showError('Erreur lors de l\'envoi. Reessayez.');
+          VT.App.showError(self, 'Erreur lors de l\'envoi. Reessayez.');
         });
     },
 

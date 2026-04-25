@@ -98,22 +98,13 @@
       return this.matrixData[key1] || this.matrixData[key2] || null;
     },
 
-    _checkRateLimit: function () {
-      var tirageId = this.config.tirageId || 'compat-astro';
-      var remaining = VT.RateLimiter.getRemaining(tirageId);
-      var infoEl = VT.$('.vt-rate-info');
-      if (infoEl && remaining !== Infinity) {
-        infoEl.textContent = VT.I18n.t('rateLimiter.remaining', { count: remaining });
-      }
-    },
-
     _doTirage: function () {
       var self = this;
       var tirageId = this.config.tirageId || 'compat-astro';
 
       if (!VT.RateLimiter.canDoTirage(tirageId)) {
         VT.Analytics.track('vt_rate_limit_hit', { type: 'compatibilite-astrologique' });
-        this._showRateLimitModal();
+        VT.App.showRateLimitModal();
         return;
       }
 
@@ -121,7 +112,7 @@
       var sign2 = this._getSelectedSign('2');
 
       if (!sign1 || !sign2) {
-        this._showError('Veuillez selectionner deux signes astrologiques.');
+        VT.App.showError(this, 'Veuillez selectionner deux signes astrologiques.');
         return;
       }
 
@@ -159,12 +150,12 @@
             VT.Counter.increment();
             VT.Analytics.track('vt_tirage_completed', { type: 'compatibilite-astrologique', score: result.score });
           } else {
-            self._showError('Impossible d\'interpreter le resultat. Reessayez.');
+            VT.App.showError(self, 'Impossible d\'interpreter le resultat. Reessayez.');
           }
         })
         .catch(function (err) {
           console.error('[VT] Erreur IA :', err);
-          self._showError('Nos voyants sont tres sollicites en ce moment. Reessayez dans quelques instants.');
+          VT.App.showError(self, 'Nos voyants sont tres sollicites en ce moment. Reessayez dans quelques instants.');
         });
     },
 
@@ -199,7 +190,7 @@
       VT.StepEngine.goTo(3);
 
       var scoreEl = VT.$('#vt-result-score');
-      if (scoreEl) this._animateScore(scoreEl, result.score);
+      if (scoreEl) VT.App.animateScore(scoreEl, result.score);
 
       var barFill = VT.$('.vt-astro-score-bar-fill');
       if (barFill) barFill.style.width = result.score + '%';
@@ -209,7 +200,7 @@
 
       var traitsEl = VT.$('#vt-result-traits');
       if (traitsEl) traitsEl.innerHTML = result.traits.map(function (t) {
-        return '<li>' + t + '</li>';
+        return '<li>' + VT.App.sanitize(t) + '</li>';
       }).join('');
 
       var adviceEl = VT.$('#vt-result-advice');
@@ -228,38 +219,9 @@
       }
     },
 
-    _animateScore: function (el, target) {
-      var start = 0;
-      var duration = 1500;
-      var startTime = null;
-
-      function step(ts) {
-        if (!startTime) startTime = ts;
-        var progress = Math.min((ts - startTime) / duration, 1);
-        var eased = 1 - Math.pow(1 - progress, 3);
-        el.textContent = Math.floor(eased * target) + '%';
-        if (progress < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    },
-
-    _showError: function (message) {
-      VT.StepEngine.goTo(1);
-      var errorEl = VT.$('#vt-error');
-      if (errorEl) {
-        errorEl.querySelector('p').textContent = message;
-        errorEl.classList.remove('vt-hidden');
-      }
-    },
-
     _hideError: function () {
       var errorEl = VT.$('#vt-error');
       if (errorEl) errorEl.classList.add('vt-hidden');
-    },
-
-    _showRateLimitModal: function () {
-      var modal = VT.$('#vt-rate-limit-modal');
-      if (modal) modal.classList.add('vt-modal--open');
     },
 
     _showEmailModal: function () {
@@ -281,7 +243,7 @@
           if (successEl) successEl.classList.remove('vt-hidden');
         })
         .catch(function () {
-          self._showError('Erreur lors de l\'envoi. Reessayez.');
+          VT.App.showError(self, 'Erreur lors de l\'envoi. Reessayez.');
         });
     },
 
