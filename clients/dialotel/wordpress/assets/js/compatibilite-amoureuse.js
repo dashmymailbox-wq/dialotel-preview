@@ -21,7 +21,7 @@
       VT.Email.init(this.config.emailCapture || {});
 
       // Charger i18n
-      var i18nEl = document.getElementById('vt-i18n');
+      var i18nEl = document.getElementById('vt-amoureuse-i18n');
       if (i18nEl) {
         try { VT.I18n.init(JSON.parse(i18nEl.textContent)); } catch (e) { /* ignore */ }
       }
@@ -43,18 +43,18 @@
       var self = this;
 
       // Bouton commencer
-      VT.on('#vt-btn-start', 'click', function () {
+      VT.on('#vt-amoureuse-btn-start', 'click', function () {
         VT.Analytics.track('vt_tirage_started', { type: 'compatibilite-amoureuse' });
         VT.StepEngine.next();
       });
 
       // Bouton lancer le tirage
-      VT.on('#vt-btn-tirage', 'click', function () {
+      VT.on('#vt-amoureuse-btn-tirage', 'click', function () {
         self._doTirage();
       });
 
       // Bouton rejouer
-      VT.on('#vt-btn-restart', 'click', function () {
+      VT.on('#vt-amoureuse-btn-restart', 'click', function () {
         self._restart();
       });
 
@@ -64,19 +64,19 @@
       });
 
       // Email form submit
-      VT.on('#vt-email-form', 'submit', function (e) {
+      VT.on('#vt-amoureuse-email-form', 'submit', function (e) {
         e.preventDefault();
         VT.App.submitEmail(self);
       });
 
       // Rate limit email extend
-      VT.on('#vt-extend-form', 'submit', function (e) {
+      VT.on('#vt-amoureuse-extend-form', 'submit', function (e) {
         e.preventDefault();
         VT.App.extendRateLimit(self);
       });
 
       // Bouton "Partager mon score"
-      VT.on('#vt-btn-share', 'click', function () { self._shareImage(); });
+      VT.on('#vt-amoureuse-btn-share', 'click', function () { self._shareImage(); });
 
       // Boutons plateforme
       VT.on('.vt-share-btn', 'click', function () {
@@ -84,7 +84,7 @@
       });
 
       // Boutons modale partage
-      VT.on('#vt-share-copy-link', 'click', function () { self._copyLink(); });
+      VT.on('#vt-amoureuse-share-copy-link', 'click', function () { self._copyLink(); });
 
       // Exposer _shareImage globalement pour le onclick inline du bouton
       window._vtShareImage = function () { self._shareImage(); };
@@ -102,10 +102,10 @@
       }
 
       // Recuperer les donnees
-      var name1 = VT.$('#vt-name1').value.trim();
-      var name2 = VT.$('#vt-name2').value.trim();
-      var birth1 = VT.$('#vt-birth1').value;
-      var birth2 = VT.$('#vt-birth2').value;
+      var name1 = VT.$('#vt-amoureuse-name1').value.trim();
+      var name2 = VT.$('#vt-amoureuse-name2').value.trim();
+      var birth1 = VT.$('#vt-amoureuse-birth1').value;
+      var birth2 = VT.$('#vt-amoureuse-birth2').value;
 
       if (!name1 || !name2) {
         VT.App.showError(this, 'Veuillez entrer les deux prenoms.');
@@ -142,8 +142,8 @@
       if (nameEls[1]) nameEls[1].textContent = name2;
 
       // Mettre a jour les signes astro dans le rituel
-      var signEl1 = VT.$('#vt-ritual-sign1');
-      var signEl2 = VT.$('#vt-ritual-sign2');
+      var signEl1 = VT.$('#vt-amoureuse-ritual-sign1');
+      var signEl2 = VT.$('#vt-amoureuse-ritual-sign2');
       if (signEl1) signEl1.innerHTML = this._sign1 ? '<div class="vt-sign-badge"><svg><use href="#sign-' + this._sign1.key + '"/></svg></div><span>' + this._sign1.name + '</span>' : '';
       if (signEl2) signEl2.innerHTML = this._sign2 ? '<div class="vt-sign-badge"><svg><use href="#sign-' + this._sign2.key + '"/></svg></div><span>' + this._sign2.name + '</span>' : '';
 
@@ -228,7 +228,7 @@
       VT.StepEngine.goTo(3);
 
       // Header avec noms et signes astrologiques
-      var headerEl = VT.$('#vt-result-header');
+      var headerEl = VT.$('#vt-amoureuse-result-header');
       if (headerEl) {
         var html = '<div class="vt-result-person">';
         if (this._sign1) html += '<div class="vt-sign-badge vt-sign-badge--result"><svg><use href="#sign-' + this._sign1.key + '"/></svg></div>';
@@ -241,7 +241,7 @@
       }
 
       // Score
-      var scoreEl = VT.$('#vt-result-score');
+      var scoreEl = VT.$('#vt-amoureuse-result-score');
       if (scoreEl) VT.App.animateScore(scoreEl, result.score);
 
       // Barre
@@ -249,24 +249,24 @@
       if (barFill) barFill.style.width = result.score + '%';
 
       // Resume
-      var resumeEl = VT.$('#vt-result-resume');
+      var resumeEl = VT.$('#vt-amoureuse-result-resume');
       if (resumeEl) resumeEl.textContent = result.resume;
 
       // Points forts
-      var strengthsEl = VT.$('#vt-result-strengths');
+      var strengthsEl = VT.$('#vt-amoureuse-result-strengths');
       var self2 = this;
       if (strengthsEl) strengthsEl.innerHTML = result.pointsFort.map(function (p) {
         return '<li>' + self2._sanitize(p) + '</li>';
       }).join('');
 
       // Tensions
-      var tensionsEl = VT.$('#vt-result-tensions');
+      var tensionsEl = VT.$('#vt-amoureuse-result-tensions');
       if (tensionsEl) tensionsEl.innerHTML = result.tensions.map(function (p) {
         return '<li>' + self2._sanitize(p) + '</li>';
       }).join('');
 
       // Conseil
-      var conseilEl = VT.$('#vt-result-advice');
+      var conseilEl = VT.$('#vt-amoureuse-result-advice');
       if (conseilEl) conseilEl.textContent = result.conseil;
 
       // TTS
@@ -313,14 +313,14 @@
       inputs.forEach(function (input) { input.value = ''; });
 
       // Reset resultats
-      var scoreEl = VT.$('#vt-result-score');
+      var scoreEl = VT.$('#vt-amoureuse-result-score');
       if (scoreEl) scoreEl.textContent = '0%';
 
       var barFill = VT.$('.vt-am-score-bar-fill');
       if (barFill) barFill.style.width = '0%';
 
       // Reset header
-      var headerEl = VT.$('#vt-result-header');
+      var headerEl = VT.$('#vt-amoureuse-result-header');
       if (headerEl) headerEl.innerHTML = '';
 
       // Fermer les modales
@@ -343,7 +343,7 @@
       if (appEl && container) {
         var splash = document.createElement('div');
         splash.className = 'vt-splash';
-        splash.id = 'vt-splash';
+        splash.id = 'vt-amoureuse-splash';
         splash.setAttribute('aria-hidden', 'true');
         splash.innerHTML = '<img class="vt-splash-logo" src="assets/logo-hexagon-voyance.webp" alt="Hexagon Voyance">';
         appEl.insertBefore(splash, appEl.firstChild);
@@ -366,12 +366,12 @@
     /* ===== Partage social ===== */
 
     _getShareData: function () {
-      var scoreEl = VT.$('#vt-result-score');
+      var scoreEl = VT.$('#vt-amoureuse-result-score');
       var score = scoreEl ? scoreEl.textContent.trim() : '';
       var name1 = this._name1 || '';
       var name2 = this._name2 || '';
       var text = name1 + ' + ' + name2 + ' = ' + score + ' de compatibilite !';
-      var resumeEl = VT.$('#vt-result-resume');
+      var resumeEl = VT.$('#vt-amoureuse-result-resume');
       var caption = text;
       if (resumeEl && resumeEl.textContent.trim()) {
         caption += '\n' + resumeEl.textContent.trim();
@@ -405,7 +405,7 @@
     },
 
     _showAssistText: function (platform) {
-      var el = document.getElementById('vt-share-assist-text');
+      var el = document.getElementById('vt-amoureuse-share-assist-text');
       if (!el) return;
       var names = { tiktok: 'TikTok', instagram: 'Instagram', snapchat: 'Snapchat' };
       el.textContent = 'Image generee ! Telechargez-la, puis ouvrez ' + (names[platform] || platform) + ' pour la partager.';
@@ -437,7 +437,7 @@
     },
 
     _showToast: function (msg) {
-      var toast = document.getElementById('vt-share-toast');
+      var toast = document.getElementById('vt-amoureuse-share-toast');
       if (!toast) return;
       toast.textContent = msg;
       toast.classList.add('vt-share-toast--visible');
@@ -446,7 +446,7 @@
 
     _shareImage: function () {
       /* --- Collecte --- */
-      var scoreText = (VT.$('#vt-result-score') || {}).textContent || '0%';
+      var scoreText = (VT.$('#vt-amoureuse-result-score') || {}).textContent || '0%';
       var score   = parseInt(scoreText, 10) || 0;
       var name1 = this._name1 || '', name2 = this._name2 || '';
       var sign1 = this._sign1, sign2 = this._sign2;
@@ -457,7 +457,7 @@
       };
 
       /* Résumé IA du tirage */
-      var resumeEl = VT.$('#vt-result-resume');
+      var resumeEl = VT.$('#vt-amoureuse-result-resume');
       var phrase = resumeEl ? resumeEl.textContent.trim() : '';
 
       /* --- Dimensions 9:16 --- */
@@ -663,9 +663,9 @@
 
         /* Affichage dans la modale */
         var dataURL = canvas.toDataURL('image/png');
-        var modal   = document.getElementById('vt-share-modal');
-        var preview = document.getElementById('vt-share-preview');
-        var dlBtn   = document.getElementById('vt-share-download');
+        var modal   = document.getElementById('vt-amoureuse-share-modal');
+        var preview = document.getElementById('vt-amoureuse-share-preview');
+        var dlBtn   = document.getElementById('vt-amoureuse-share-download');
         if (!modal) return;
         if (preview) preview.src  = dataURL;
         if (dlBtn)   dlBtn.href   = dataURL;

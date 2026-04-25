@@ -46,7 +46,7 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 	</button>
 	<?php endif; ?>
 
-	<div class="vt-splash" id="vt-splash" aria-hidden="true">
+	<div class="vt-splash" id="vt-amoureuse-splash" aria-hidden="true">
 		<?php
 		$brand_logo = get_option( 'vt_brand_logo', '' );
 		$logo_src   = ! empty( $brand_logo ) ? $brand_logo : $assets_url . 'logo-hexagon-voyance.webp';
@@ -107,7 +107,7 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 					<span>tirages ce mois</span>
 				</div>
 				<div style="margin-top: 2rem;">
-					<button class="btn-hex" id="vt-btn-start">
+					<button class="btn-hex" id="vt-amoureuse-btn-start">
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
 							<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
 						</svg>
@@ -149,7 +149,7 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 				<h2 style="font-family:var(--theme-font-title); letter-spacing:0.05em; margin-bottom:0.25rem; font-size:1.4rem;">Entrez vos informations</h2>
 				<p style="color:var(--theme-text-muted); font-size:0.82rem; margin-bottom:0.75rem;">Deux prenoms, un destin</p>
 			</div>
-			<div id="vt-error" class="vt-error vt-hidden" style="margin-bottom:0.75rem;">
+			<div id="vt-amoureuse-error" class="vt-error vt-hidden" style="margin-bottom:0.75rem;">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
 					<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
 				</svg>
@@ -160,12 +160,12 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 					<div class="vt-am-person">
 						<div class="vt-am-person-header">Premiere personne</div>
 						<div class="vt-am-field-group">
-							<label for="vt-name1">Prenom</label>
-							<input type="text" id="vt-name1" placeholder="Ex : Marie" required autocomplete="given-name">
+							<label for="vt-amoureuse-name1">Prenom</label>
+							<input type="text" id="vt-amoureuse-name1" placeholder="Ex : Marie" required autocomplete="given-name">
 						</div>
 						<div class="vt-am-field-group">
-							<label for="vt-birth1">Date de naissance (optionnel)</label>
-							<input type="date" id="vt-birth1" autocomplete="bday" value="2000-01-01">
+							<label for="vt-amoureuse-birth1">Date de naissance (optionnel)</label>
+							<input type="date" id="vt-amoureuse-birth1" autocomplete="bday" value="2000-01-01">
 						</div>
 					</div>
 					<div class="vt-am-form-heart" aria-hidden="true">
@@ -174,17 +174,17 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 					<div class="vt-am-person">
 						<div class="vt-am-person-header">Deuxieme personne</div>
 						<div class="vt-am-field-group">
-							<label for="vt-name2">Prenom</label>
-							<input type="text" id="vt-name2" placeholder="Ex : Pierre" required autocomplete="given-name">
+							<label for="vt-amoureuse-name2">Prenom</label>
+							<input type="text" id="vt-amoureuse-name2" placeholder="Ex : Pierre" required autocomplete="given-name">
 						</div>
 						<div class="vt-am-field-group">
-							<label for="vt-birth2">Date de naissance (optionnel)</label>
-							<input type="date" id="vt-birth2" autocomplete="bday" value="2000-01-01">
+							<label for="vt-amoureuse-birth2">Date de naissance (optionnel)</label>
+							<input type="date" id="vt-amoureuse-birth2" autocomplete="bday" value="2000-01-01">
 						</div>
 					</div>
 				</div>
 				<div style="text-align:center; margin-top:1rem;">
-					<button type="button" class="btn-hex" id="vt-btn-tirage">
+					<button type="button" class="btn-hex" id="vt-amoureuse-btn-tirage">
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
 							<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
 						</svg>
@@ -200,7 +200,7 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 				<div class="vt-am-ritual-names">
 					<div class="vt-am-ritual-person">
 						<span class="vt-am-ritual-name"></span>
-						<div class="vt-am-ritual-sign" id="vt-ritual-sign1"></div>
+						<div class="vt-am-ritual-sign" id="vt-amoureuse-ritual-sign1"></div>
 					</div>
 					<span class="vt-am-ritual-heart">
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none">
@@ -209,7 +209,7 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 					</span>
 					<div class="vt-am-ritual-person">
 						<span class="vt-am-ritual-name"></span>
-						<div class="vt-am-ritual-sign" id="vt-ritual-sign2"></div>
+						<div class="vt-am-ritual-sign" id="vt-amoureuse-ritual-sign2"></div>
 					</div>
 				</div>
 				<div class="vt-am-ritual-circle">
@@ -237,8 +237,8 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 				</div>
 				<?php endif; ?>
 
-				<div class="vt-result-header" id="vt-result-header"></div>
-				<div class="vt-am-result-score vt-anim-dialotel-reveal" id="vt-result-score">0%</div>
+				<div class="vt-result-header" id="vt-amoureuse-result-header"></div>
+				<div class="vt-am-result-score vt-anim-dialotel-reveal" id="vt-amoureuse-result-score">0%</div>
 				<p class="vt-am-result-score-label">de compatibilite amoureuse</p>
 				<div class="vt-am-score-bar">
 					<div class="vt-am-score-bar-fill" style="width:0%"></div>
@@ -247,28 +247,28 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 
 				<div class="vt-am-section">
 					<h3 class="vt-am-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Resume</h3>
-					<p class="vt-am-section-text" id="vt-result-resume"></p>
+					<p class="vt-am-section-text" id="vt-amoureuse-result-resume"></p>
 				</div>
 				<div class="vt-am-section">
 					<h3 class="vt-am-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Points forts</h3>
-					<ul class="vt-am-section-text" id="vt-result-strengths"></ul>
+					<ul class="vt-am-section-text" id="vt-amoureuse-result-strengths"></ul>
 				</div>
 				<div class="vt-am-section">
 					<h3 class="vt-am-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Points de tension</h3>
-					<ul class="vt-am-section-text" id="vt-result-tensions"></ul>
+					<ul class="vt-am-section-text" id="vt-amoureuse-result-tensions"></ul>
 				</div>
 				<div class="vt-am-section">
 					<h3 class="vt-am-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M9 18l6-6-6-6"/></svg>Conseil</h3>
-					<p class="vt-am-section-text" id="vt-result-advice"></p>
+					<p class="vt-am-section-text" id="vt-amoureuse-result-advice"></p>
 				</div>
 				<div class="vt-am-divider"></div>
 
 				<!-- Partage social -->
 				<?php $share_enabled = get_option( 'vt_share_enabled', true ); ?>
 				<?php if ( $share_enabled ) : ?>
-				<div class="vt-share" id="vt-share">
+				<div class="vt-share" id="vt-amoureuse-share">
 					<p class="vt-share-title">Partager le resultat</p>
-					<button class="vt-share-trigger" id="vt-btn-share" type="button">
+					<button class="vt-share-trigger" id="vt-amoureuse-btn-share" type="button">
 						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
 						Partager mon score
 					</button>
@@ -299,16 +299,16 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 						</button>
 						<?php endif; ?>
 					</div>
-					<div class="vt-share-toast" id="vt-share-toast">Lien copie !</div>
+					<div class="vt-share-toast" id="vt-amoureuse-share-toast">Lien copie !</div>
 				</div>
 				<?php endif; ?>
 
 				<!-- Email inline — bon de reduction -->
-				<div class="vt-email-inline" id="vt-email-inline">
+				<div class="vt-email-inline" id="vt-amoureuse-email-inline">
 					<h3><?php echo esc_html( $email_title ); ?></h3>
 					<p><?php echo esc_html( $email_desc ); ?></p>
-					<form class="vt-email-form" id="vt-email-form">
-						<input type="email" id="vt-email-input" placeholder="Votre adresse email" required autocomplete="email">
+					<form class="vt-email-form" id="vt-amoureuse-email-form">
+						<input type="email" id="vt-amoureuse-email-input" placeholder="Votre adresse email" required autocomplete="email">
 						<button type="submit" class="btn-hex" style="width:100%;"><?php echo esc_html( $email_btn ); ?></button>
 						<p class="vt-legal"><?php echo esc_html( $email_legal ); ?></p>
 					</form>
@@ -320,7 +320,7 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 
 				<div class="vt-result-actions">
 					<?php if ( $cta_enabled ) : ?>
-					<div class="vt-cta-voyants" id="vt-cta-voyants">
+					<div class="vt-cta-voyants" id="vt-amoureuse-cta-voyants">
 						<p class="vt-cta-voyants-hook"><?php echo esc_html( $cta_hook ); ?></p>
 						<a href="<?php echo esc_url( $cta_url ); ?>" class="btn-hex btn-hex--secondary" target="_blank" rel="noopener" onclick="VT.Analytics.track('vt_cta_voyants_clicked')">
 							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
@@ -330,7 +330,7 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 						</a>
 					</div>
 					<?php endif; ?>
-					<button class="btn-hex" id="vt-btn-restart">
+					<button class="btn-hex" id="vt-amoureuse-btn-restart">
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
 							<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
 						</svg>
@@ -343,30 +343,30 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 	</div>
 
 	<!-- Modale limite -->
-	<div class="vt-modal-overlay" id="vt-rate-limit-modal">
+	<div class="vt-modal-overlay" id="vt-amoureuse-rate-limit-modal">
 		<div class="vt-modal">
 			<h3>Limite atteinte</h3>
 			<p style="color:var(--theme-text-muted); margin:0.5rem 0 1.25rem; font-size:0.85rem;">Entrez votre email pour debloquer des tirages supplementaires.</p>
-			<form class="vt-email-form" id="vt-extend-form">
-				<input type="email" id="vt-extend-email" placeholder="Votre adresse email" required autocomplete="email">
+			<form class="vt-email-form" id="vt-amoureuse-extend-form">
+				<input type="email" id="vt-amoureuse-extend-email" placeholder="Votre adresse email" required autocomplete="email">
 				<button type="submit" class="btn-hex" style="width:100%;">Debloquer</button>
 			</form>
 		</div>
 	</div>
 
 	<!-- Modale partage -->
-	<div class="vt-modal-overlay" id="vt-share-modal">
+	<div class="vt-modal-overlay" id="vt-amoureuse-share-modal">
 		<div class="vt-modal vt-share-modal">
 			<button class="vt-modal-close" onclick="this.closest('.vt-modal-overlay').style.display='none'" aria-label="Fermer">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
 			</button>
 			<h3>Votre image de compatibilite</h3>
-			<img id="vt-share-preview" alt="Apercu du tirage" style="max-width:100%;border-radius:10px;margin:1rem 0;">
+			<img id="vt-amoureuse-share-preview" alt="Apercu du tirage" style="max-width:100%;border-radius:10px;margin:1rem 0;">
 			<div class="vt-share-modal-actions">
-				<a id="vt-share-download" download="compatibilite-amoureuse.png" class="btn-hex">Telecharger l'image</a>
-				<button id="vt-share-copy-link" class="btn-hex btn-hex--secondary" type="button">Copier le lien</button>
+				<a id="vt-amoureuse-share-download" download="compatibilite-amoureuse.png" class="btn-hex">Telecharger l'image</a>
+				<button id="vt-amoureuse-share-copy-link" class="btn-hex btn-hex--secondary" type="button">Copier le lien</button>
 			</div>
-			<p class="vt-share-assist-text" id="vt-share-assist-text" style="display:none;"></p>
+			<p class="vt-share-assist-text" id="vt-amoureuse-share-assist-text" style="display:none;"></p>
 		</div>
 	</div>
 
@@ -387,7 +387,7 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 }
 </script>
 
-<script type="application/json" id="vt-i18n">
+<script type="application/json" id="vt-amoureuse-i18n">
 { "app": { "loading": "Chargement...", "error": "Une erreur est survenue.", "retry": "Reessayer", "restart": "Refaire un tirage" }, "counter": { "label": "tirages effectues ce mois" }, "rateLimiter": { "remaining": "Il vous reste {count} tirage(s) aujourd'hui" } }
 </script>
 

@@ -99,7 +99,7 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 					<span>tirages ce mois</span>
 				</div>
 				<div style="margin-top: 2rem;">
-					<button class="btn-hex" id="vt-btn-start">
+					<button class="btn-hex" id="vt-astro-btn-start">
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><path d="M16.2 7.8l-2 6.3-6.4 2.1 2-6.3z"/></svg>
 						<?php echo esc_html( $app_btn_text ); ?>
 					</button>
@@ -125,7 +125,7 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 				</div>
 			</div>
 
-			<div id="vt-error" class="vt-error vt-hidden" style="margin-bottom:1rem;">
+			<div id="vt-astro-error" class="vt-error vt-hidden" style="margin-bottom:1rem;">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
 				<p></p>
 			</div>
@@ -171,7 +171,7 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 			</div><!-- /vt-astro-sign-groups-row -->
 
 			<div style="text-align:center; margin-top:1.25rem;">
-				<button type="button" class="btn-hex" id="vt-btn-tirage">
+				<button type="button" class="btn-hex" id="vt-astro-btn-tirage">
 					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><path d="M16.2 7.8l-2 6.3-6.4 2.1 2-6.3z"/></svg>
 					Lancer le tirage
 				</button>
@@ -202,8 +202,8 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 		<div class="vt-step" data-step="result">
 			<div class="vt-result" style="text-align:center;">
 
-				<div id="vt-result-header" class="vt-result-header"></div>
-				<div class="vt-astro-result-score vt-anim-dialotel-reveal" id="vt-result-score">0%</div>
+				<div id="vt-astro-result-header" class="vt-result-header"></div>
+				<div class="vt-astro-result-score vt-anim-dialotel-reveal" id="vt-astro-result-score">0%</div>
 				<p class="vt-astro-result-score-label">de compatibilite astrologique</p>
 				<div class="vt-astro-score-bar"><div class="vt-astro-score-bar-fill" style="width:0%"></div></div>
 
@@ -219,25 +219,25 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 
 				<div class="vt-astro-section">
 					<h3 class="vt-astro-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Profil combine</h3>
-					<p class="vt-astro-section-text" id="vt-result-profile"></p>
+					<p class="vt-astro-section-text" id="vt-astro-result-profile"></p>
 				</div>
 				<div class="vt-astro-section">
 					<h3 class="vt-astro-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Traits partages</h3>
-					<ul class="vt-astro-section-text" id="vt-result-traits"></ul>
+					<ul class="vt-astro-section-text" id="vt-astro-result-traits"></ul>
 				</div>
 				<div class="vt-astro-section">
 					<h3 class="vt-astro-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M9 18l6-6-6-6"/></svg>Conseils</h3>
-					<p class="vt-astro-section-text" id="vt-result-advice"></p>
+					<p class="vt-astro-section-text" id="vt-astro-result-advice"></p>
 				</div>
 
 				<div class="vt-astro-divider"></div>
 
 				<!-- Email inline -->
-				<div class="vt-email-inline" id="vt-email-inline">
+				<div class="vt-email-inline" id="vt-astro-email-inline">
 					<h3><?php echo esc_html( $email_title ); ?></h3>
 					<p><?php echo esc_html( $email_desc ); ?></p>
-					<form class="vt-email-form" id="vt-email-form">
-						<input type="email" id="vt-email-input" placeholder="Votre adresse email" required autocomplete="email">
+					<form class="vt-email-form" id="vt-astro-email-form">
+						<input type="email" id="vt-astro-email-input" placeholder="Votre adresse email" required autocomplete="email">
 						<button type="submit" class="btn-hex" style="width:100%;"><?php echo esc_html( $email_btn ); ?></button>
 						<p class="vt-legal"><?php echo esc_html( $email_legal ); ?></p>
 					</form>
@@ -249,7 +249,7 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 
 				<div class="vt-result-actions">
 					<?php if ( $cta_enabled ) : ?>
-					<div class="vt-cta-voyants" id="vt-cta-voyants">
+					<div class="vt-cta-voyants" id="vt-astro-cta-voyants">
 						<p class="vt-cta-voyants-hook"><?php echo esc_html( $cta_hook ); ?></p>
 						<a href="<?php echo esc_url( $cta_url ); ?>" class="btn-hex btn-hex--secondary" target="_blank" rel="noopener" onclick="VT.Analytics.track('vt_cta_voyants_clicked')">
 							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -258,12 +258,12 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 					</div>
 					<?php endif; ?>
 					<?php if ( $share_enabled ) : ?>
-					<button class="btn-hex btn-hex--outline" id="vt-btn-share" type="button">
+					<button class="btn-hex btn-hex--outline" id="vt-astro-btn-share" type="button">
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
 						Partager mon resultat
 					</button>
 					<?php endif; ?>
-					<button class="btn-hex" id="vt-btn-restart">
+					<button class="btn-hex" id="vt-astro-btn-restart">
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
 						Refaire un tirage
 					</button>
@@ -291,12 +291,12 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 	</div>
 
 	<!-- Modale limite -->
-	<div class="vt-modal-overlay" id="vt-rate-limit-modal">
+	<div class="vt-modal-overlay" id="vt-astro-rate-limit-modal">
 		<div class="vt-modal">
 			<h3>Limite atteinte</h3>
 			<p style="color:var(--theme-text-muted); margin:0.5rem 0 1.25rem; font-size:0.85rem;">Entrez votre email pour debloquer des tirages supplementaires.</p>
-			<form class="vt-email-form" id="vt-extend-form">
-				<input type="email" id="vt-extend-email" placeholder="Votre adresse email" required autocomplete="email">
+			<form class="vt-email-form" id="vt-astro-extend-form">
+				<input type="email" id="vt-astro-extend-email" placeholder="Votre adresse email" required autocomplete="email">
 				<button type="submit" class="btn-hex" style="width:100%;">Debloquer</button>
 			</form>
 		</div>
@@ -306,20 +306,20 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 
 <?php if ( $share_enabled ) : ?>
 <!-- Modal partage -->
-<div class="vt-modal-overlay" id="vt-share-modal">
+<div class="vt-modal-overlay" id="vt-astro-share-modal">
 	<div class="vt-modal">
-		<button type="button" class="vt-modal-close" id="vt-share-modal-close" aria-label="Fermer">
+		<button type="button" class="vt-modal-close" id="vt-astro-share-modal-close" aria-label="Fermer">
 			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
 		</button>
 		<h3 style="margin-bottom:1rem;">Partager mon resultat</h3>
 		<div class="vt-share-btns" style="display:flex;flex-direction:column;gap:0.75rem;">
-			<a id="vt-share-whatsapp" href="#" target="_blank" rel="noopener" class="btn-hex btn-hex--secondary" style="background:#25D366;border-color:#25D366;text-decoration:none;">
+			<a id="vt-astro-share-whatsapp" href="#" target="_blank" rel="noopener" class="btn-hex btn-hex--secondary" style="background:#25D366;border-color:#25D366;text-decoration:none;">
 				WhatsApp
 			</a>
-			<a id="vt-share-facebook" href="#" target="_blank" rel="noopener" class="btn-hex btn-hex--secondary" style="background:#1877F2;border-color:#1877F2;text-decoration:none;">
+			<a id="vt-astro-share-facebook" href="#" target="_blank" rel="noopener" class="btn-hex btn-hex--secondary" style="background:#1877F2;border-color:#1877F2;text-decoration:none;">
 				Facebook
 			</a>
-			<button type="button" id="vt-share-copy" class="btn-hex">
+			<button type="button" id="vt-astro-share-copy" class="btn-hex">
 				<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
 				Copier le lien
 			</button>
@@ -329,7 +329,7 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 <?php endif; ?>
 
 <!-- Config -->
-<script type="application/json" id="vt-config-compat-astro">
+<script type="application/json" id="vt-astro-config">
 {
 	"tirageId": "compat-astro",
 	"theme": "<?php echo esc_js( $default_theme ); ?>",
@@ -342,11 +342,11 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 }
 </script>
 
-<script type="application/json" id="vt-i18n">
+<script type="application/json" id="vt-astro-i18n">
 { "app": { "loading": "Chargement...", "error": "Une erreur est survenue.", "retry": "Reessayer", "restart": "Refaire un tirage" }, "counter": { "label": "tirages effectues ce mois" }, "rateLimiter": { "remaining": "Il vous reste {count} tirage(s) aujourd'hui" }, "compatibility": { "title": "Compatibilite Astrologique" } }
 </script>
 
-<script type="application/json" id="vt-data-signs">
+<script type="application/json" id="vt-astro-data-signs">
 {
 	"aries": { "name": "Belier", "element": "feu", "traits": ["courageux", "determine", "confiant", "enthousiaste"] },
 	"taurus": { "name": "Taureau", "element": "terre", "traits": ["fiable", "patient", "pratique", "devoue"] },
@@ -363,7 +363,7 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 }
 </script>
 
-<script type="application/json" id="vt-data-matrix">
+<script type="application/json" id="vt-astro-data-matrix">
 {
 	"aries":      {"aries":75,"taurus":62,"gemini":82,"cancer":52,"leo":90,"virgo":58,"libra":78,"scorpio":48,"sagittarius":88,"capricorn":62,"aquarius":80,"pisces":50},
 	"taurus":     {"aries":62,"taurus":75,"gemini":68,"cancer":82,"leo":58,"virgo":92,"libra":65,"scorpio":82,"sagittarius":58,"capricorn":88,"aquarius":62,"pisces":82},
@@ -380,7 +380,7 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 }
 </script>
 
-<script type="text/plain" id="vt-prompt-compat-astro">
+<script type="text/plain" id="vt-astro-prompt">
 Tu es un astrologue expert. Le theme choisi est : {theme}.
 Analyse la compatibilite {sign1} / {sign2} selon ce theme et reponds UNIQUEMENT en JSON :
 { "score": <1-100>, "profil": "<2-3 phrases sur le duo selon le theme>", "traits": ["<trait1>", "<trait2>", "<trait3>"], "conseil": "<2-3 phrases adaptees au theme>" }

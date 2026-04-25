@@ -25,7 +25,7 @@
       VT.TTS.init(this.config.tts || {});
       VT.Email.init(this.config.emailCapture || {});
 
-      var i18nEl = document.getElementById('vt-i18n');
+      var i18nEl = document.getElementById('vt-tarot-i18n');
       if (i18nEl) {
         try { VT.I18n.init(JSON.parse(i18nEl.textContent)); } catch (e) { /* ignore */ }
       }
@@ -39,16 +39,16 @@
     _bindEvents: function () {
       var self = this;
 
-      VT.on('#vt-btn-start', 'click', function () {
+      VT.on('#vt-tarot-btn-start', 'click', function () {
         VT.Analytics.track('vt_tirage_started', { type: 'tirage-tarot' });
         VT.StepEngine.next();
       });
 
-      VT.on('#vt-btn-tirage', 'click', function () {
+      VT.on('#vt-tarot-btn-tirage', 'click', function () {
         self._doTirage();
       });
 
-      VT.on('#vt-btn-restart', 'click', function () {
+      VT.on('#vt-tarot-btn-restart', 'click', function () {
         self._restart();
       });
 
@@ -56,12 +56,12 @@
         VT.TTS.toggle();
       });
 
-      VT.on('#vt-email-form', 'submit', function (e) {
+      VT.on('#vt-tarot-email-form', 'submit', function (e) {
         e.preventDefault();
         VT.App.submitEmail(self);
       });
 
-      VT.on('#vt-extend-form', 'submit', function (e) {
+      VT.on('#vt-tarot-extend-form', 'submit', function (e) {
         e.preventDefault();
         VT.App.extendRateLimit(self);
       });
@@ -89,7 +89,7 @@
       }
 
       var question = '';
-      var questionEl = VT.$('#vt-question');
+      var questionEl = VT.$('#vt-tarot-question');
       if (questionEl) question = questionEl.value.trim();
 
       // Tirer 3 cartes
@@ -191,25 +191,25 @@
       VT.StepEngine.goTo(3);
 
       // Carte Passe
-      var passName = VT.$('#vt-result-card-passe-name');
-      var passText = VT.$('#vt-result-card-passe-text');
+      var passName = VT.$('#vt-tarot-result-card-passe-name');
+      var passText = VT.$('#vt-tarot-result-card-passe-text');
       if (passName) passName.textContent = result.cartePasse.nom;
       if (passText) passText.textContent = result.cartePasse.interpretation;
 
       // Carte Present
-      var presName = VT.$('#vt-result-card-present-name');
-      var presText = VT.$('#vt-result-card-present-text');
+      var presName = VT.$('#vt-tarot-result-card-present-name');
+      var presText = VT.$('#vt-tarot-result-card-present-text');
       if (presName) presName.textContent = result.cartePresent.nom;
       if (presText) presText.textContent = result.cartePresent.interpretation;
 
       // Carte Futur
-      var futName = VT.$('#vt-result-card-futur-name');
-      var futText = VT.$('#vt-result-card-futur-text');
+      var futName = VT.$('#vt-tarot-result-card-futur-name');
+      var futText = VT.$('#vt-tarot-result-card-futur-text');
       if (futName) futName.textContent = result.carteFutur.nom;
       if (futText) futText.textContent = result.carteFutur.interpretation;
 
       // Synthese
-      var synthEl = VT.$('#vt-result-synthese');
+      var synthEl = VT.$('#vt-tarot-result-synthese');
       if (synthEl) synthEl.textContent = result.synthese;
 
       // TTS
@@ -231,7 +231,7 @@
       VT.TTS.stop();
       this.drawnCards = [];
 
-      var questionEl = VT.$('#vt-question');
+      var questionEl = VT.$('#vt-tarot-question');
       if (questionEl) questionEl.value = '';
 
       // Reset cards
@@ -245,7 +245,7 @@
         m.classList.remove('vt-modal--open');
       });
 
-      var emailForm = VT.$('#vt-email-form');
+      var emailForm = VT.$('#vt-tarot-email-form');
       var emailSuccess = VT.$('.vt-email-success');
       if (emailForm) emailForm.classList.remove('vt-hidden');
       if (emailSuccess) emailSuccess.classList.add('vt-hidden');

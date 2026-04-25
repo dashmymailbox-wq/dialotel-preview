@@ -70,7 +70,7 @@ $email_legal    = get_option( 'vt_email_legal', 'En soumettant votre email, vous
 					<span>tirages ce mois</span>
 				</div>
 				<div style="margin-top: 2rem;">
-					<button class="btn-hex" id="vt-btn-start">
+					<button class="btn-hex" id="vt-numero-btn-start">
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
 						<?php echo esc_html( $app_btn_text ); ?>
 					</button>
@@ -86,7 +86,7 @@ $email_legal    = get_option( 'vt_email_legal', 'En soumettant votre email, vous
 				<p style="color:var(--theme-text-muted); font-size:0.85rem; margin-bottom:2rem;">Votre prenom et date de naissance pour calculer votre chemin de vie</p>
 			</div>
 
-			<div id="vt-error" class="vt-error vt-hidden" style="margin-bottom:1rem;">
+			<div id="vt-numero-error" class="vt-error vt-hidden" style="margin-bottom:1rem;">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
 				<p></p>
 			</div>
@@ -94,14 +94,14 @@ $email_legal    = get_option( 'vt_email_legal', 'En soumettant votre email, vous
 			<form class="vt-numero-form" id="vt-numero-form" onsubmit="return false;">
 				<div class="vt-numero-field-group">
 					<label for="vt-fullname">Prenom complet</label>
-					<input type="text" id="vt-fullname" placeholder="Ex : Marie Dupont" required autocomplete="name">
+					<input type="text" id="vt-numero-fullname" placeholder="Ex : Marie Dupont" required autocomplete="name">
 				</div>
 				<div class="vt-numero-field-group">
 					<label for="vt-birthdate">Date de naissance</label>
-					<input type="date" id="vt-birthdate" required autocomplete="bday" value="2000-01-01">
+					<input type="date" id="vt-numero-birthdate" required autocomplete="bday" value="2000-01-01">
 				</div>
 				<div style="text-align:center; margin-top:1.25rem;">
-					<button type="button" class="btn-hex" id="vt-btn-tirage">
+					<button type="button" class="btn-hex" id="vt-numero-btn-tirage">
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
 						Calculer mon chemin de vie
 					</button>
@@ -122,7 +122,7 @@ $email_legal    = get_option( 'vt_email_legal', 'En soumettant votre email, vous
 		<div class="vt-step" data-step="result">
 			<div style="text-align:center;">
 
-				<div class="vt-numero-result-number vt-anim-dialotel-reveal" id="vt-result-number">0</div>
+				<div class="vt-numero-result-number vt-anim-dialotel-reveal" id="vt-numero-result-number">0</div>
 				<p class="vt-numero-result-label">Votre chemin de vie</p>
 
 				<?php if ( $tts_enabled ) : ?>
@@ -137,29 +137,29 @@ $email_legal    = get_option( 'vt_email_legal', 'En soumettant votre email, vous
 
 				<div class="vt-numero-section">
 					<h3 class="vt-numero-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Votre profil numerologique</h3>
-					<p class="vt-numero-section-text" id="vt-result-description"></p>
+					<p class="vt-numero-section-text" id="vt-numero-result-description"></p>
 				</div>
 				<div class="vt-numero-section">
 					<h3 class="vt-numero-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Vos forces</h3>
-					<ul class="vt-numero-section-text" id="vt-result-forces"></ul>
+					<ul class="vt-numero-section-text" id="vt-numero-result-forces"></ul>
 				</div>
 				<div class="vt-numero-section">
 					<h3 class="vt-numero-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Vos defis</h3>
-					<ul class="vt-numero-section-text" id="vt-result-defis"></ul>
+					<ul class="vt-numero-section-text" id="vt-numero-result-defis"></ul>
 				</div>
 				<div class="vt-numero-section">
 					<h3 class="vt-numero-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M9 18l6-6-6-6"/></svg>Conseil</h3>
-					<p class="vt-numero-section-text" id="vt-result-advice"></p>
+					<p class="vt-numero-section-text" id="vt-numero-result-advice"></p>
 				</div>
 
 				<div class="vt-numero-divider"></div>
 
 				<!-- Email inline -->
-				<div class="vt-email-inline" id="vt-email-inline">
+				<div class="vt-email-inline" id="vt-numero-email-inline">
 					<h3><?php echo esc_html( $email_title ); ?></h3>
 					<p><?php echo esc_html( $email_desc ); ?></p>
-					<form class="vt-email-form" id="vt-email-form">
-						<input type="email" id="vt-email-input" placeholder="Votre adresse email" required autocomplete="email">
+					<form class="vt-email-form" id="vt-numero-email-form">
+						<input type="email" id="vt-numero-email-input" placeholder="Votre adresse email" required autocomplete="email">
 						<button type="submit" class="btn-hex" style="width:100%;"><?php echo esc_html( $email_btn ); ?></button>
 						<p class="vt-legal"><?php echo esc_html( $email_legal ); ?></p>
 					</form>
@@ -171,7 +171,7 @@ $email_legal    = get_option( 'vt_email_legal', 'En soumettant votre email, vous
 
 				<div class="vt-result-actions">
 					<?php if ( $cta_enabled ) : ?>
-					<div class="vt-cta-voyants" id="vt-cta-voyants">
+					<div class="vt-cta-voyants" id="vt-numero-cta-voyants">
 						<p class="vt-cta-voyants-hook"><?php echo esc_html( $cta_hook ); ?></p>
 						<a href="<?php echo esc_url( $cta_url ); ?>" class="btn-hex btn-hex--secondary" target="_blank" rel="noopener" onclick="VT.Analytics.track('vt_cta_voyants_clicked')">
 							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -179,7 +179,7 @@ $email_legal    = get_option( 'vt_email_legal', 'En soumettant votre email, vous
 						</a>
 					</div>
 					<?php endif; ?>
-					<button class="btn-hex" id="vt-btn-restart">
+					<button class="btn-hex" id="vt-numero-btn-restart">
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
 						Refaire un calcul
 					</button>
@@ -191,12 +191,12 @@ $email_legal    = get_option( 'vt_email_legal', 'En soumettant votre email, vous
 	</div>
 
 	<!-- Modale limite -->
-	<div class="vt-modal-overlay" id="vt-rate-limit-modal">
+	<div class="vt-modal-overlay" id="vt-numero-rate-limit-modal">
 		<div class="vt-modal">
 			<h3>Limite atteinte</h3>
 			<p style="color:var(--theme-text-muted); margin:0.5rem 0 1.25rem; font-size:0.85rem;">Entrez votre email pour debloquer des tirages supplementaires.</p>
-			<form class="vt-email-form" id="vt-extend-form">
-				<input type="email" id="vt-extend-email" placeholder="Votre adresse email" required autocomplete="email">
+			<form class="vt-email-form" id="vt-numero-extend-form">
+				<input type="email" id="vt-numero-extend-email" placeholder="Votre adresse email" required autocomplete="email">
 				<button type="submit" class="btn-hex" style="width:100%;">Debloquer</button>
 			</form>
 		</div>
@@ -218,7 +218,7 @@ $email_legal    = get_option( 'vt_email_legal', 'En soumettant votre email, vous
 }
 </script>
 
-<script type="application/json" id="vt-i18n">
+<script type="application/json" id="vt-numero-i18n">
 { "app": { "loading": "Chargement...", "error": "Une erreur est survenue.", "retry": "Reessayer", "restart": "Refaire un calcul" }, "counter": { "label": "tirages effectues ce mois" }, "rateLimiter": { "remaining": "Il vous reste {count} tirage(s) aujourd'hui" } }
 </script>
 

@@ -17,7 +17,7 @@
       VT.TTS.init(this.config.tts || {});
       VT.Email.init(this.config.emailCapture || {});
 
-      var i18nEl = document.getElementById('vt-i18n');
+      var i18nEl = document.getElementById('vt-numero-i18n');
       if (i18nEl) {
         try { VT.I18n.init(JSON.parse(i18nEl.textContent)); } catch (e) { /* ignore */ }
       }
@@ -31,16 +31,16 @@
     _bindEvents: function () {
       var self = this;
 
-      VT.on('#vt-btn-start', 'click', function () {
+      VT.on('#vt-numero-btn-start', 'click', function () {
         VT.Analytics.track('vt_tirage_started', { type: 'numerologie' });
         VT.StepEngine.next();
       });
 
-      VT.on('#vt-btn-tirage', 'click', function () {
+      VT.on('#vt-numero-btn-tirage', 'click', function () {
         self._doTirage();
       });
 
-      VT.on('#vt-btn-restart', 'click', function () {
+      VT.on('#vt-numero-btn-restart', 'click', function () {
         self._restart();
       });
 
@@ -48,12 +48,12 @@
         VT.TTS.toggle();
       });
 
-      VT.on('#vt-email-form', 'submit', function (e) {
+      VT.on('#vt-numero-email-form', 'submit', function (e) {
         e.preventDefault();
         VT.App.submitEmail(self);
       });
 
-      VT.on('#vt-extend-form', 'submit', function (e) {
+      VT.on('#vt-numero-extend-form', 'submit', function (e) {
         e.preventDefault();
         VT.App.extendRateLimit(self);
       });
@@ -90,11 +90,11 @@
       }
 
       var fullName = '';
-      var nameEl = VT.$('#vt-fullname');
+      var nameEl = VT.$('#vt-numero-fullname');
       if (nameEl) fullName = nameEl.value.trim();
 
       var birthDate = '';
-      var birthEl = VT.$('#vt-birthdate');
+      var birthEl = VT.$('#vt-numero-birthdate');
       if (birthEl) birthDate = birthEl.value;
 
       if (!fullName) {
@@ -197,27 +197,27 @@
       VT.StepEngine.goTo(3);
 
       // Chiffre de vie
-      var numEl = VT.$('#vt-result-number');
+      var numEl = VT.$('#vt-numero-result-number');
       if (numEl) numEl.textContent = result.chiffreDeVie;
 
       // Description
-      var descEl = VT.$('#vt-result-description');
+      var descEl = VT.$('#vt-numero-result-description');
       if (descEl) descEl.textContent = result.description;
 
       // Forces
-      var forcesEl = VT.$('#vt-result-forces');
+      var forcesEl = VT.$('#vt-numero-result-forces');
       if (forcesEl) forcesEl.innerHTML = result.forces.map(function (f) {
         return '<li>' + f + '</li>';
       }).join('');
 
       // Defis
-      var defisEl = VT.$('#vt-result-defis');
+      var defisEl = VT.$('#vt-numero-result-defis');
       if (defisEl) defisEl.innerHTML = result.defis.map(function (d) {
         return '<li>' + d + '</li>';
       }).join('');
 
       // Conseil
-      var conseilEl = VT.$('#vt-result-advice');
+      var conseilEl = VT.$('#vt-numero-result-advice');
       if (conseilEl) conseilEl.textContent = result.conseil;
 
       // TTS
@@ -238,16 +238,16 @@
     _restart: function () {
       VT.TTS.stop();
 
-      var nameEl = VT.$('#vt-fullname');
+      var nameEl = VT.$('#vt-numero-fullname');
       if (nameEl) nameEl.value = '';
-      var birthEl = VT.$('#vt-birthdate');
+      var birthEl = VT.$('#vt-numero-birthdate');
       if (birthEl) birthEl.value = '';
 
       VT.$$('.vt-modal-overlay').forEach(function (m) {
         m.classList.remove('vt-modal--open');
       });
 
-      var emailForm = VT.$('#vt-email-form');
+      var emailForm = VT.$('#vt-numero-email-form');
       var emailSuccess = VT.$('.vt-email-success');
       if (emailForm) emailForm.classList.remove('vt-hidden');
       if (emailSuccess) emailSuccess.classList.add('vt-hidden');

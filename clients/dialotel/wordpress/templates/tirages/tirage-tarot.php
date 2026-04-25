@@ -70,7 +70,7 @@ $email_legal    = get_option( 'vt_email_legal', 'En soumettant votre email, vous
 					<span>tirages ce mois</span>
 				</div>
 				<div style="margin-top: 2rem;">
-					<button class="btn-hex" id="vt-btn-start">
+					<button class="btn-hex" id="vt-tarot-btn-start">
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
 						<?php echo esc_html( $app_btn_text ); ?>
 					</button>
@@ -86,19 +86,19 @@ $email_legal    = get_option( 'vt_email_legal', 'En soumettant votre email, vous
 				<p style="color:var(--theme-text-muted); font-size:0.85rem; margin-bottom:2rem;">Formulez votre intention ou laissez le tarot vous guider</p>
 			</div>
 
-			<div id="vt-error" class="vt-error vt-hidden" style="margin-bottom:1rem;">
+			<div id="vt-tarot-error" class="vt-error vt-hidden" style="margin-bottom:1rem;">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
 				<p></p>
 			</div>
 
 			<div class="vt-tarot-question">
-				<label for="vt-question">Votre question (optionnel)</label>
-				<textarea id="vt-question" placeholder="Ex : Que me reserve l'avenir sentimentalement ?" rows="3"></textarea>
+				<label for="vt-tarot-question">Votre question (optionnel)</label>
+				<textarea id="vt-tarot-question" placeholder="Ex : Que me reserve l'avenir sentimentalement ?" rows="3"></textarea>
 				<p class="vt-tarot-question-hint">Trois cartes seront tirees pour vous eclairer.</p>
 			</div>
 
 			<div style="text-align:center; margin-top:1.25rem;">
-				<button type="button" class="btn-hex" id="vt-btn-tirage">
+				<button type="button" class="btn-hex" id="vt-tarot-btn-tirage">
 					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
 					Tirer les cartes
 				</button>
@@ -136,18 +136,18 @@ $email_legal    = get_option( 'vt_email_legal', 'En soumettant votre email, vous
 				<div class="vt-tarot-result-cards">
 					<div class="vt-tarot-result-card">
 						<div class="vt-tarot-result-card-label">Passe</div>
-						<div class="vt-tarot-result-card-name" id="vt-result-card-passe-name"></div>
-						<div class="vt-tarot-result-card-text" id="vt-result-card-passe-text"></div>
+						<div class="vt-tarot-result-card-name" id="vt-tarot-result-card-passe-name"></div>
+						<div class="vt-tarot-result-card-text" id="vt-tarot-result-card-passe-text"></div>
 					</div>
 					<div class="vt-tarot-result-card">
 						<div class="vt-tarot-result-card-label">Present</div>
-						<div class="vt-tarot-result-card-name" id="vt-result-card-present-name"></div>
-						<div class="vt-tarot-result-card-text" id="vt-result-card-present-text"></div>
+						<div class="vt-tarot-result-card-name" id="vt-tarot-result-card-present-name"></div>
+						<div class="vt-tarot-result-card-text" id="vt-tarot-result-card-present-text"></div>
 					</div>
 					<div class="vt-tarot-result-card">
 						<div class="vt-tarot-result-card-label">Futur</div>
-						<div class="vt-tarot-result-card-name" id="vt-result-card-futur-name"></div>
-						<div class="vt-tarot-result-card-text" id="vt-result-card-futur-text"></div>
+						<div class="vt-tarot-result-card-name" id="vt-tarot-result-card-futur-name"></div>
+						<div class="vt-tarot-result-card-text" id="vt-tarot-result-card-futur-text"></div>
 					</div>
 				</div>
 
@@ -155,7 +155,7 @@ $email_legal    = get_option( 'vt_email_legal', 'En soumettant votre email, vous
 
 				<div class="vt-tarot-section">
 					<h3 class="vt-tarot-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Synthese</h3>
-					<p class="vt-tarot-section-text" id="vt-result-synthese"></p>
+					<p class="vt-tarot-section-text" id="vt-tarot-result-synthese"></p>
 				</div>
 
 				<?php if ( $tts_enabled ) : ?>
@@ -169,11 +169,11 @@ $email_legal    = get_option( 'vt_email_legal', 'En soumettant votre email, vous
 				<div class="vt-tarot-divider"></div>
 
 				<!-- Email inline -->
-				<div class="vt-email-inline" id="vt-email-inline">
+				<div class="vt-email-inline" id="vt-tarot-email-inline">
 					<h3><?php echo esc_html( $email_title ); ?></h3>
 					<p><?php echo esc_html( $email_desc ); ?></p>
-					<form class="vt-email-form" id="vt-email-form">
-						<input type="email" id="vt-email-input" placeholder="Votre adresse email" required autocomplete="email">
+					<form class="vt-email-form" id="vt-tarot-email-form">
+						<input type="email" id="vt-tarot-email-input" placeholder="Votre adresse email" required autocomplete="email">
 						<button type="submit" class="btn-hex" style="width:100%;"><?php echo esc_html( $email_btn ); ?></button>
 						<p class="vt-legal"><?php echo esc_html( $email_legal ); ?></p>
 					</form>
@@ -185,7 +185,7 @@ $email_legal    = get_option( 'vt_email_legal', 'En soumettant votre email, vous
 
 				<div class="vt-result-actions">
 					<?php if ( $cta_enabled ) : ?>
-					<div class="vt-cta-voyants" id="vt-cta-voyants">
+					<div class="vt-cta-voyants" id="vt-tarot-cta-voyants">
 						<p class="vt-cta-voyants-hook"><?php echo esc_html( $cta_hook ); ?></p>
 						<a href="<?php echo esc_url( $cta_url ); ?>" class="btn-hex btn-hex--secondary" target="_blank" rel="noopener" onclick="VT.Analytics.track('vt_cta_voyants_clicked')">
 							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -193,7 +193,7 @@ $email_legal    = get_option( 'vt_email_legal', 'En soumettant votre email, vous
 						</a>
 					</div>
 					<?php endif; ?>
-					<button class="btn-hex" id="vt-btn-restart">
+					<button class="btn-hex" id="vt-tarot-btn-restart">
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
 						Refaire un tirage
 					</button>
@@ -205,12 +205,12 @@ $email_legal    = get_option( 'vt_email_legal', 'En soumettant votre email, vous
 	</div>
 
 	<!-- Modale limite -->
-	<div class="vt-modal-overlay" id="vt-rate-limit-modal">
+	<div class="vt-modal-overlay" id="vt-tarot-rate-limit-modal">
 		<div class="vt-modal">
 			<h3>Limite atteinte</h3>
 			<p style="color:var(--theme-text-muted); margin:0.5rem 0 1.25rem; font-size:0.85rem;">Entrez votre email pour debloquer des tirages supplementaires.</p>
-			<form class="vt-email-form" id="vt-extend-form">
-				<input type="email" id="vt-extend-email" placeholder="Votre adresse email" required autocomplete="email">
+			<form class="vt-email-form" id="vt-tarot-extend-form">
+				<input type="email" id="vt-tarot-extend-email" placeholder="Votre adresse email" required autocomplete="email">
 				<button type="submit" class="btn-hex" style="width:100%;">Debloquer</button>
 			</form>
 		</div>
@@ -232,7 +232,7 @@ $email_legal    = get_option( 'vt_email_legal', 'En soumettant votre email, vous
 }
 </script>
 
-<script type="application/json" id="vt-i18n">
+<script type="application/json" id="vt-tarot-i18n">
 { "app": { "loading": "Chargement...", "error": "Une erreur est survenue.", "retry": "Reessayer", "restart": "Refaire un tirage" }, "counter": { "label": "tirages effectues ce mois" }, "rateLimiter": { "remaining": "Il vous reste {count} tirage(s) aujourd'hui" } }
 </script>
 

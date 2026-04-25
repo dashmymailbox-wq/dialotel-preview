@@ -13,17 +13,17 @@
     zodiac: { aries:'♈', taurus:'♉', gemini:'♊', cancer:'♋', leo:'♌', virgo:'♍', libra:'♎', scorpio:'♏', sagittarius:'♐', capricorn:'♑', aquarius:'♒', pisces:'♓' },
 
     init: function () {
-      this.config = VT.Config.load('vt-config-compat-astro');
+      this.config = VT.Config.load('vt-astro-config');
 
-      var promptEl = document.getElementById('vt-prompt-compat-astro');
+      var promptEl = document.getElementById('vt-astro-prompt');
       if (promptEl) this.promptTemplate = promptEl.textContent.trim();
 
       // Charger donnees astrologiques inline
-      var signsEl = document.getElementById('vt-data-signs');
+      var signsEl = document.getElementById('vt-astro-data-signs');
       if (signsEl) {
         try { this.signsData = JSON.parse(signsEl.textContent); } catch (e) { /* ignore */ }
       }
-      var matrixEl = document.getElementById('vt-data-matrix');
+      var matrixEl = document.getElementById('vt-astro-data-matrix');
       if (matrixEl) {
         try { this.matrixData = JSON.parse(matrixEl.textContent); } catch (e) { /* ignore */ }
       }
@@ -33,7 +33,7 @@
       VT.TTS.init(this.config.tts || {});
       VT.Email.init(this.config.emailCapture || {});
 
-      var i18nEl = document.getElementById('vt-i18n');
+      var i18nEl = document.getElementById('vt-astro-i18n');
       if (i18nEl) {
         try { VT.I18n.init(JSON.parse(i18nEl.textContent)); } catch (e) { /* ignore */ }
       }
@@ -47,16 +47,16 @@
     _bindEvents: function () {
       var self = this;
 
-      VT.on('#vt-btn-start', 'click', function () {
+      VT.on('#vt-astro-btn-start', 'click', function () {
         VT.Analytics.track('vt_tirage_started', { type: 'compatibilite-astrologique' });
         VT.StepEngine.next();
       });
 
-      VT.on('#vt-btn-tirage', 'click', function () {
+      VT.on('#vt-astro-btn-tirage', 'click', function () {
         self._doTirage();
       });
 
-      VT.on('#vt-btn-restart', 'click', function () {
+      VT.on('#vt-astro-btn-restart', 'click', function () {
         self._restart();
       });
 
@@ -66,12 +66,12 @@
 
       window._vtShareImage = function () { self._shareImage(); };
 
-      VT.on('#vt-email-form', 'submit', function (e) {
+      VT.on('#vt-astro-email-form', 'submit', function (e) {
         e.preventDefault();
         VT.App.submitEmail(self);
       });
 
-      VT.on('#vt-extend-form', 'submit', function (e) {
+      VT.on('#vt-astro-extend-form', 'submit', function (e) {
         e.preventDefault();
         VT.App.extendRateLimit(self);
       });
@@ -239,7 +239,7 @@
     _showResult: function (result) {
       VT.StepEngine.goTo(3);
 
-      var headerEl = VT.$('#vt-result-header');
+      var headerEl = VT.$('#vt-astro-result-header');
       if (headerEl && this._sign1 && this._sign2) {
         headerEl.innerHTML =
           '<div class="vt-result-person">' +
@@ -253,23 +253,23 @@
           '</div>';
       }
 
-      var scoreEl = VT.$('#vt-result-score');
+      var scoreEl = VT.$('#vt-astro-result-score');
       if (scoreEl) VT.App.animateScore(scoreEl, result.score);
 
       var barFill = VT.$('.vt-astro-score-bar-fill');
       if (barFill) barFill.style.width = result.score + '%';
 
-      var profileEl = VT.$('#vt-result-profile');
+      var profileEl = VT.$('#vt-astro-result-profile');
       if (profileEl) profileEl.textContent = result.profilCombine;
 
-      var traitsEl = VT.$('#vt-result-traits');
+      var traitsEl = VT.$('#vt-astro-result-traits');
       if (traitsEl) {
         traitsEl.innerHTML = result.traits.map(function (t) {
           return '<li>' + VT.App.sanitize(t) + '</li>';
         }).join('');
       }
 
-      var adviceEl = VT.$('#vt-result-advice');
+      var adviceEl = VT.$('#vt-astro-result-advice');
       if (adviceEl) adviceEl.textContent = result.conseils;
 
       var ttsText = result.profilCombine + ' ' + result.conseils;
@@ -281,19 +281,19 @@
     },
 
     _hideError: function () {
-      var errorEl = VT.$('#vt-error');
+      var errorEl = VT.$('#vt-astro-error');
       if (errorEl) errorEl.classList.add('vt-hidden');
     },
 
     _extendRateLimit: function () {
-      var email = VT.$('#vt-extend-email').value.trim();
+      var email = VT.$('#vt-astro-extend-email').value.trim();
       if (!email || !email.includes('@')) return;
 
       var tirageId = this.config.tirageId || 'compat-astro';
       VT.RateLimiter.extendLimit(tirageId);
       VT.Analytics.track('vt_rate_limit_extended', { type: 'compatibilite-astrologique' });
 
-      var modal = VT.$('#vt-rate-limit-modal');
+      var modal = VT.$('#vt-astro-rate-limit-modal');
       if (modal) modal.classList.remove('vt-modal--open');
 
       this._doTirage();
@@ -301,14 +301,14 @@
 
 
     _submitEmail: function () {
-      var email = VT.$('#vt-email-input').value.trim();
+      var email = VT.$('#vt-astro-email-input').value.trim();
       if (!email || !email.includes('@')) return;
 
       var self = this;
       VT.Email.submit(email)
         .then(function () {
           VT.Analytics.track('vt_email_submitted', { type: 'compatibilite-astrologique' });
-          var formEl = VT.$('#vt-email-form');
+          var formEl = VT.$('#vt-astro-email-form');
           var successEl = VT.$('.vt-email-success');
           if (formEl) formEl.classList.add('vt-hidden');
           if (successEl) successEl.classList.remove('vt-hidden');
@@ -323,7 +323,7 @@
       var scoreText = (VT.$('#vt-result-score') || {}).textContent || '0%';
       var score = parseInt(scoreText, 10) || 0;
       var sign1 = this._sign1, sign2 = this._sign2;
-      var profileEl = VT.$('#vt-result-profile');
+      var profileEl = VT.$('#vt-astro-result-profile');
       var phrase = profileEl ? profileEl.textContent.trim() : '';
 
       var SC = 2, W = 512, H = 896;
@@ -474,9 +474,9 @@
         var dataURL;
         try { dataURL=canvas.toDataURL('image/png'); }
         catch(e) { console.error('[VT] canvas.toDataURL failed:',e); return; }
-        var modal=document.getElementById('vt-share-modal');
-        var preview=document.getElementById('vt-share-preview');
-        var dlBtn=document.getElementById('vt-share-download');
+        var modal=document.getElementById('vt-astro-share-modal');
+        var preview=document.getElementById('vt-astro-share-preview');
+        var dlBtn=document.getElementById('vt-astro-share-download');
         if(!modal) return;
         if(preview) preview.src=dataURL;
         if(dlBtn){ dlBtn.href=dataURL; dlBtn.download='compatibilite-astrologique.png'; }
@@ -495,7 +495,7 @@
         b.classList.remove('vt-astro-sign--selected');
       });
 
-      var scoreEl = VT.$('#vt-result-score');
+      var scoreEl = VT.$('#vt-astro-result-score');
       if (scoreEl) scoreEl.textContent = '0%';
 
       var barFill = VT.$('.vt-astro-score-bar-fill');

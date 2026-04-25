@@ -43,11 +43,11 @@ function vt_render_shortcode( $atts ) {
 	$handle = 'vt-app-' . $atts['type'];
 	$inline = "(function(){"
 		. "if(!localStorage.getItem('vt_theme'))localStorage.setItem('vt_theme','" . esc_js( $theme ) . "');"
-		. "var splash=document.getElementById('vt-splash'),container=document.querySelector('.vt-container');"
+		. "var splash=document.querySelector('.vt-splash'),container=document.querySelector('.vt-container');"
 		. "if(!splash){if(container)container.classList.add('vt-ready')}"
 		. "else{setTimeout(function(){splash.classList.add('vt-splash--hiding');setTimeout(function(){splash.remove();if(container)container.classList.add('vt-ready');window.scrollTo(0,0)},600)},2600)}"
 		. "function rainHearts(){var s=['\\u2764','\\u2665','\\u2763'];for(var i=0;i<25;i++){var h=document.createElement('span');h.className='vt-heart-particle';h.textContent=s[i%3];h.style.left=(5+Math.random()*90)+'vw';h.style.top='-30px';h.style.fontSize=(12+Math.random()*16)+'px';h.style.animationDuration=(3+Math.random()*3)+'s';h.style.animationDelay=(0.1+Math.random()*1.8)+'s';document.body.appendChild(h);(function(el){setTimeout(function(){el.remove()},8000)})(h)}}"
-		. "var rained=false;new MutationObserver(function(){if(!rained&&document.querySelector('.vt-step[data-step=\"result\"].vt-step--active')){rained=true;setTimeout(function(){var s=document.getElementById('vt-result-score');var pct=s?parseInt(s.textContent):0;if(pct>65)rainHearts()},1700)}}).observe(document.body,{attributes:true,subtree:true,attributeFilter:['class']})"
+		. "var rained=false;new MutationObserver(function(){if(!rained&&document.querySelector('.vt-step[data-step=\"result\"].vt-step--active')){rained=true;setTimeout(function(){var s=document.querySelector('[id*=\"result-score\"],[id*=\"result-number\"]');var pct=s?parseInt(s.textContent):0;if(pct>65)rainHearts()},1700)}}).observe(document.body,{attributes:true,subtree:true,attributeFilter:['class']})"
 		. "})();";
 	wp_add_inline_script( $handle, $inline, 'after' );
 
