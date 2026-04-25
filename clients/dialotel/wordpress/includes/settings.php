@@ -186,10 +186,10 @@ function vt_register_settings() {
 			};
 		}
 		// CTA URL optionnel si CTA désactivé
-		if ( $setting === 'vt_cta_url' && ! get_option( 'vt_cta_enabled', true ) ) {
+		if ( $setting === 'vt_cta_url' && ! get_option( 'vt_cta_enabled', false ) ) {
 			$args['sanitize_callback'] = function( $value ) { return '#'; };
 		}
-		if ( $setting === 'vt_astro_cta_url' && ! get_option( 'vt_astro_cta_enabled', true ) ) {
+		if ( $setting === 'vt_astro_cta_url' && ! get_option( 'vt_astro_cta_enabled', false ) ) {
 			$args['sanitize_callback'] = function( $value ) { return '#'; };
 		}
 		register_setting( 'vt_settings_group', $setting, $args );
@@ -212,10 +212,17 @@ function vt_register_settings() {
    SAUVEGARDE + CREATION PAGE
    ============================================================ */
 
-// Apres sauvegarde reglages → mettre a jour la page
+// Apres sauvegarde reglages → mettre a jour les pages
 add_action( 'admin_init', function() {
 	if ( isset( $_GET['page'] ) && $_GET['page'] === 'voyance-tirages' && isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] === 'true' ) {
-		vt_ensure_page_exists();
+		// Compat. Amoureuse
+		if ( get_option( 'vt_app_amoureuse_enabled', '0' ) === '1' ) {
+			vt_ensure_app_page( 'compatibilite-amoureuse', 'vt_page_slug', 'tirage-compatibilite-amoureuse', 'vt_page_title', 'Compatibilite Amoureuse' );
+		}
+		// Compat. Astrologique
+		if ( get_option( 'vt_app_astro_enabled', '0' ) === '1' ) {
+			vt_ensure_app_page( 'compatibilite-astrologique', 'vt_astro_page_slug', 'tirage-compatibilite-astrologique', 'vt_astro_page_title', 'Compatibilite Astrologique' );
+		}
 	}
 });
 
@@ -315,10 +322,10 @@ function vt_render_admin_page() {
 			<div class="vt-admin-panel <?php echo $active_tab === 'applications' ? 'active' : ''; ?>">
 
 				<?php
-				$vt_am_slug   = get_option( 'vt_page_slug', 'compatibilite-amoureuse' );
+				$vt_am_slug   = get_option( 'vt_page_slug', 'tirage-compatibilite-amoureuse' );
 				$vt_am_page   = get_page_by_path( $vt_am_slug, OBJECT, 'page' );
 				$vt_am_url    = $vt_am_page ? get_permalink( $vt_am_page->ID ) : '';
-				$vt_as_slug   = get_option( 'vt_astro_page_slug', 'compatibilite-astrologique' );
+				$vt_as_slug   = get_option( 'vt_astro_page_slug', 'tirage-compatibilite-astrologique' );
 				$vt_as_page   = get_page_by_path( $vt_as_slug, OBJECT, 'page' );
 				$vt_as_url    = $vt_as_page ? get_permalink( $vt_as_page->ID ) : '';
 				?>
@@ -335,7 +342,7 @@ function vt_render_admin_page() {
 						</div>
 						<label class="vt-admin-toggle">
 							<input type="hidden" name="vt_app_amoureuse_enabled" value="0">
-							<input type="checkbox" name="vt_app_amoureuse_enabled" value="1" <?php checked( get_option( 'vt_app_amoureuse_enabled', '1' ), '1' ); ?>>
+							<input type="checkbox" name="vt_app_amoureuse_enabled" value="1" <?php checked( get_option( 'vt_app_amoureuse_enabled', '0' ), '1' ); ?>>
 							<span class="vt-admin-toggle-slider"></span>
 						</label>
 					</div>
@@ -362,7 +369,7 @@ function vt_render_admin_page() {
 						</div>
 						<label class="vt-admin-toggle">
 							<input type="hidden" name="vt_app_astro_enabled" value="0">
-							<input type="checkbox" name="vt_app_astro_enabled" value="1" <?php checked( get_option( 'vt_app_astro_enabled', '1' ), '1' ); ?>>
+							<input type="checkbox" name="vt_app_astro_enabled" value="1" <?php checked( get_option( 'vt_app_astro_enabled', '0' ), '1' ); ?>>
 							<span class="vt-admin-toggle-slider"></span>
 						</label>
 					</div>
@@ -424,8 +431,8 @@ function vt_render_admin_page() {
 					</div>
 					<div class="vt-admin-field">
 						<label for="vt_page_slug">Slug (URL)</label>
-						<input type="text" name="vt_page_slug" id="vt_page_slug" value="<?php echo esc_attr( get_option( 'vt_page_slug', 'compatibilite-amoureuse' ) ); ?>">
-						<p class="description">L'URL sera : <?php echo esc_url( home_url( '/' ) ); ?><span id="vt-slug-preview"><?php echo esc_html( get_option( 'vt_page_slug', 'compatibilite-amoureuse' ) ); ?></span></p>
+						<input type="text" name="vt_page_slug" id="vt_page_slug" value="<?php echo esc_attr( get_option( 'vt_page_slug', 'tirage-compatibilite-amoureuse' ) ); ?>">
+						<p class="description">L'URL sera : <?php echo esc_url( home_url( '/' ) ); ?><span id="vt-slug-preview"><?php echo esc_html( get_option( 'vt_page_slug', 'tirage-compatibilite-amoureuse' ) ); ?></span></p>
 					</div>
 					<div class="vt-admin-field">
 						<label for="vt_meta_title">Meta title</label>
@@ -500,11 +507,11 @@ function vt_render_admin_page() {
 						<span class="vt-admin-toggle-label">Activer le CTA voyants</span>
 						<label class="vt-admin-toggle">
 							<input type="hidden" name="vt_cta_enabled" value="0">
-							<input type="checkbox" id="vt_cta_enabled" name="vt_cta_enabled" value="1" <?php checked( get_option('vt_cta_enabled', true) ); ?>>
+							<input type="checkbox" id="vt_cta_enabled" name="vt_cta_enabled" value="1" <?php checked( get_option('vt_cta_enabled', false) ); ?>>
 							<span class="vt-admin-toggle-slider"></span>
 						</label>
 					</div>
-					<fieldset id="vt-cta-fieldset" <?php echo ! get_option('vt_cta_enabled', true) ? 'style="display:none;"' : ''; ?>>
+					<fieldset id="vt-cta-fieldset" <?php echo ! get_option('vt_cta_enabled', false) ? 'style="display:none;"' : ''; ?>>
 						<div class="vt-admin-field" style="margin-top:0.75rem;">
 							<label for="vt_cta_hook">Texte d'accroche</label>
 							<input type="text" name="vt_cta_hook" id="vt_cta_hook" value="<?php echo esc_attr( get_option('vt_cta_hook') ); ?>">
@@ -596,8 +603,8 @@ function vt_render_admin_page() {
 						</div>
 						<div class="vt-admin-field">
 							<label for="vt_astro_page_slug">Slug (URL)</label>
-							<input type="text" name="vt_astro_page_slug" id="vt_astro_page_slug" value="<?php echo esc_attr( get_option( 'vt_astro_page_slug', 'compatibilite-astrologique' ) ); ?>">
-							<p class="description">L'URL sera : <?php echo esc_url( home_url( '/' ) ); ?><span id="vt-astro-slug-preview"><?php echo esc_html( get_option( 'vt_astro_page_slug', 'compatibilite-astrologique' ) ); ?></span></p>
+							<input type="text" name="vt_astro_page_slug" id="vt_astro_page_slug" value="<?php echo esc_attr( get_option( 'vt_astro_page_slug', 'tirage-compatibilite-astrologique' ) ); ?>">
+							<p class="description">L'URL sera : <?php echo esc_url( home_url( '/' ) ); ?><span id="vt-astro-slug-preview"><?php echo esc_html( get_option( 'vt_astro_page_slug', 'tirage-compatibilite-astrologique' ) ); ?></span></p>
 						</div>
 						<div class="vt-admin-field">
 							<label for="vt_astro_meta_title">Meta title</label>
@@ -696,7 +703,7 @@ function vt_render_admin_page() {
 							<span class="vt-admin-toggle-label">Activer le CTA voyants</span>
 							<label class="vt-admin-toggle">
 								<input type="hidden" name="vt_astro_cta_enabled" value="0">
-								<input type="checkbox" name="vt_astro_cta_enabled" value="1" <?php checked( get_option('vt_astro_cta_enabled', true) ); ?>>
+								<input type="checkbox" name="vt_astro_cta_enabled" value="1" <?php checked( get_option('vt_astro_cta_enabled', false) ); ?>>
 								<span class="vt-admin-toggle-slider"></span>
 							</label>
 						</div>

@@ -31,6 +31,30 @@ $email_desc     = get_option( 'vt_astro_email_desc', 'Recevez votre bon de reduc
 $email_btn      = get_option( 'vt_astro_email_btn', 'Recevoir mon bon -' . $discount_pct . '%' );
 $email_legal    = get_option( 'vt_astro_email_legal', 'En soumettant votre email, vous acceptez de recevoir des communications de Hexagon Voyance. Desabonnement possible a tout moment.' );
 $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
+
+// FAQ defaults
+$faq_defaults = array(
+	1 => array(
+		'q' => 'Comment fonctionne la compatibilite astrologique ?',
+		'a' => 'Notre outil analyse les affinites entre vos signes du zodiaque selon les traditions astrologiques, en tenant compte des elements (Feu, Terre, Air, Eau) et des modalites de chaque signe.',
+	),
+	2 => array(
+		'q' => 'Quels signes sont les plus compatibles ?',
+		'a' => 'Certaines associations sont reconnues comme harmonieuses : Belier-Lion, Taureau-Vierge, Gemeaux-Balance... mais chaque relation reste unique et va au-dela du seul signe solaire.',
+	),
+	3 => array(
+		'q' => 'Le tirage astrologique est-il fiable ?',
+		'a' => 'Il reflete des traditions milleniaires de l\'astrologie occidentale. C\'est un outil de reflexion et d\'exploration, non une certitude absolue sur l\'avenir de votre relation.',
+	),
+	4 => array(
+		'q' => 'Puis-je refaire le tirage plusieurs fois ?',
+		'a' => 'Oui, plusieurs tirages gratuits sont disponibles par jour. Pour une analyse complete de votre theme astral et de vos relations, nos astrologues sont disponibles.',
+	),
+	5 => array(
+		'q' => 'Faut-il connaitre l\'heure de naissance ?',
+		'a' => 'Non, le signe solaire suffit pour ce tirage. Pour une analyse plus fine integrant l\'ascendant et les planetes, nos astrologues peuvent approfondir votre theme natal.',
+	),
+);
 ?>
 
 <div class="vt-app" data-theme="<?php echo esc_attr( $default_theme ); ?>">
@@ -273,9 +297,8 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 				<div class="vt-faq" style="margin-top:2.5rem; text-align:left;">
 					<h2 class="vt-astro-section-title" style="margin-bottom:1.25rem;"><?php echo esc_html( get_option( 'vt_astro_faq_title', 'Questions frequentes' ) ); ?></h2>
 					<?php for ( $i = 1; $i <= 5; $i++ ) :
-						$faq_q = get_option( "vt_astro_faq_q{$i}" );
-						$faq_a = get_option( "vt_astro_faq_a{$i}" );
-						if ( ! $faq_q || ! $faq_a ) continue;
+						$faq_q = get_option( "vt_astro_faq_q{$i}" ) ?: $faq_defaults[$i]['q'];
+						$faq_a = get_option( "vt_astro_faq_a{$i}" ) ?: $faq_defaults[$i]['a'];
 					?>
 					<details class="vt-faq-item">
 						<summary class="vt-faq-q"><?php echo esc_html( $faq_q ); ?></summary>
