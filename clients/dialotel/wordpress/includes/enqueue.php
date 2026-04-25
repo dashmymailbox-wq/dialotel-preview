@@ -34,9 +34,16 @@ add_action( 'wp_enqueue_scripts', 'vt_enqueue_assets' );
 add_action( 'wp_head', 'vt_inject_og_tags' );
 
 function vt_enqueue_assets() {
-	// Detection du shortcode via has_shortcode() (fiable contrairement a la globale)
+	// Detection du shortcode : has_shortcode() pour classic, ou shortcode dans blocks pour Gutenberg
 	global $post;
-	if ( ! is_a( $post, 'WP_Post' ) || ! has_shortcode( $post->post_content, 'tirage_voyance' ) ) return;
+	if ( ! is_a( $post, 'WP_Post' ) ) return;
+
+	$has_shortcode = has_shortcode( $post->post_content, 'tirage_voyance' );
+	// Fallback pour Gutenberg : chercher dans le contenu brut si le shortcode est dans un bloc
+	if ( ! $has_shortcode && function_exists( 'has_blocks' ) && has_blocks( $post ) ) {
+		$has_shortcode = strpos( $post->post_content, '[tirage_voyance' ) !== false;
+	}
+	if ( ! $has_shortcode ) return;
 
 	// Google Fonts
 	wp_enqueue_style(
