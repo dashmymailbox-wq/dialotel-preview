@@ -29,6 +29,11 @@ function vt_render_shortcode( $atts ) {
 		return '<p style="color:red;">Type de tirage invalide.</p>';
 	}
 
+	// Verifier si l'app est activee
+	if ( ! get_option( 'vt_app_' . $atts['type'] . '_enabled', true ) ) {
+		return '';
+	}
+
 	// Enqueue les assets
 	vt_enqueue_tirage_assets( $atts['type'] );
 

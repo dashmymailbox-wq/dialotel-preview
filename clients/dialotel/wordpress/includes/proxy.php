@@ -57,7 +57,7 @@ function vt_get_provider_config( $provider ) {
 	$defaults = array(
 		'mistral' => array( 'key_opt' => 'vt_ai_mistral_key', 'model_opt' => 'vt_ai_mistral_model', 'model_default' => 'mistral-small-latest' ),
 		'openai'  => array( 'key_opt' => 'vt_ai_openai_key',  'model_opt' => 'vt_ai_openai_model',  'model_default' => 'gpt-4o-mini' ),
-		'claude'  => array( 'key_opt' => 'vt_ai_claude_key',  'model_opt' => 'vt_ai_claude_model',  'model_default' => 'claude-sonnet-4-6-20250514' ),
+		'claude'  => array( 'key_opt' => 'vt_ai_claude_key',  'model_opt' => 'vt_ai_claude_model',  'model_default' => 'claude-sonnet-4-6' ),
 	);
 	if ( ! isset( $defaults[ $provider ] ) ) return false;
 	$d   = $defaults[ $provider ];
@@ -98,6 +98,11 @@ function vt_ai_proxy() {
 	// FIX 4 : Limite de taille du prompt
 	if ( mb_strlen( $prompt ) > 4000 ) {
 		wp_send_json_error( array( 'message' => 'Prompt trop long (max 4000 caracteres).' ), 400 );
+	}
+
+	// Limite de taille du system prompt
+	if ( mb_strlen( $system_prompt ) > 8000 ) {
+		wp_send_json_error( array( 'message' => 'System prompt trop long (max 8000 caracteres).' ), 400 );
 	}
 
 	// Construction messages (base commune pour tous les providers)
@@ -311,14 +316,13 @@ function vt_email_proxy() {
 	}
 
 	$code = wp_remote_retrieve_response_code( $response );
-	// 204 = contact existe deja, c'est OK
-	if ( $code >= 400 && $code !== 204 ) {
+	// Accepter 200, 201, 204 (contact existe deja) comme succes
+	if ( ! in_array( $code, array( 200, 201, 204 ), true ) ) {
 		$details = json_decode( wp_remote_retrieve_body( $response ), true );
 		VT_Logger::log( 'Brevo API ' . $code . ' : ' . wp_json_encode( $details ), 'error' );
-		wp_send_json_error( array( 'message' => 'Erreur temporaire. Reessayez.' ), $code );
+		wp_send_json_error( array( 'message' => 'Erreur temporaire. Reessayez.' ), 500 );
 	}
 
-	VT_Logger::log( 'Email enregistre : ' . $email, 'success' );
 	wp_send_json_success( array( 'message' => 'Email enregistre.' ) );
 }
 

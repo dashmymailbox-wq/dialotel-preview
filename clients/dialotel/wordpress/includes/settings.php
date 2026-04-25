@@ -493,22 +493,24 @@ function vt_render_admin_page() {
 						<span class="vt-admin-toggle-label">Activer le CTA voyants</span>
 						<label class="vt-admin-toggle">
 							<input type="hidden" name="vt_cta_enabled" value="0">
-							<input type="checkbox" name="vt_cta_enabled" value="1" <?php checked( get_option('vt_cta_enabled', true) ); ?>>
+							<input type="checkbox" id="vt_cta_enabled" name="vt_cta_enabled" value="1" <?php checked( get_option('vt_cta_enabled', true) ); ?>>
 							<span class="vt-admin-toggle-slider"></span>
 						</label>
 					</div>
-					<div class="vt-admin-field" style="margin-top:0.75rem;">
-						<label for="vt_cta_hook">Texte d'accroche</label>
-						<input type="text" name="vt_cta_hook" id="vt_cta_hook" value="<?php echo esc_attr( get_option('vt_cta_hook') ); ?>">
-					</div>
-					<div class="vt-admin-field">
-						<label for="vt_cta_btn_text">Texte du bouton</label>
-						<input type="text" name="vt_cta_btn_text" id="vt_cta_btn_text" value="<?php echo esc_attr( get_option('vt_cta_btn_text') ); ?>">
-					</div>
-					<div class="vt-admin-field">
-						<label for="vt_cta_url">URL destination</label>
-						<input type="url" name="vt_cta_url" id="vt_cta_url" value="<?php echo esc_attr( get_option('vt_cta_url', '#') ); ?>">
-					</div>
+					<fieldset id="vt-cta-fieldset" <?php echo ! get_option('vt_cta_enabled', true) ? 'style="display:none;"' : ''; ?>>
+						<div class="vt-admin-field" style="margin-top:0.75rem;">
+							<label for="vt_cta_hook">Texte d'accroche</label>
+							<input type="text" name="vt_cta_hook" id="vt_cta_hook" value="<?php echo esc_attr( get_option('vt_cta_hook') ); ?>">
+						</div>
+						<div class="vt-admin-field">
+							<label for="vt_cta_btn_text">Texte du bouton</label>
+							<input type="text" name="vt_cta_btn_text" id="vt_cta_btn_text" value="<?php echo esc_attr( get_option('vt_cta_btn_text') ); ?>">
+						</div>
+						<div class="vt-admin-field">
+							<label for="vt_cta_url">URL destination</label>
+							<input type="url" name="vt_cta_url" id="vt_cta_url" value="<?php echo esc_attr( get_option('vt_cta_url', '#') ); ?>">
+						</div>
+					</fieldset>
 				</div>
 
 				<!-- FAQ -->
@@ -1042,6 +1044,16 @@ function vt_render_admin_page() {
 		});
 		$('#vt_astro_page_slug').on('input', function() {
 			$('#vt-astro-slug-preview').text($(this).val());
+		});
+
+		// CTA toggle show/hide fieldset
+		$('#vt_cta_enabled').on('change', function() {
+			var fieldset = $('#vt-cta-fieldset');
+			if ($(this).is(':checked')) {
+				fieldset.show();
+			} else {
+				fieldset.hide();
+			}
 		});
 
 		// === Log viewer (AJAX) ===

@@ -42,6 +42,14 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 	</button>
 	<?php endif; ?>
 
+	<div class="vt-splash" id="vt-splash" aria-hidden="true">
+		<?php
+		$brand_logo = get_option( 'vt_brand_logo', '' );
+		$logo_src   = ! empty( $brand_logo ) ? $brand_logo : $assets_url . 'logo-hexagon-voyance.webp';
+		?>
+		<img class="vt-splash-logo" src="<?php echo esc_url( $logo_src ); ?>" alt="<?php echo esc_attr( $brand_name ); ?>">
+	</div>
+
 	<div class="vt-stars-layer">
 		<img src="<?php echo esc_url( $assets_url . 'textures/cosmic-gradient.svg' ); ?>" alt="" class="vt-stars-img" aria-hidden="true">
 	</div>
@@ -267,7 +275,7 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 					<?php for ( $i = 1; $i <= 5; $i++ ) :
 						$faq_q = get_option( "vt_astro_faq_q{$i}" );
 						$faq_a = get_option( "vt_astro_faq_a{$i}" );
-						if ( ! $faq_q ) continue;
+						if ( ! $faq_q || ! $faq_a ) continue;
 					?>
 					<details class="vt-faq-item">
 						<summary class="vt-faq-q"><?php echo esc_html( $faq_q ); ?></summary>
