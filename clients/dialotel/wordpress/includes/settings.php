@@ -185,6 +185,13 @@ function vt_register_settings() {
 				return $value ? '1' : '0';
 			};
 		}
+		// CTA URL optionnel si CTA désactivé
+		if ( $setting === 'vt_cta_url' && ! get_option( 'vt_cta_enabled', true ) ) {
+			$args['sanitize_callback'] = function( $value ) { return '#'; };
+		}
+		if ( $setting === 'vt_astro_cta_url' && ! get_option( 'vt_astro_cta_enabled', true ) ) {
+			$args['sanitize_callback'] = function( $value ) { return '#'; };
+		}
 		register_setting( 'vt_settings_group', $setting, $args );
 	}
 
