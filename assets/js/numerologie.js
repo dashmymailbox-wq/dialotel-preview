@@ -17,7 +17,7 @@
       VT.TTS.init(this.config.tts || {});
       VT.Email.init(this.config.emailCapture || {});
 
-      var i18nEl = document.getElementById('vt-i18n');
+      var i18nEl = document.getElementById('vt-numero-i18n');
       if (i18nEl) {
         try { VT.I18n.init(JSON.parse(i18nEl.textContent)); } catch (e) { /* ignore */ }
       }
@@ -31,16 +31,16 @@
     _bindEvents: function () {
       var self = this;
 
-      VT.on('#vt-btn-start', 'click', function () {
+      VT.on('#vt-numero-btn-start', 'click', function () {
         VT.Analytics.track('vt_tirage_started', { type: 'numerologie' });
         VT.StepEngine.next();
       });
 
-      VT.on('#vt-btn-tirage', 'click', function () {
+      VT.on('#vt-numero-btn-tirage', 'click', function () {
         self._doTirage();
       });
 
-      VT.on('#vt-btn-restart', 'click', function () {
+      VT.on('#vt-numero-btn-restart', 'click', function () {
         self._restart();
       });
 
@@ -48,24 +48,15 @@
         VT.TTS.toggle();
       });
 
-      VT.on('#vt-email-form', 'submit', function (e) {
+      VT.on('#vt-numero-email-form', 'submit', function (e) {
         e.preventDefault();
-        self._submitEmail();
+        VT.App.submitEmail(self);
       });
 
-      VT.on('#vt-extend-form', 'submit', function (e) {
+      VT.on('#vt-numero-extend-form', 'submit', function (e) {
         e.preventDefault();
-        self._extendRateLimit();
+        VT.App.extendRateLimit(self);
       });
-    },
-
-    _checkRateLimit: function () {
-      var tirageId = this.config.tirageId || 'numerologie';
-      var remaining = VT.RateLimiter.getRemaining(tirageId);
-      var infoEl = VT.$('.vt-rate-info');
-      if (infoEl && remaining !== Infinity) {
-        infoEl.textContent = VT.I18n.t('rateLimiter.remaining', { count: remaining });
-      }
     },
 
     _calculateLifePath: function (dateStr) {
@@ -99,25 +90,25 @@
       }
 
       var fullName = '';
-      var nameEl = VT.$('#vt-fullname');
+      var nameEl = VT.$('#vt-numero-fullname');
       if (nameEl) fullName = nameEl.value.trim();
 
       var birthDate = '';
-      var birthEl = VT.$('#vt-birthdate');
+      var birthEl = VT.$('#vt-numero-birthdate');
       if (birthEl) birthDate = birthEl.value;
 
       if (!fullName) {
-        VT.App.showError(this,'Veuillez entrer votre prenom complet.');
+        VT.App.showError(this, 'Veuillez entrer votre prenom complet.');
         return;
       }
       if (!birthDate) {
-        VT.App.showError(this,'Veuillez entrer votre date de naissance.');
+        VT.App.showError(this, 'Veuillez entrer votre date de naissance.');
         return;
       }
 
       var lifePath = this._calculateLifePath(birthDate);
       if (!lifePath) {
-        VT.App.showError(this,'Date de naissance invalide.');
+        VT.App.showError(this, 'Date de naissance invalide.');
         return;
       }
 
@@ -147,12 +138,12 @@
               VT.Counter.increment();
               VT.Analytics.track('vt_tirage_completed', { type: 'numerologie', lifePath: lifePath });
             } else {
-              self._showError('Impossible d\'interpreter le resultat. Reessayez.');
+              VT.App.showError(self, 'Impossible d\'interpreter le resultat. Reessayez.');
             }
           })
           .catch(function (err) {
             console.error('[VT] Erreur IA :', err);
-            self._showError('Nos voyants sont tres sollicites en ce moment. Reessayez dans quelques instants.');
+            VT.App.showError(self, 'Nos voyants sont tres sollicites en ce moment. Reessayez dans quelques instants.');
           });
       }, 2000);
     },
@@ -206,27 +197,27 @@
       VT.StepEngine.goTo(3);
 
       // Chiffre de vie
-      var numEl = VT.$('#vt-result-number');
+      var numEl = VT.$('#vt-numero-result-number');
       if (numEl) numEl.textContent = result.chiffreDeVie;
 
       // Description
-      var descEl = VT.$('#vt-result-description');
+      var descEl = VT.$('#vt-numero-result-description');
       if (descEl) descEl.textContent = result.description;
 
       // Forces
-      var forcesEl = VT.$('#vt-result-forces');
+      var forcesEl = VT.$('#vt-numero-result-forces');
       if (forcesEl) forcesEl.innerHTML = result.forces.map(function (f) {
         return '<li>' + f + '</li>';
       }).join('');
 
       // Defis
-      var defisEl = VT.$('#vt-result-defis');
+      var defisEl = VT.$('#vt-numero-result-defis');
       if (defisEl) defisEl.innerHTML = result.defis.map(function (d) {
         return '<li>' + d + '</li>';
       }).join('');
 
       // Conseil
-      var conseilEl = VT.$('#vt-result-advice');
+      var conseilEl = VT.$('#vt-numero-result-advice');
       if (conseilEl) conseilEl.textContent = result.conseil;
 
       // TTS
@@ -238,85 +229,30 @@
       var emailConfig = this.config.emailCapture || {};
       if (emailConfig.enabled) {
         setTimeout(function () {
-          self._showEmailModal();
+          VT.App.showEmailModal();
           VT.Analytics.track('vt_email_shown');
         }, 3000);
       }
     },
 
-    _showError: function (message) {
-      VT.StepEngine.goTo(1);
-      var errorEl = VT.$('#vt-error');
-      if (errorEl) {
-        errorEl.querySelector('p').textContent = message;
-        errorEl.classList.remove('vt-hidden');
-      }
-    },
-
-    _hideError: function () {
-      var errorEl = VT.$('#vt-error');
-      if (errorEl) errorEl.classList.add('vt-hidden');
-    },
-
-    _showRateLimitModal: function () {
-      var modal = VT.$('#vt-rate-limit-modal');
-      if (modal) modal.classList.add('vt-modal--open');
-    },
-
-    _showEmailModal: function () {
-      var modal = VT.$('#vt-email-modal');
-      if (modal) modal.classList.add('vt-modal--open');
-    },
-
-    _submitEmail: function () {
-      var email = VT.$('#vt-email-input').value.trim();
-      if (!email || !email.includes('@')) return;
-
-      var self = this;
-      VT.Email.submit(email)
-        .then(function () {
-          VT.Analytics.track('vt_email_submitted', { type: 'numerologie' });
-          var formEl = VT.$('#vt-email-form');
-          var successEl = VT.$('.vt-email-success');
-          if (formEl) formEl.classList.add('vt-hidden');
-          if (successEl) successEl.classList.remove('vt-hidden');
-        })
-        .catch(function () {
-          self._showError('Erreur lors de l\'envoi. Reessayez.');
-        });
-    },
-
-    _extendRateLimit: function () {
-      var email = VT.$('#vt-extend-email').value.trim();
-      if (!email || !email.includes('@')) return;
-
-      var tirageId = this.config.tirageId || 'numerologie';
-      VT.RateLimiter.extendLimit(tirageId);
-      VT.Analytics.track('vt_rate_limit_extended', { type: 'numerologie' });
-
-      var modal = VT.$('#vt-rate-limit-modal');
-      if (modal) modal.classList.remove('vt-modal--open');
-      this._doTirage();
-    },
-
     _restart: function () {
       VT.TTS.stop();
 
-      var nameEl = VT.$('#vt-fullname');
+      var nameEl = VT.$('#vt-numero-fullname');
       if (nameEl) nameEl.value = '';
-      var birthEl = VT.$('#vt-birthdate');
+      var birthEl = VT.$('#vt-numero-birthdate');
       if (birthEl) birthEl.value = '';
 
       VT.$$('.vt-modal-overlay').forEach(function (m) {
         m.classList.remove('vt-modal--open');
       });
 
-      var emailForm = VT.$('#vt-email-form');
+      var emailForm = VT.$('#vt-numero-email-form');
       var emailSuccess = VT.$('.vt-email-success');
       if (emailForm) emailForm.classList.remove('vt-hidden');
       if (emailSuccess) emailSuccess.classList.add('vt-hidden');
 
-      this._hideError();
+      VT.App.hideError(this);
       VT.App.checkRateLimit(this);
       VT.StepEngine.goTo(0);
     }

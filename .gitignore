@@ -10,11 +10,7 @@ desktop.ini
 *.swo
 
 # Config reels (cles API reelles)
-assets/data/config/*.config.json
-!assets/data/config/config.example.json
-
-# Fonts clients (fichiers fournis par le client, pas sur git)
-clients/*/fonts/
+config/*.config.json
 
 # Logs
 *.log

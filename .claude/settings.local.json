@@ -61,7 +61,16 @@
       "Bash(npx claude-mem:*)",
       "Bash(bash)",
       "Bash(cp /home/caums/.claude/projects/-mnt-c-Users-Olivier-Desktop-CLAUDE-Z-AI-PLUGIN-TIRAGES/memory/MEMORY.md /home/caums/.claude/projects/-mnt-c-Users-Olivier-desktop-claude-Z-AI-PLUGIN-TIRAGES/memory/MEMORY.md)",
-      "Bash(cp /home/caums/.claude/projects/-mnt-c-Users-Olivier-Desktop-CLAUDE-Z-AI-PLUGIN-TIRAGES/memory/feedback_wp_menu_footer.md /home/caums/.claude/projects/-mnt-c-Users-Olivier-desktop-claude-Z-AI-PLUGIN-TIRAGES/memory/feedback_wp_menu_footer.md)"
+      "Bash(cp /home/caums/.claude/projects/-mnt-c-Users-Olivier-Desktop-CLAUDE-Z-AI-PLUGIN-TIRAGES/memory/feedback_wp_menu_footer.md /home/caums/.claude/projects/-mnt-c-Users-Olivier-desktop-claude-Z-AI-PLUGIN-TIRAGES/memory/feedback_wp_menu_footer.md)",
+      "Bash(npx @wp-now/wp-now start --path=/tmp/dialotel-preview/wordpress --skip-browser)",
+      "Bash(git -C /tmp/dialotel-preview log --oneline -5)",
+      "PowerShell(Stop-Process -Name \"node\" -Force -ErrorAction SilentlyContinue)",
+      "Bash(npx @wp-now/wp-now start --path=\"c:/Users/Olivier/Desktop/CLAUDE/Z-AI_PLUGIN_TIRAGES/wordpress\" --skip-browser)",
+      "Bash(git -C /tmp/dialotel-preview branch -a)",
+      "Bash(git ls-tree *)",
+      "Bash(npx @wp-now/wp-now start --path=\"c:/Users/Olivier/Desktop/CLAUDE/Z-AI_PLUGIN_TIRAGES/wordpress\" --skip-browser --reset)",
+      "Bash(git fetch *)",
+      "Bash(npx @wp-now/wp-now start --path=\"c:/Users/Olivier/Desktop/CLAUDE/Z-AI_PLUGIN_TIRAGES/clients/dialotel/wordpress\" --skip-browser --reset)"
     ]
   }
 }

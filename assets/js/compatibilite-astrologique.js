@@ -7,19 +7,23 @@
     promptTemplate: '',
     signsData: null,
     matrixData: null,
+    _sign1: null,
+    _sign2: null,
+    _theme: 'amour',
+    zodiac: { aries:'♈', taurus:'♉', gemini:'♊', cancer:'♋', leo:'♌', virgo:'♍', libra:'♎', scorpio:'♏', sagittarius:'♐', capricorn:'♑', aquarius:'♒', pisces:'♓' },
 
     init: function () {
-      this.config = VT.Config.load('vt-config-compat-astro');
+      this.config = VT.Config.load('vt-astro-config');
 
-      var promptEl = document.getElementById('vt-prompt-compat-astro');
+      var promptEl = document.getElementById('vt-astro-prompt');
       if (promptEl) this.promptTemplate = promptEl.textContent.trim();
 
       // Charger donnees astrologiques inline
-      var signsEl = document.getElementById('vt-data-signs');
+      var signsEl = document.getElementById('vt-astro-data-signs');
       if (signsEl) {
         try { this.signsData = JSON.parse(signsEl.textContent); } catch (e) { /* ignore */ }
       }
-      var matrixEl = document.getElementById('vt-data-matrix');
+      var matrixEl = document.getElementById('vt-astro-data-matrix');
       if (matrixEl) {
         try { this.matrixData = JSON.parse(matrixEl.textContent); } catch (e) { /* ignore */ }
       }
@@ -29,7 +33,7 @@
       VT.TTS.init(this.config.tts || {});
       VT.Email.init(this.config.emailCapture || {});
 
-      var i18nEl = document.getElementById('vt-i18n');
+      var i18nEl = document.getElementById('vt-astro-i18n');
       if (i18nEl) {
         try { VT.I18n.init(JSON.parse(i18nEl.textContent)); } catch (e) { /* ignore */ }
       }
@@ -43,16 +47,16 @@
     _bindEvents: function () {
       var self = this;
 
-      VT.on('#vt-btn-start', 'click', function () {
+      VT.on('#vt-astro-btn-start', 'click', function () {
         VT.Analytics.track('vt_tirage_started', { type: 'compatibilite-astrologique' });
         VT.StepEngine.next();
       });
 
-      VT.on('#vt-btn-tirage', 'click', function () {
+      VT.on('#vt-astro-btn-tirage', 'click', function () {
         self._doTirage();
       });
 
-      VT.on('#vt-btn-restart', 'click', function () {
+      VT.on('#vt-astro-btn-restart', 'click', function () {
         self._restart();
       });
 
@@ -60,14 +64,25 @@
         VT.TTS.toggle();
       });
 
-      VT.on('#vt-email-form', 'submit', function (e) {
+      window._vtShareImage = function () { self._shareImage(); };
+
+      VT.on('#vt-astro-email-form', 'submit', function (e) {
         e.preventDefault();
-        self._submitEmail();
+        VT.App.submitEmail(self);
       });
 
-      VT.on('#vt-extend-form', 'submit', function (e) {
+      VT.on('#vt-astro-extend-form', 'submit', function (e) {
         e.preventDefault();
-        self._extendRateLimit();
+        VT.App.extendRateLimit(self);
+      });
+
+      // Selection du theme
+      VT.$$('.vt-astro-theme-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          VT.$$('.vt-astro-theme-btn').forEach(function (b) { b.classList.remove('vt-astro-theme-btn--selected'); });
+          btn.classList.add('vt-astro-theme-btn--selected');
+          self._theme = btn.dataset.theme;
+        });
       });
 
       // Selection des signes
@@ -116,6 +131,12 @@
         return;
       }
 
+      var validSigns = ['aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo', 'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces'];
+      if (validSigns.indexOf(sign1) === -1 || validSigns.indexOf(sign2) === -1) {
+        VT.App.showError(this, 'Signe astrologique invalide.');
+        return;
+      }
+
       var sign1Name = sign1;
       var sign2Name = sign2;
       if (this.signsData) {
@@ -125,6 +146,9 @@
         if (s2) sign2Name = s2.name;
       }
 
+      this._sign1 = { key: sign1, name: sign1Name };
+      this._sign2 = { key: sign2, name: sign2Name };
+
       var baseScore = this._lookupScore(sign1, sign2);
 
       // Etape rituelle
@@ -132,20 +156,43 @@
 
       // Mettre a jour les noms dans le rituel
       var nameEls = VT.$$('.vt-astro-ritual-name');
-      if (nameEls[0]) nameEls[0].textContent = sign1Name;
-      if (nameEls[1]) nameEls[1].textContent = sign2Name;
+      if (nameEls[0]) nameEls[0].innerHTML = '<svg class="vt-astro-ritual-sign-icon"><use href="#sign-' + sign1 + '"/></svg><span>' + sign1Name + '</span>';
+      if (nameEls[1]) nameEls[1].innerHTML = '<svg class="vt-astro-ritual-sign-icon"><use href="#sign-' + sign2 + '"/></svg><span>' + sign2Name + '</span>';
+
+      var themeLabels = { amour: 'Amour', amitie: 'Amitié', travail: 'Travail', famille: 'Famille' };
+      var ritualThemeEl = VT.$('#vt-astro-ritual-theme');
+      if (ritualThemeEl) ritualThemeEl.textContent = themeLabels[this._theme] || 'Amour';
 
       var prompt = this._buildPrompt(sign1Name, sign2Name, baseScore);
 
       var aiConfig = this.config.ai || {};
       VT.AI.init(aiConfig);
 
+      // Messages de patience cycles pendant l'appel IA
+      var _pMsgs = [
+        'Les astres consultent votre destinee...',
+        'L\'energie cosmique se concentre...',
+        'Les constellations s\'alignent pour vous...',
+        'Votre avenir se revele dans les etoiles...',
+      ];
+      var _pIdx = 0;
+      var _pEl = VT.$('.vt-astro-ritual-text');
+      var _pTimer = setInterval(function () {
+        _pIdx = (_pIdx + 1) % _pMsgs.length;
+        if (_pEl) _pEl.textContent = _pMsgs[_pIdx];
+      }, 3000);
+
       VT.AI.generate(prompt, this.promptTemplate)
         .then(function (response) {
+          clearInterval(_pTimer);
           var result = self._parseResponse(response);
           if (result) {
             if (baseScore) result.score = baseScore;
-            self._showResult(result);
+            try {
+              self._showResult(result);
+            } catch (e) {
+              console.error('[VT] Erreur _showResult :', e);
+            }
             VT.RateLimiter.recordTirage(tirageId);
             VT.Counter.increment();
             VT.Analytics.track('vt_tirage_completed', { type: 'compatibilite-astrologique', score: result.score });
@@ -154,15 +201,18 @@
           }
         })
         .catch(function (err) {
+          clearInterval(_pTimer);
           console.error('[VT] Erreur IA :', err);
           VT.App.showError(self, 'Nos voyants sont tres sollicites en ce moment. Reessayez dans quelques instants.');
         });
     },
 
     _buildPrompt: function (name1, name2, baseScore) {
+      var themeLabels = { amour: 'Amour', amitie: 'Amitie', travail: 'Travail', famille: 'Famille' };
       var parts = [
         'Signe 1 : ' + name1,
-        'Signe 2 : ' + name2
+        'Signe 2 : ' + name2,
+        'Theme : ' + (themeLabels[this._theme] || 'Amour')
       ];
       if (baseScore) parts.push('Score de base : ' + baseScore + '/100');
       return parts.join('\n');
@@ -189,55 +239,76 @@
     _showResult: function (result) {
       VT.StepEngine.goTo(3);
 
-      var scoreEl = VT.$('#vt-result-score');
+      var headerEl = VT.$('#vt-astro-result-header');
+      if (headerEl && this._sign1 && this._sign2) {
+        headerEl.innerHTML =
+          '<div class="vt-result-person">' +
+            '<div class="vt-sign-badge vt-sign-badge--result"><svg><use href="#sign-' + this._sign1.key + '"/></svg></div>' +
+            '<span class="vt-result-person-name">' + this._sign1.name + '</span>' +
+          '</div>' +
+          '<span class="vt-result-person-link" style="font-size:1.1rem;">✦</span>' +
+          '<div class="vt-result-person">' +
+            '<div class="vt-sign-badge vt-sign-badge--result"><svg><use href="#sign-' + this._sign2.key + '"/></svg></div>' +
+            '<span class="vt-result-person-name">' + this._sign2.name + '</span>' +
+          '</div>';
+      }
+
+      var scoreEl = VT.$('#vt-astro-result-score');
       if (scoreEl) VT.App.animateScore(scoreEl, result.score);
 
       var barFill = VT.$('.vt-astro-score-bar-fill');
       if (barFill) barFill.style.width = result.score + '%';
 
-      var profileEl = VT.$('#vt-result-profile');
+      var profileEl = VT.$('#vt-astro-result-profile');
       if (profileEl) profileEl.textContent = result.profilCombine;
 
-      var traitsEl = VT.$('#vt-result-traits');
-      if (traitsEl) traitsEl.innerHTML = result.traits.map(function (t) {
-        return '<li>' + VT.App.sanitize(t) + '</li>';
-      }).join('');
+      var traitsEl = VT.$('#vt-astro-result-traits');
+      if (traitsEl) {
+        traitsEl.innerHTML = result.traits.map(function (t) {
+          return '<li>' + VT.App.sanitize(t) + '</li>';
+        }).join('');
+      }
 
-      var adviceEl = VT.$('#vt-result-advice');
+      var adviceEl = VT.$('#vt-astro-result-advice');
       if (adviceEl) adviceEl.textContent = result.conseils;
 
       var ttsText = result.profilCombine + ' ' + result.conseils;
       VT.TTS.speak(ttsText);
 
-      var self = this;
-      var emailConfig = this.config.emailCapture || {};
-      if (emailConfig.enabled) {
-        setTimeout(function () {
-          self._showEmailModal();
-          VT.Analytics.track('vt_email_shown');
-        }, 3000);
+      if ((this.config.emailCapture || {}).enabled) {
+        VT.Analytics.track('vt_email_shown');
       }
     },
 
     _hideError: function () {
-      var errorEl = VT.$('#vt-error');
+      var errorEl = VT.$('#vt-astro-error');
       if (errorEl) errorEl.classList.add('vt-hidden');
     },
 
-    _showEmailModal: function () {
-      var modal = VT.$('#vt-email-modal');
-      if (modal) modal.classList.add('vt-modal--open');
+    _extendRateLimit: function () {
+      var email = VT.$('#vt-astro-extend-email').value.trim();
+      if (!email || !email.includes('@')) return;
+
+      var tirageId = this.config.tirageId || 'compat-astro';
+      VT.RateLimiter.extendLimit(tirageId);
+      VT.Analytics.track('vt_rate_limit_extended', { type: 'compatibilite-astrologique' });
+
+      var modal = VT.$('#vt-astro-rate-limit-modal');
+      if (modal) modal.classList.remove('vt-modal--open');
+
+      this._doTirage();
     },
 
+
     _submitEmail: function () {
-      var email = VT.$('#vt-email-input').value.trim();
+      var email = VT.$('#vt-astro-email-input').value.trim();
       if (!email || !email.includes('@')) return;
 
       var self = this;
       VT.Email.submit(email)
         .then(function () {
           VT.Analytics.track('vt_email_submitted', { type: 'compatibilite-astrologique' });
-          var formEl = VT.$('#vt-email-form');
+          var formEl = VT.$('#vt-astro-email-form');
           var successEl = VT.$('.vt-email-success');
           if (formEl) formEl.classList.add('vt-hidden');
           if (successEl) successEl.classList.remove('vt-hidden');
@@ -247,17 +318,173 @@
         });
     },
 
-    _extendRateLimit: function () {
-      var email = VT.$('#vt-extend-email').value.trim();
-      if (!email || !email.includes('@')) return;
+    _shareImage: function () {
+      var self = this;
+      var scoreText = (VT.$('#vt-result-score') || {}).textContent || '0%';
+      var score = parseInt(scoreText, 10) || 0;
+      var sign1 = this._sign1, sign2 = this._sign2;
+      var profileEl = VT.$('#vt-astro-result-profile');
+      var phrase = profileEl ? profileEl.textContent.trim() : '';
 
-      var tirageId = this.config.tirageId || 'compat-astro';
-      VT.RateLimiter.extendLimit(tirageId);
-      VT.Analytics.track('vt_rate_limit_extended', { type: 'compatibilite-astrologique' });
+      var SC = 2, W = 512, H = 896;
 
-      var modal = VT.$('#vt-rate-limit-modal');
-      if (modal) modal.classList.remove('vt-modal--open');
-      this._doTirage();
+      function doRender() {
+        var canvas = document.createElement('canvas');
+        canvas.width = W*SC; canvas.height = H*SC;
+        var ctx = canvas.getContext('2d');
+        ctx.scale(SC,SC);
+
+        /* Fond */
+        var bg = ctx.createRadialGradient(W/2,H*0.45,0,W/2,H*0.45,H*0.85);
+        bg.addColorStop(0,'#ffffff'); bg.addColorStop(0.5,'#f8f0ff'); bg.addColorStop(1,'#f0e6f6');
+        ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+        ctx.save(); ctx.globalAlpha=0.5; VT.App.drawMandala(ctx,W,H); ctx.globalAlpha=1; ctx.restore();
+        var veil=ctx.createRadialGradient(W/2,H*0.45,0,W/2,H*0.45,H*0.65);
+        veil.addColorStop(0,'rgba(255,255,255,0.3)'); veil.addColorStop(1,'rgba(255,255,255,0)');
+        ctx.fillStyle=veil; ctx.fillRect(0,0,W,H);
+
+        var MARGIN=30, logoW=200, logoH=Math.round(logoW*216/636);
+        var OR=100; /* rayon orbe central */
+        var OD=OR*2; /* diamètre */
+        var BR=34, urlH=16;
+
+        /* Pré-calcul phrase */
+        ctx.save(); ctx.font='16px "Lato",Arial,sans-serif';
+        var phraseMaxW=W-70, pWords=phrase.split(' '), pLine='', pLines=[];
+        pWords.forEach(function(w){var t=pLine+w+' ';if(pLine&&ctx.measureText(t).width>phraseMaxW){pLines.push(pLine.trim());pLine=w+' ';}else pLine=t;});
+        if(pLine.trim())pLines.push(pLine.trim()); ctx.restore();
+        var pLineH=20, phraseH=pLines.length*pLineH;
+
+        function personH(s){ return BR+(s?50:24); }
+        var totalContent=logoH+OD+personH(sign1)+phraseH+personH(sign2)+urlH;
+        var GAP=Math.max(12,Math.floor((H-MARGIN*2-totalContent)/5));
+        var cursorY=MARGIN;
+
+        /* 1. Badge theme */
+        var themeLabels2={'amour':'Amour','amitie':'Amitie','travail':'Travail','famille':'Famille'};
+        var themeLabel=themeLabels2[self._theme]||'Amour';
+        var pillW=140,pillH=46,pillR=23;
+        var pillX=W/2-pillW/2,pillY=cursorY+(logoH-pillH)/2;
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(pillX+pillR,pillY);
+        ctx.lineTo(pillX+pillW-pillR,pillY);
+        ctx.arcTo(pillX+pillW,pillY,pillX+pillW,pillY+pillH,pillR);
+        ctx.lineTo(pillX+pillW,pillY+pillH-pillR);
+        ctx.arcTo(pillX+pillW,pillY+pillH,pillX+pillW-pillR,pillY+pillH,pillR);
+        ctx.lineTo(pillX+pillR,pillY+pillH);
+        ctx.arcTo(pillX,pillY+pillH,pillX,pillY+pillH-pillR,pillR);
+        ctx.lineTo(pillX,pillY+pillR);
+        ctx.arcTo(pillX,pillY,pillX+pillR,pillY,pillR);
+        ctx.closePath();
+        var pillG=ctx.createLinearGradient(pillX,pillY,pillX+pillW,pillY+pillH);
+        pillG.addColorStop(0,'#f5a0ef'); pillG.addColorStop(1,'#c055b8');
+        ctx.fillStyle=pillG; ctx.fill();
+        ctx.fillStyle='#fff'; ctx.font='bold 20px Arial,sans-serif';
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText(themeLabel,W/2,pillY+pillH/2);
+        ctx.restore();
+        cursorY+=logoH+GAP;
+
+        /* 2. Orbe central avec score */
+        var oCx=W/2, oCy=cursorY+OR;
+
+        /* Halo */
+        var halo=ctx.createRadialGradient(oCx,oCy,0,oCx,oCy,OR+60);
+        halo.addColorStop(0,'rgba(237,140,230,0.28)'); halo.addColorStop(1,'rgba(237,140,230,0)');
+        ctx.fillStyle=halo; ctx.fillRect(oCx-(OR+60),oCy-(OR+60),(OR+60)*2,(OR+60)*2);
+
+        /* Cercle extérieur (anneau) */
+        ctx.beginPath(); ctx.arc(oCx,oCy,OR+8,0,Math.PI*2);
+        ctx.strokeStyle='rgba(226,237,119,0.5)'; ctx.lineWidth=1.5; ctx.stroke();
+
+        /* Cercle principal */
+        ctx.beginPath(); ctx.arc(oCx,oCy,OR,0,Math.PI*2);
+        var oGrad=ctx.createRadialGradient(oCx,oCy-OR*0.25,OR*0.1,oCx,oCy,OR);
+        oGrad.addColorStop(0,'#f5a0ef'); oGrad.addColorStop(0.45,'#ed8ce6'); oGrad.addColorStop(1,'#c055b8');
+        ctx.fillStyle=oGrad; ctx.fill();
+
+        /* Reflet */
+        var refGrad=ctx.createLinearGradient(oCx-OR*0.4,oCy-OR,oCx+OR*0.4,oCy-OR*0.1);
+        refGrad.addColorStop(0,'rgba(255,255,255,0.28)'); refGrad.addColorStop(1,'rgba(255,255,255,0)');
+        ctx.fillStyle=refGrad;
+        ctx.beginPath(); ctx.arc(oCx,oCy,OR,0,Math.PI*2); ctx.fill();
+
+        /* Score */
+        ctx.save();
+        ctx.fillStyle='#e2ed77'; ctx.font='bold 52px Arial,sans-serif';
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.shadowColor='rgba(0,0,0,0.25)'; ctx.shadowBlur=10;
+        ctx.fillText(score+'%',oCx,oCy);
+        ctx.shadowBlur=0; ctx.restore();
+
+        /* Sparkles */
+        [[oCx-OR-18,oCy-20,3],[oCx+OR+14,oCy+25,2.5],[oCx-OR+10,oCy+OR-10,2],
+         [oCx+OR-8,oCy-OR+15,3.5],[oCx,oCy-OR-18,2.5],[oCx-60,oCy+OR+10,2]].forEach(function(sp){
+          var spG=ctx.createRadialGradient(sp[0],sp[1],0,sp[0],sp[1],sp[2]*3);
+          spG.addColorStop(0,'rgba(226,237,119,0.7)'); spG.addColorStop(1,'rgba(226,237,119,0)');
+          ctx.fillStyle=spG; ctx.fillRect(sp[0]-sp[2]*3,sp[1]-sp[2]*3,sp[2]*6,sp[2]*6);
+          ctx.beginPath(); ctx.arc(sp[0],sp[1],sp[2],0,Math.PI*2);
+          ctx.fillStyle='#e2ed77'; ctx.fill();
+        });
+
+        cursorY+=OD+GAP;
+
+        /* 3 & 5. Blocs signe */
+        function drawSignBlock(cx,cy,signData){
+          ctx.save();
+          ctx.beginPath(); ctx.arc(cx,cy,BR,0,Math.PI*2);
+          var g=ctx.createRadialGradient(cx,cy-8,3,cx,cy,BR);
+          g.addColorStop(0,'#c084fc'); g.addColorStop(1,'#7c3aed');
+          ctx.fillStyle=g; ctx.fill();
+          ctx.beginPath(); ctx.arc(cx,cy,BR+4,0,Math.PI*2);
+          ctx.strokeStyle='rgba(237,140,230,0.35)'; ctx.lineWidth=2; ctx.stroke();
+          ctx.fillStyle='#fff'; ctx.font='24px Arial,sans-serif';
+          ctx.textAlign='center'; ctx.textBaseline='middle';
+          ctx.fillText((signData&&self.zodiac[signData.key])||'★',cx,cy);
+          ctx.restore();
+          if(signData){
+            ctx.save(); ctx.textAlign='center'; ctx.textBaseline='top';
+            ctx.fillStyle='#2d1b3d'; ctx.font='bold 18px Arial,sans-serif';
+            ctx.fillText(signData.name,cx,cy+BR+12); ctx.restore();
+          }
+        }
+
+        drawSignBlock(W/2,cursorY+BR,sign1);
+        cursorY+=personH(sign1)+GAP;
+
+        /* 4. Phrase */
+        ctx.save();
+        var tGrad=ctx.createLinearGradient(W/2-130,0,W/2+130,0);
+        tGrad.addColorStop(0,'#c084fc'); tGrad.addColorStop(0.5,'#ed8ce6'); tGrad.addColorStop(1,'#c084fc');
+        ctx.fillStyle=tGrad; ctx.font='16px "Lato",Arial,sans-serif';
+        ctx.textAlign='center'; ctx.textBaseline='top';
+        pLines.forEach(function(ln,i){ ctx.fillText(ln,W/2,cursorY+i*pLineH); });
+        ctx.restore();
+        cursorY+=phraseH+GAP;
+
+        drawSignBlock(W/2,cursorY+BR,sign2);
+        cursorY+=personH(sign2)+GAP;
+
+        /* 6. Footer */
+        ctx.save(); ctx.fillStyle='#a855f7'; ctx.font='13px Arial,sans-serif';
+        ctx.textAlign='center'; ctx.textBaseline='top';
+        ctx.fillText('hexagon-voyance.com',W/2,cursorY); ctx.restore();
+
+        var dataURL;
+        try { dataURL=canvas.toDataURL('image/png'); }
+        catch(e) { console.error('[VT] canvas.toDataURL failed:',e); return; }
+        var modal=document.getElementById('vt-astro-share-modal');
+        var preview=document.getElementById('vt-astro-share-preview');
+        var dlBtn=document.getElementById('vt-astro-share-download');
+        if(!modal) return;
+        if(preview) preview.src=dataURL;
+        if(dlBtn){ dlBtn.href=dataURL; dlBtn.download='compatibilite-astrologique.png'; }
+        modal.style.display='flex';
+        VT.Analytics.track('vt_share',{platform:'image',type:'compatibilite-astrologique'});
+      }
+
+      try { doRender(); } catch(e) { console.error('[VT] doRender failed:',e); }
     },
 
     _restart: function () {
@@ -268,7 +495,7 @@
         b.classList.remove('vt-astro-sign--selected');
       });
 
-      var scoreEl = VT.$('#vt-result-score');
+      var scoreEl = VT.$('#vt-astro-result-score');
       if (scoreEl) scoreEl.textContent = '0%';
 
       var barFill = VT.$('.vt-astro-score-bar-fill');

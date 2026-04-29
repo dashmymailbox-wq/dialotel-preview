@@ -13,6 +13,8 @@
     container: null,
 
     init: function (containerSelector, stepSelectors) {
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+      window.scrollTo(0, 0);
       this.container = document.querySelector(containerSelector);
       this.steps = Array.prototype.slice.call(
         this.container ? this.container.querySelectorAll(stepSelectors) : []
@@ -28,6 +30,7 @@
           step.classList.add('vt-step--active', 'vt-step--enter');
         }
       });
+      window.scrollTo(0, 0);
     },
 
     goTo: function (index) {
@@ -204,16 +207,25 @@
       }
     },
 
+    _getNonce: function () {
+      return (window.vtWpConfig && window.vtWpConfig.nonce) || '';
+    },
+
     _callProxy: function (proxyUrl, prompt, systemPrompt) {
+      var params = new URLSearchParams();
+      params.append('prompt', prompt);
+      params.append('systemPrompt', systemPrompt || '');
+      params.append('nonce', this._getNonce());
       return fetch(proxyUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: prompt, systemPrompt: systemPrompt || '' })
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString()
       }).then(function (r) {
         if (!r.ok) throw new Error('Proxy error ' + r.status);
         return r.json();
       }).then(function (data) {
-        return data.content || data.text || data.choices[0].message.content || JSON.stringify(data);
+        if (data.success === false) throw new Error(data.data && data.data.message || 'Erreur proxy');
+        return data.data && data.data.content || data.content || data.text || JSON.stringify(data);
       });
     },
 
@@ -397,6 +409,11 @@
     submit: function (email, listId) {
       if (!this.config.enabled) return Promise.resolve();
 
+      // Si un proxy URL est defini (mode WordPress), toujours passer par le proxy
+      if (this.config.emailProxyUrl) {
+        return this._viaProxy(email);
+      }
+
       var provider = (this.config.provider || 'webhook').toLowerCase();
 
       switch (provider) {
@@ -410,7 +427,41 @@
       }
     },
 
+    _viaProxy: function (email) {
+      var nonce = (window.vtWpConfig && window.vtWpConfig.nonce) || '';
+      var params = new URLSearchParams();
+      params.append('email', email);
+      params.append('nonce', nonce);
+      return fetch(this.config.emailProxyUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString()
+      }).then(function (r) {
+        if (!r.ok) throw new Error('Erreur email ' + r.status);
+        return r.json();
+      }).then(function (data) {
+        if (data.success === false) throw new Error(data.data && data.data.message || 'Erreur email');
+      });
+    },
+
     _brevo: function (email, listId) {
+      // Mode WordPress : passer par le proxy PHP (cle API cote serveur)
+      if (this.config.emailProxyUrl) {
+        var brevoParams = new URLSearchParams();
+        brevoParams.append('email', email);
+        brevoParams.append('nonce', (window.vtWpConfig && window.vtWpConfig.nonce) || '');
+        return fetch(this.config.emailProxyUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: brevoParams.toString()
+        }).then(function (r) {
+          if (!r.ok) throw new Error('Erreur email ' + r.status);
+          return r.json();
+        }).then(function (data) {
+          if (data.success === false) throw new Error(data.data && data.data.message || 'Erreur email');
+        });
+      }
+      // Mode autonome (cle API directe — hors WordPress)
       return fetch('https://api.brevo.com/v3/contacts', {
         method: 'POST',
         headers: {
@@ -534,146 +585,7 @@
   };
 
   /* ============================================================
-     11. HELPERS
-     ============================================================ */
-  VT.$ = function (selector) {
-    return document.querySelector(selector);
-  };
-
-  VT.$$ = function (selector) {
-    return Array.prototype.slice.call(document.querySelectorAll(selector));
-  };
-
-  VT.on = function (el, event, fn) {
-    if (typeof el === 'string') el = document.querySelector(el);
-    if (el) el.addEventListener(event, fn);
-  };
-
-  VT.off = function (el, event, fn) {
-    if (typeof el === 'string') el = document.querySelector(el);
-    if (el) el.removeEventListener(event, fn);
-  };
-
-  /* ============================================================
-     12. PARTAGE IMAGE (Canvas → Web Share API / téléchargement)
-     ============================================================ */
-  VT.ShareCard = {
-    // Génère un canvas 1080×1080 avec le score et les données passées
-    // data : { title, names, score, url }
-    generate: function (data) {
-      var canvas = document.createElement('canvas');
-      canvas.width = 1080;
-      canvas.height = 1080;
-      var ctx = canvas.getContext('2d');
-
-      // Lire les couleurs depuis les variables CSS actives (thème Dialotel ou autre)
-      var styles = getComputedStyle(document.documentElement);
-      var appEl = document.querySelector('.vt-app');
-      if (appEl) styles = getComputedStyle(appEl);
-      var colorBg      = (styles.getPropertyValue('--theme-bg') || '#ffffff').trim();
-      var colorPrimary = (styles.getPropertyValue('--theme-primary') || '#ed8ce6').trim();
-      var colorSecondary = (styles.getPropertyValue('--theme-secondary') || '#e2ed77').trim();
-      var colorText    = (styles.getPropertyValue('--theme-text') || '#000000').trim();
-      var colorMuted   = (styles.getPropertyValue('--theme-text-muted') || '#666666').trim();
-
-      var W = 1080, H = 1080;
-
-      // Fond
-      ctx.fillStyle = colorBg;
-      ctx.fillRect(0, 0, W, H);
-
-      // Bordure décorative (rose, 8px)
-      ctx.strokeStyle = colorPrimary;
-      ctx.lineWidth = 8;
-      ctx.strokeRect(24, 24, W - 48, H - 48);
-
-      // Ligne décorative secondaire intérieure (jaune, 2px)
-      ctx.strokeStyle = colorSecondary;
-      ctx.lineWidth = 2;
-      ctx.strokeRect(36, 36, W - 72, H - 72);
-
-      // Titre de l'app
-      ctx.fillStyle = colorPrimary;
-      ctx.font = 'bold 44px Georgia, serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(data.title || '', W / 2, 160);
-
-      // Noms
-      ctx.fillStyle = colorText;
-      ctx.font = '500 56px Georgia, serif';
-      ctx.fillText(data.names || '', W / 2, 290);
-
-      // Score — très grand
-      ctx.fillStyle = colorPrimary;
-      ctx.font = 'bold 260px Georgia, serif';
-      ctx.fillText(data.score || '', W / 2, 600);
-
-      // Barre de score
-      var barW = 560, barH = 22, barX = (W - barW) / 2, barY = 660;
-      // fond barre
-      ctx.fillStyle = colorMuted;
-      ctx.beginPath();
-      this._roundRect(ctx, barX, barY, barW, barH, barH / 2);
-      ctx.fill();
-      // remplissage barre (dégradé rose→jaune)
-      var scoreNum = parseInt((data.score || '0').replace('%', ''), 10) || 0;
-      var fillW = Math.round(barW * scoreNum / 100);
-      if (fillW > 0) {
-        var grad = ctx.createLinearGradient(barX, 0, barX + barW, 0);
-        grad.addColorStop(0, colorPrimary);
-        grad.addColorStop(1, colorSecondary);
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        this._roundRect(ctx, barX, barY, fillW, barH, barH / 2);
-        ctx.fill();
-      }
-
-      // Label sous la barre
-      ctx.fillStyle = colorMuted;
-      ctx.font = '32px Georgia, serif';
-      ctx.fillText('compatibilite amoureuse', W / 2, 740);
-
-      // URL / branding
-      ctx.fillStyle = colorPrimary;
-      ctx.font = '28px Georgia, serif';
-      ctx.fillText(data.url || '', W / 2, 980);
-
-      return canvas;
-    },
-
-    // Tracé d'un rectangle arrondi compatible tous navigateurs
-    _roundRect: function (ctx, x, y, w, h, r) {
-      r = Math.min(r, w / 2, h / 2);
-      ctx.moveTo(x + r, y);
-      ctx.lineTo(x + w - r, y);
-      ctx.arcTo(x + w, y, x + w, y + r, r);
-      ctx.lineTo(x + w, y + h - r);
-      ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
-      ctx.lineTo(x + r, y + h);
-      ctx.arcTo(x, y + h, x, y + h - r, r);
-      ctx.lineTo(x, y + r);
-      ctx.arcTo(x, y, x + r, y, r);
-      ctx.closePath();
-    },
-
-    // Retourne un dataURL PNG synchrone — à utiliser directement dans un handler de clic
-    toDataURL: function (canvas) {
-      return canvas.toDataURL('image/png');
-    },
-
-    // Retourne un File PNG via Promise — pour Web Share API mobile
-    toFile: function (canvas, filename) {
-      return new Promise(function (resolve, reject) {
-        canvas.toBlob(function (blob) {
-          if (!blob) { reject(new Error('toBlob failed')); return; }
-          resolve(new File([blob], filename || 'partage.png', { type: 'image/png' }));
-        }, 'image/png');
-      });
-    }
-  };
-
-  /* ============================================================
-     APP HELPER — Methodes communes (factorisation)
+     11. APP HELPER — Methodes communes (factorisation)
      ============================================================ */
   VT.App = {
     checkRateLimit: function (app) {
@@ -820,6 +732,27 @@
 
       ctx.restore();
     }
+  };
+
+  /* ============================================================
+     12. HELPERS
+     ============================================================ */
+  VT.$ = function (selector) {
+    return document.querySelector(selector);
+  };
+
+  VT.$$ = function (selector) {
+    return Array.prototype.slice.call(document.querySelectorAll(selector));
+  };
+
+  VT.on = function (el, event, fn) {
+    if (typeof el === 'string') el = document.querySelector(el);
+    if (el) el.addEventListener(event, fn);
+  };
+
+  VT.off = function (el, event, fn) {
+    if (typeof el === 'string') el = document.querySelector(el);
+    if (el) el.removeEventListener(event, fn);
   };
 
   /* ============================================================
