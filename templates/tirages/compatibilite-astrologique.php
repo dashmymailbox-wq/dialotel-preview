@@ -301,7 +301,7 @@ $faq_defaults = array(
 					</div>
 					<?php endif; ?>
 					<?php if ( $share_enabled ) : ?>
-					<button class="btn-hex btn-hex--outline" id="vt-astro-btn-share" type="button">
+					<button class="btn-hex btn-hex--secondary" id="vt-astro-btn-share" type="button">
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
 						Partager mon resultat
 					</button>

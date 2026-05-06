@@ -429,7 +429,7 @@ function vt_render_admin_page() {
 						<span class="vt-admin-toggle-label">Afficher l'encart email dans l'app</span>
 						<label class="vt-admin-toggle">
 							<input type="hidden" name="vt_email_enabled" value="0">
-							<input type="checkbox" name="vt_email_enabled" value="1" <?php checked( get_option('vt_email_enabled', '1'), '1' ); ?>>
+							<input type="checkbox" name="vt_email_enabled" value="1" <?php checked( get_option('vt_email_enabled', '0'), '1' ); ?>>
 							<span class="vt-admin-toggle-slider"></span>
 						</label>
 					</div>
@@ -646,7 +646,7 @@ function vt_render_admin_page() {
 							<span class="vt-admin-toggle-label">Afficher l'encart email dans l'app</span>
 							<label class="vt-admin-toggle">
 								<input type="hidden" name="vt_astro_email_enabled" value="0">
-								<input type="checkbox" name="vt_astro_email_enabled" value="1" <?php checked( get_option('vt_astro_email_enabled', '1'), '1' ); ?>>
+								<input type="checkbox" name="vt_astro_email_enabled" value="1" <?php checked( get_option('vt_astro_email_enabled', '0'), '1' ); ?>>
 								<span class="vt-admin-toggle-slider"></span>
 							</label>
 						</div>

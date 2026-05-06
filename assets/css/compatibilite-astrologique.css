@@ -170,9 +170,9 @@
   align-items: center;
   gap: 0.3rem;
   padding: 0.6rem 0.3rem;
-  border: 1px solid var(--theme-border);
+  border: 1px solid rgba(156, 39, 176, 0.4);
   border-radius: 10px;
-  background: rgba(26, 14, 36, 0.4);
+  background: #9c27b0 !important;
   cursor: pointer;
   transition: all 300ms ease;
 }
@@ -192,16 +192,19 @@
 .vt-app .vt-astro-sign svg {
   width: 24px;
   height: 24px;
+  color: #fff !important;
+  stroke: #fff !important;
+  fill: none !important;
 }
 
 .vt-app .vt-astro-sign-name {
   font-size: 0.7rem;
-  color: var(--theme-text-muted);
+  color: #fff !important;
   letter-spacing: 0.02em;
 }
 
 .vt-app .vt-astro-sign--selected .vt-astro-sign-name {
-  color: var(--theme-primary);
+  color: #fff !important;
 }
 
 /* ===== Rituel ===== */
