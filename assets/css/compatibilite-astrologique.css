@@ -3,7 +3,7 @@
 /* ===== Intro ===== */
 .vt-app .vt-astro-intro {
   text-align: center;
-  padding: 3rem 1rem 2rem;
+  padding: 1.5rem 1rem 0.75rem;
 }
 
 .vt-app .vt-astro-theme-hint {
@@ -68,12 +68,12 @@
 }
 
 .vt-app .vt-step[data-step="form"] .vt-astro-intro {
-  padding: 0.75rem 1rem 0.75rem;
+  padding: 0.5rem 1rem 0.4rem;
 }
 
 .vt-app .vt-astro-sign-groups-row {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.5rem;
   align-items: flex-start;
 }
 
@@ -105,7 +105,7 @@
 
 /* ===== Selecteur de theme ===== */
 .vt-app .vt-astro-theme-selector {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .vt-app .vt-astro-theme-grid {
@@ -117,12 +117,12 @@
 }
 
 .vt-app .vt-astro-theme-btn {
-  padding: 0.6rem 0.5rem;
+  padding: 0.4rem 0.4rem;
   border: 1px solid rgba(156, 39, 176, 0.4);
-  border-radius: 10px;
+  border-radius: 8px;
   background: #9c27b0 !important;
   color: #fff !important;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   cursor: pointer;
   transition: all 300ms ease;
   letter-spacing: 0.02em;
@@ -143,7 +143,7 @@
 
 /* ===== Grille de selection des signes ===== */
 .vt-app .vt-astro-sign-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .vt-app .vt-astro-sign-group-title {
@@ -169,10 +169,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.3rem;
-  padding: 0.6rem 0.3rem;
+  gap: 0.2rem;
+  padding: 0.4rem 0.2rem;
   border: 1px solid rgba(156, 39, 176, 0.4);
-  border-radius: 10px;
+  border-radius: 8px;
   background: #9c27b0 !important;
   cursor: pointer;
   transition: all 300ms ease;
@@ -196,15 +196,15 @@
 }
 
 .vt-app .vt-astro-sign svg {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   color: #fff !important;
   stroke: #fff !important;
   fill: none !important;
 }
 
 .vt-app .vt-astro-sign-name {
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   color: #fff !important;
   letter-spacing: 0.02em;
 }

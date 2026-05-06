@@ -9,7 +9,7 @@
     matrixData: null,
     _sign1: null,
     _sign2: null,
-    _theme: 'amour',
+    _theme: null,
     zodiac: { aries:'♈', taurus:'♉', gemini:'♊', cancer:'♋', leo:'♌', virgo:'♍', libra:'♎', scorpio:'♏', sagittarius:'♐', capricorn:'♑', aquarius:'♒', pisces:'♓' },
 
     init: function () {
@@ -124,6 +124,11 @@
       if (!VT.RateLimiter.canDoTirage(tirageId)) {
         VT.Analytics.track('vt_rate_limit_hit', { type: 'compatibilite-astrologique' });
         VT.App.showRateLimitModal();
+        return;
+      }
+
+      if (!this._theme) {
+        VT.App.showError(this, 'Veuillez selectionner un theme de compatibilite.');
         return;
       }
 

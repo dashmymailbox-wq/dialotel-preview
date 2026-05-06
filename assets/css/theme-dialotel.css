@@ -892,6 +892,7 @@
   color: var(--theme-text-muted);
   padding: 0 0 1rem;
   max-width: 500px;
+  text-align: left;
 }
 
 @media (max-width: 480px) {

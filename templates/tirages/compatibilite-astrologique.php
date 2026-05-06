@@ -152,13 +152,13 @@ $faq_defaults = array(
 		<!-- ETAPE 1 : Selection du theme -->
 		<div class="vt-step" data-step="form">
 			<div class="vt-astro-intro vt-anim-fade-in">
-				<h2 style="font-family:var(--theme-font-title); letter-spacing:0.05em; margin-bottom:0.5rem;">Choisissez votre theme</h2>
-				<p style="color:var(--theme-text-muted); font-size:0.85rem; margin-bottom:1.5rem;">Quel aspect de votre compatibilite souhaitez-vous explorer ?</p>
+				<h2 style="font-family:var(--theme-font-title); letter-spacing:0.05em; margin-bottom:0.25rem;">Choisissez votre theme</h2>
+				<p style="color:var(--theme-text-muted); font-size:0.85rem; margin-bottom:0.75rem;">Quel aspect de votre compatibilite souhaitez-vous explorer ?</p>
 			</div>
 
-			<div class="vt-astro-theme-selector" style="margin-bottom:2rem;">
+			<div class="vt-astro-theme-selector" style="margin-bottom:0.75rem;">
 				<div class="vt-astro-theme-grid">
-					<button type="button" class="vt-astro-theme-btn vt-astro-theme-btn--selected" data-theme="amour">&#10084;&#65039; Amour</button>
+					<button type="button" class="vt-astro-theme-btn" data-theme="amour">&#10084;&#65039; Amour</button>
 					<button type="button" class="vt-astro-theme-btn" data-theme="amitie">🤝 Amitie</button>
 					<button type="button" class="vt-astro-theme-btn" data-theme="travail">💼 Travail</button>
 					<button type="button" class="vt-astro-theme-btn" data-theme="famille">🌿 Famille</button>
@@ -166,8 +166,8 @@ $faq_defaults = array(
 			</div>
 
 			<div class="vt-astro-intro vt-anim-fade-in">
-				<h2 style="font-family:var(--theme-font-title); letter-spacing:0.05em; margin-bottom:0.5rem;">Choisissez vos signes</h2>
-				<p style="color:var(--theme-text-muted); font-size:0.85rem; margin-bottom:1.5rem;">Selectionnez un signe dans chaque colonne</p>
+				<h2 style="font-family:var(--theme-font-title); letter-spacing:0.05em; margin-bottom:0.25rem;">Choisissez vos signes</h2>
+				<p style="color:var(--theme-text-muted); font-size:0.85rem; margin-bottom:0.5rem;">Selectionnez un signe dans chaque colonne</p>
 			</div>
 
 			<div id="vt-astro-error" class="vt-error vt-hidden" style="margin-bottom:1rem;">
