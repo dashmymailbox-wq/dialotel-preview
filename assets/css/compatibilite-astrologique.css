@@ -184,9 +184,14 @@
 }
 
 .vt-app .vt-astro-sign--selected {
-  border-color: var(--theme-primary);
-  background: rgba(237, 140, 230, 0.15);
-  box-shadow: 0 0 16px var(--theme-glow-primary), inset 0 0 8px rgba(237, 140, 230, 0.05);
+  border-color: #e2ed77 !important;
+  background: #7b1fa2 !important;
+  box-shadow: 0 0 16px rgba(226, 237, 119, 0.5), 0 0 8px rgba(156, 39, 176, 0.4) !important;
+}
+
+.vt-app .vt-astro-sign--selected svg {
+  color: #e2ed77 !important;
+  stroke: #e2ed77 !important;
 }
 
 .vt-app .vt-astro-sign svg {
@@ -204,7 +209,7 @@
 }
 
 .vt-app .vt-astro-sign--selected .vt-astro-sign-name {
-  color: #fff !important;
+  color: #e2ed77 !important;
 }
 
 /* ===== Rituel ===== */
