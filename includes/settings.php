@@ -22,8 +22,8 @@ function vt_ajax_test_api_key() {
 	check_ajax_referer( 'vt_admin_nonce', 'nonce' );
 	if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error( array( 'message' => 'Accès refusé.' ) );
 
-	$provider = isset( $_POST['provider'] ) ? sanitize_text_field( $_POST['provider'] ) : '';
-	$key      = isset( $_POST['key'] )      ? sanitize_text_field( $_POST['key'] )      : '';
+	$provider = isset( $_POST['provider'] ) ? sanitize_text_field( wp_unslash( $_POST['provider'] ) ) : '';
+	$key      = isset( $_POST['key'] )      ? preg_replace( '/[\r\n\x00-\x1f]/', '', sanitize_text_field( wp_unslash( $_POST['key'] ) ) ) : '';
 
 	if ( ! $key ) {
 		wp_send_json_error( array( 'message' => 'Clé vide — saisissez une clé avant de tester.' ) );
@@ -45,7 +45,7 @@ function vt_ajax_test_api_key() {
 				$result['message'] = 'Clé valide — connexion Mistral réussie.';
 			} else {
 				$body = json_decode( wp_remote_retrieve_body( $resp ), true );
-				$result['message'] = 'Clé invalide (' . wp_remote_retrieve_response_code( $resp ) . ') : ' . ( isset( $body['message'] ) ? $body['message'] : 'Erreur inconnue.' );
+				$result['message'] = 'Clé invalide (' . wp_remote_retrieve_response_code( $resp ) . ') : ' . ( isset( $body['message'] ) ? esc_html( $body['message'] ) : 'Erreur inconnue.' );
 			}
 			break;
 
@@ -61,7 +61,7 @@ function vt_ajax_test_api_key() {
 				$result['message'] = 'Clé valide — connexion OpenAI réussie.';
 			} else {
 				$body = json_decode( wp_remote_retrieve_body( $resp ), true );
-				$result['message'] = 'Clé invalide (' . wp_remote_retrieve_response_code( $resp ) . ') : ' . ( isset( $body['error']['message'] ) ? $body['error']['message'] : 'Erreur inconnue.' );
+				$result['message'] = 'Clé invalide (' . wp_remote_retrieve_response_code( $resp ) . ') : ' . ( isset( $body['error']['message'] ) ? esc_html( $body['error']['message'] ) : 'Erreur inconnue.' );
 			}
 			break;
 
@@ -86,7 +86,7 @@ function vt_ajax_test_api_key() {
 				$result['message'] = 'Clé valide — connexion Claude réussie.';
 			} else {
 				$body = json_decode( wp_remote_retrieve_body( $resp ), true );
-				$result['message'] = 'Clé invalide (' . wp_remote_retrieve_response_code( $resp ) . ') : ' . ( isset( $body['error']['message'] ) ? $body['error']['message'] : 'Erreur inconnue.' );
+				$result['message'] = 'Clé invalide (' . wp_remote_retrieve_response_code( $resp ) . ') : ' . ( isset( $body['error']['message'] ) ? esc_html( $body['error']['message'] ) : 'Erreur inconnue.' );
 			}
 			break;
 
@@ -103,7 +103,7 @@ function vt_ajax_test_api_key() {
 				$result['message'] = 'Clé valide — compte : ' . ( isset( $body['email'] ) ? esc_html( $body['email'] ) : 'OK' );
 			} else {
 				$body = json_decode( wp_remote_retrieve_body( $resp ), true );
-				$result['message'] = 'Clé invalide (' . wp_remote_retrieve_response_code( $resp ) . ') : ' . ( isset( $body['message'] ) ? $body['message'] : 'Erreur inconnue.' );
+				$result['message'] = 'Clé invalide (' . wp_remote_retrieve_response_code( $resp ) . ') : ' . ( isset( $body['message'] ) ? esc_html( $body['message'] ) : 'Erreur inconnue.' );
 			}
 			break;
 

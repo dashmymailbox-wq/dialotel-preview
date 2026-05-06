@@ -165,10 +165,12 @@
         _pIdx = (_pIdx + 1) % _pMsgs.length;
         if (_pEl) _pEl.textContent = _pMsgs[_pIdx];
       }, 3000);
+      this._patienceTimer = _pTimer;
 
       VT.AI.generate(prompt, this.promptTemplate)
         .then(function (response) {
           clearInterval(_pTimer);
+          self._patienceTimer = null;
           var result = self._parseResponse(response);
           if (result) {
             var elapsed = Date.now() - ritualStart;
@@ -250,7 +252,6 @@
 
       // Points forts
       var strengthsEl = VT.$('#vt-amoureuse-result-strengths');
-      var self2 = this;
       if (strengthsEl) strengthsEl.innerHTML = result.pointsFort.map(function (p) {
         return '<li>' + VT.App.sanitize(p) + '</li>';
       }).join('');
@@ -303,6 +304,15 @@
 
     _restart: function () {
       VT.TTS.stop();
+
+      // Annuler le timer patience s'il tourne encore
+      if (this._patienceTimer) { clearInterval(this._patienceTimer); this._patienceTimer = null; }
+
+      // Annuler l'appel IA en cours
+      VT.AI.abort();
+
+      // Annuler le timer email s'il est en attente
+      if (this._emailTimer) { clearTimeout(this._emailTimer); this._emailTimer = null; }
 
       // Reset formulaire
       var inputs = VT.$$('.vt-am-form input');

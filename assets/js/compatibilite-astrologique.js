@@ -187,10 +187,12 @@
         _pIdx = (_pIdx + 1) % _pMsgs.length;
         if (_pEl) _pEl.textContent = _pMsgs[_pIdx];
       }, 3000);
+      this._patienceTimer = _pTimer;
 
       VT.AI.generate(prompt, this.promptTemplate)
         .then(function (response) {
           clearInterval(_pTimer);
+          self._patienceTimer = null;
           var result = self._parseResponse(response);
           if (result) {
             if (baseScore) result.score = baseScore;
@@ -286,7 +288,14 @@
       VT.TTS.speak(ttsText);
 
       if ((this.config.emailCapture || {}).enabled) {
-        VT.Analytics.track('vt_email_shown');
+        var self = this;
+        if (!self._emailTimer) {
+          self._emailTimer = setTimeout(function () {
+            VT.App.showEmailModal();
+            VT.Analytics.track('vt_email_shown');
+            self._emailTimer = null;
+          }, 3000);
+        }
       }
     },
 
@@ -471,6 +480,15 @@
 
     _restart: function () {
       VT.TTS.stop();
+
+      // Annuler le timer patience s'il tourne encore
+      if (this._patienceTimer) { clearInterval(this._patienceTimer); this._patienceTimer = null; }
+
+      // Annuler l'appel IA en cours
+      VT.AI.abort();
+
+      // Annuler le timer email s'il est en attente
+      if (this._emailTimer) { clearTimeout(this._emailTimer); this._emailTimer = null; }
 
       // Reset signes selectionnes
       VT.$$('.vt-astro-sign--selected').forEach(function (b) {

@@ -178,15 +178,34 @@
     config: null,
     proxyUrl: null,
 
+    _abortController: null,
+
     init: function (aiConfig) {
       this.config = aiConfig || { provider: 'mistral' };
       this.proxyUrl = aiConfig.proxyUrl || null;
     },
 
+    /** Annule l'appel IA en cours (appeler au restart) */
+    abort: function () {
+      if (this._abortController) {
+        try { this._abortController.abort(); } catch (e) {}
+        this._abortController = null;
+      }
+    },
+
     generate: function (prompt, systemPrompt) {
+      // Annuler tout appel precedent
+      this.abort();
+      this._abortController = new AbortController();
+      var signal = this._abortController.signal;
+      var self = this;
+
+      // Timeout 30s
+      var timeoutId = setTimeout(function () { self.abort(); }, 30000);
+
       // Si proxy WP configure, router via le serveur
       if (this.proxyUrl) {
-        return this._callProxy(this.proxyUrl, prompt, systemPrompt);
+        return this._callProxy(this.proxyUrl, prompt, systemPrompt, signal, timeoutId);
       }
 
       var provider = (this.config.provider || 'mistral').toLowerCase();
@@ -195,14 +214,15 @@
 
       switch (provider) {
         case 'mistral':
-          return this._callMistral(apiKey, model || 'mistral-small-latest', prompt, systemPrompt);
+          return this._callMistral(apiKey, model || 'mistral-small-latest', prompt, systemPrompt, signal, timeoutId);
         case 'openai':
-          return this._callOpenAI(apiKey, model || 'gpt-4o-mini', prompt, systemPrompt);
+          return this._callOpenAI(apiKey, model || 'gpt-4o-mini', prompt, systemPrompt, signal, timeoutId);
         case 'gemini':
-          return this._callGemini(apiKey, model || 'gemini-1.5-flash', prompt, systemPrompt);
+          return this._callGemini(apiKey, model || 'gemini-1.5-flash', prompt, systemPrompt, signal, timeoutId);
         case 'anthropic':
-          return this._callAnthropic(apiKey, model || 'claude-haiku-20240307', prompt, systemPrompt);
+          return this._callAnthropic(apiKey, model || 'claude-haiku-20240307', prompt, systemPrompt, signal, timeoutId);
         default:
+          clearTimeout(timeoutId);
           return Promise.reject(new Error('Provider IA inconnu : ' + provider));
       }
     },
@@ -211,7 +231,7 @@
       return (window.vtWpConfig && window.vtWpConfig.nonce) || '';
     },
 
-    _callProxy: function (proxyUrl, prompt, systemPrompt) {
+    _callProxy: function (proxyUrl, prompt, systemPrompt, signal, timeoutId) {
       var params = new URLSearchParams();
       params.append('prompt', prompt);
       params.append('systemPrompt', systemPrompt || '');
@@ -219,17 +239,23 @@
       return fetch(proxyUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: params.toString()
+        body: params.toString(),
+        signal: signal
       }).then(function (r) {
+        clearTimeout(timeoutId);
         if (!r.ok) throw new Error('Proxy error ' + r.status);
         return r.json();
       }).then(function (data) {
         if (data.success === false) throw new Error(data.data && data.data.message || 'Erreur proxy');
         return data.data && data.data.content || data.content || data.text || JSON.stringify(data);
+      }).catch(function (e) {
+        clearTimeout(timeoutId);
+        if (e.name === 'AbortError') throw new Error('Requête annulée (timeout ou restart).');
+        throw e;
       });
     },
 
-    _callMistral: function (apiKey, model, prompt, systemPrompt) {
+    _callMistral: function (apiKey, model, prompt, systemPrompt, signal, timeoutId) {
       var messages = [];
       if (systemPrompt) messages.push({ role: 'system', content: systemPrompt });
       messages.push({ role: 'user', content: prompt });
@@ -237,16 +263,22 @@
       return fetch('https://api.mistral.ai/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
-        body: JSON.stringify({ model: model, messages: messages })
+        body: JSON.stringify({ model: model, messages: messages }),
+        signal: signal
       }).then(function (r) {
+        clearTimeout(timeoutId);
         if (!r.ok) throw new Error('Mistral API error ' + r.status);
         return r.json();
       }).then(function (data) {
-        return data.choices[0].message.content;
+        return (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
+      }).catch(function (e) {
+        clearTimeout(timeoutId);
+        if (e.name === 'AbortError') throw new Error('Requête annulée (timeout ou restart).');
+        throw e;
       });
     },
 
-    _callOpenAI: function (apiKey, model, prompt, systemPrompt) {
+    _callOpenAI: function (apiKey, model, prompt, systemPrompt, signal, timeoutId) {
       var messages = [];
       if (systemPrompt) messages.push({ role: 'system', content: systemPrompt });
       messages.push({ role: 'user', content: prompt });
@@ -254,16 +286,22 @@
       return fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
-        body: JSON.stringify({ model: model, messages: messages })
+        body: JSON.stringify({ model: model, messages: messages }),
+        signal: signal
       }).then(function (r) {
+        clearTimeout(timeoutId);
         if (!r.ok) throw new Error('OpenAI API error ' + r.status);
         return r.json();
       }).then(function (data) {
-        return data.choices[0].message.content;
+        return (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
+      }).catch(function (e) {
+        clearTimeout(timeoutId);
+        if (e.name === 'AbortError') throw new Error('Requête annulée (timeout ou restart).');
+        throw e;
       });
     },
 
-    _callGemini: function (apiKey, model, prompt, systemPrompt) {
+    _callGemini: function (apiKey, model, prompt, systemPrompt, signal, timeoutId) {
       var body = {
         contents: [{ parts: [{ text: (systemPrompt ? systemPrompt + '\n\n' : '') + prompt }] }]
       };
@@ -271,16 +309,22 @@
       return fetch('https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + apiKey, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
+        signal: signal
       }).then(function (r) {
+        clearTimeout(timeoutId);
         if (!r.ok) throw new Error('Gemini API error ' + r.status);
         return r.json();
       }).then(function (data) {
-        return data.candidates[0].content.parts[0].text;
+        return (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text) || '';
+      }).catch(function (e) {
+        clearTimeout(timeoutId);
+        if (e.name === 'AbortError') throw new Error('Requête annulée (timeout ou restart).');
+        throw e;
       });
     },
 
-    _callAnthropic: function (apiKey, model, prompt, systemPrompt) {
+    _callAnthropic: function (apiKey, model, prompt, systemPrompt, signal, timeoutId) {
       var body = {
         model: model,
         max_tokens: 2048,
@@ -295,12 +339,18 @@
           'x-api-key': apiKey,
           'anthropic-version': '2023-06-01'
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
+        signal: signal
       }).then(function (r) {
+        clearTimeout(timeoutId);
         if (!r.ok) throw new Error('Anthropic API error ' + r.status);
         return r.json();
       }).then(function (data) {
-        return data.content[0].text;
+        return (data.content && data.content[0] && data.content[0].text) || '';
+      }).catch(function (e) {
+        clearTimeout(timeoutId);
+        if (e.name === 'AbortError') throw new Error('Requête annulée (timeout ou restart).');
+        throw e;
       });
     }
   };
@@ -347,10 +397,6 @@
       if (this.synth.speaking) {
         this.synth.paused ? this.synth.resume() : this.synth.pause();
       }
-    },
-
-    isSpeaking: function () {
-      return this.synth && this.synth.speaking;
     }
   };
 
@@ -748,11 +794,6 @@
   VT.on = function (el, event, fn) {
     if (typeof el === 'string') el = document.querySelector(el);
     if (el) el.addEventListener(event, fn);
-  };
-
-  VT.off = function (el, event, fn) {
-    if (typeof el === 'string') el = document.querySelector(el);
-    if (el) el.removeEventListener(event, fn);
   };
 
   /* ============================================================
