@@ -20,6 +20,9 @@
       VT.TTS.init(this.config.tts || {});
       VT.Email.init(this.config.emailCapture || {});
 
+      // Accessibilite modales (Escape pour fermer)
+      VT.App.initModalAccessibility();
+
       // Charger i18n
       var i18nEl = document.getElementById('vt-amoureuse-i18n');
       if (i18nEl) {
@@ -59,9 +62,7 @@
       });
 
       // Bouton TTS
-      VT.on('.vt-tts-btn', 'click', function () {
-        VT.TTS.toggle();
-      });
+      VT.App.initTTSButton();
 
       // Email form submit
       VT.on('#vt-amoureuse-email-form', 'submit', function (e) {
@@ -78,12 +79,11 @@
       // Bouton "Partager mon score"
       VT.on('#vt-amoureuse-btn-share', 'click', function () { self._shareImage(); });
       VT.on('#vt-amoureuse-share-modal-close', 'click', function () {
-        var m = VT.$('#vt-amoureuse-share-modal');
-        if (m) m.classList.remove('vt-modal--open');
+        VT.App.closeModal('vt-amoureuse-share-modal');
       });
 
       // Exposer _shareImage globalement pour le onclick inline du bouton
-      window._vtShareImage = function () { self._shareImage(); };
+      window._vtShareImageAm = function () { self._shareImage(); };
     },
 
     _doTirage: function () {
@@ -330,10 +330,7 @@
       if (headerEl) headerEl.innerHTML = '';
 
       // Fermer les modales
-      VT.$$('.vt-modal-overlay').forEach(function (m) {
-        m.classList.remove('vt-modal--open');
-        m.style.display = '';
-      });
+      VT.App.closeAllModals();
 
       // Reset email form
       var emailForm = VT.$('#vt-amoureuse-email-form');
@@ -341,7 +338,7 @@
       if (emailForm) emailForm.classList.remove('vt-hidden');
       if (emailSuccess) emailSuccess.classList.add('vt-hidden');
 
-      VT.App.hideError(this);
+      VT.App.hideError();
       VT.App.checkRateLimit(this);
 
       // Re-afficher le splash

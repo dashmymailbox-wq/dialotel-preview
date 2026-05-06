@@ -652,8 +652,9 @@
       }
     },
 
-    hideError: function (app) {
-      var errorEl = VT.$('#vt-error');
+    hideError: function (selector) {
+      var sel = selector || '#vt-error';
+      var errorEl = VT.$(sel);
       if (errorEl) errorEl.classList.add('vt-hidden');
     },
 
@@ -697,6 +698,41 @@
       if (modal) modal.classList.remove('vt-modal--open');
 
       app._doTirage();
+    },
+
+    /** Fermer les modales ouvertes avec Escape + focus trap basique */
+    initModalAccessibility: function () {
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        var openModals = VT.$$('.vt-modal-overlay.vt-modal--open');
+        openModals.forEach(function (modal) {
+          modal.classList.remove('vt-modal--open');
+          // Retourner le focus au bouton qui a ouvert la modale
+          var trigger = modal.dataset.triggerId && VT.$('#' + modal.dataset.triggerId);
+          if (trigger) trigger.focus();
+        });
+      });
+    },
+
+    /** Bind le bouton TTS (.vt-tts-btn) au toggle global */
+    initTTSButton: function () {
+      VT.on('.vt-tts-btn', 'click', function () {
+        VT.TTS.toggle();
+      });
+    },
+
+    /** Ferme toutes les modales overlay ouvertes */
+    closeAllModals: function () {
+      VT.$$('.vt-modal-overlay').forEach(function (m) {
+        m.classList.remove('vt-modal--open');
+        m.style.display = '';
+      });
+    },
+
+    /** Ferme une modale specifique par son ID */
+    closeModal: function (id) {
+      var modal = VT.$('#' + id);
+      if (modal) modal.classList.remove('vt-modal--open');
     },
 
     animateScore: function (el, target) {

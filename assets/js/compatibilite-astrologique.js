@@ -33,6 +33,9 @@
       VT.TTS.init(this.config.tts || {});
       VT.Email.init(this.config.emailCapture || {});
 
+      // Accessibilite modales (Escape pour fermer)
+      VT.App.initModalAccessibility();
+
       var i18nEl = document.getElementById('vt-astro-i18n');
       if (i18nEl) {
         try { VT.I18n.init(JSON.parse(i18nEl.textContent)); } catch (e) { /* ignore */ }
@@ -60,11 +63,9 @@
         self._restart();
       });
 
-      VT.on('.vt-tts-btn', 'click', function () {
-        VT.TTS.toggle();
-      });
+      VT.App.initTTSButton();
 
-      window._vtShareImage = function () { self._shareImage(); };
+      window._vtShareImageAstro = function () { self._shareImage(); };
 
       VT.on('#vt-astro-btn-share', 'click', function () { self._shareImage(); });
       VT.on('#vt-astro-share-modal-close', 'click', function () { self._closeShareModal(); });
@@ -299,14 +300,8 @@
       }
     },
 
-    _hideError: function () {
-      var errorEl = VT.$('#vt-astro-error');
-      if (errorEl) errorEl.classList.add('vt-hidden');
-    },
-
     _closeShareModal: function () {
-      var modal = VT.$('#vt-astro-share-modal');
-      if (modal) modal.classList.remove('vt-modal--open');
+      VT.App.closeModal('vt-astro-share-modal');
     },
 
     _shareImage: function () {
@@ -501,17 +496,14 @@
       var barFill = VT.$('.vt-astro-score-bar-fill');
       if (barFill) barFill.style.width = '0%';
 
-      VT.$$('.vt-modal-overlay').forEach(function (m) {
-        m.classList.remove('vt-modal--open');
-        m.style.display = '';
-      });
+      VT.App.closeAllModals();
 
       var emailForm = VT.$('#vt-astro-email-form');
       var emailSuccess = VT.$('.vt-email-success');
       if (emailForm) emailForm.classList.remove('vt-hidden');
       if (emailSuccess) emailSuccess.classList.add('vt-hidden');
 
-      this._hideError();
+      VT.App.hideError('#vt-astro-error');
       VT.App.checkRateLimit(this);
 
       // Re-afficher le splash

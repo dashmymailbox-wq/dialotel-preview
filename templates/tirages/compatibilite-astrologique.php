@@ -318,7 +318,7 @@ $faq_defaults = array(
 	</div>
 
 	<!-- Modale limite -->
-	<div class="vt-modal-overlay" id="vt-astro-rate-limit-modal">
+	<div class="vt-modal-overlay" id="vt-astro-rate-limit-modal" role="dialog" aria-modal="true">
 		<div class="vt-modal">
 			<h3>Limite atteinte</h3>
 			<p style="color:var(--theme-text-muted); margin:0.5rem 0 1.25rem; font-size:0.85rem;">Entrez votre email pour debloquer des tirages supplementaires.</p>
@@ -331,7 +331,7 @@ $faq_defaults = array(
 
 	<?php if ( $share_enabled ) : ?>
 	<!-- Modal partage -->
-	<div class="vt-modal-overlay" id="vt-astro-share-modal">
+	<div class="vt-modal-overlay" id="vt-astro-share-modal" role="dialog" aria-modal="true">
 		<div class="vt-modal">
 			<button type="button" class="vt-modal-close" id="vt-astro-share-modal-close" aria-label="Fermer">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
