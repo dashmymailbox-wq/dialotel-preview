@@ -184,15 +184,14 @@
 }
 
 .vt-app .vt-astro-sign--selected {
-  border-color: #e2ed77 !important;
-  background: #e2ed77 !important;
-  box-shadow: 0 0 20px rgba(226, 237, 119, 0.6), 0 0 8px rgba(156, 39, 176, 0.4) !important;
-  transform: scale(1.08);
+  border-color: #ce93d8 !important;
+  background: #ce93d8 !important;
+  box-shadow: 0 0 12px rgba(206, 147, 216, 0.5) !important;
 }
 
 .vt-app .vt-astro-sign--selected svg {
-  color: #4a148c !important;
-  stroke: #4a148c !important;
+  color: #fff !important;
+  stroke: #fff !important;
 }
 
 .vt-app .vt-astro-sign svg {
@@ -210,7 +209,7 @@
 }
 
 .vt-app .vt-astro-sign--selected .vt-astro-sign-name {
-  color: #4a148c !important;
+  color: #fff !important;
   font-weight: 700;
 }
 
