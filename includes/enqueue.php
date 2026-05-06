@@ -74,7 +74,7 @@ function vt_enqueue_assets() {
 		'proxyUrl'      => $proxy_url,
 		'emailProxyUrl' => $email_proxy,
 		'nonce'         => wp_create_nonce( 'vt_proxy_nonce' ),
-		'logoUrl'       => plugins_url( 'assets/logo-hexagon-voyance.webp', VT_PLUGIN_FILE ),
+		'logoUrl'       => VT_PLUGIN_URL . 'assets/logo-hexagon-voyance.webp',
 	) );
 }
 
