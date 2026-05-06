@@ -118,10 +118,10 @@
 
 .vt-app .vt-astro-theme-btn {
   padding: 0.6rem 0.5rem;
-  border: 1px solid var(--theme-border);
+  border: 1px solid rgba(156, 39, 176, 0.4);
   border-radius: 10px;
-  background: rgba(26, 14, 36, 0.4);
-  color: var(--theme-text-muted);
+  background: #9c27b0 !important;
+  color: #fff !important;
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 300ms ease;
@@ -134,10 +134,11 @@
 }
 
 .vt-app .vt-astro-theme-btn--selected {
-  border-color: var(--theme-primary);
-  background: rgba(237, 140, 230, 0.15);
-  color: var(--theme-primary);
-  box-shadow: 0 0 12px var(--theme-glow-primary);
+  border-color: #ce93d8 !important;
+  background: #ce93d8 !important;
+  color: #fff !important;
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(206, 147, 216, 0.5);
 }
 
 /* ===== Grille de selection des signes ===== */
