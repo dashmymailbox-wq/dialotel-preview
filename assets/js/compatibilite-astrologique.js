@@ -66,6 +66,10 @@
 
       window._vtShareImage = function () { self._shareImage(); };
 
+      VT.on('#vt-astro-btn-share', 'click', function () { self._openShareModal(); });
+      VT.on('#vt-astro-share-modal-close', 'click', function () { self._closeShareModal(); });
+      VT.on('#vt-astro-share-copy', 'click', function () { self._copyLink(); });
+
       VT.on('#vt-astro-email-form', 'submit', function (e) {
         e.preventDefault();
         VT.App.submitEmail(self);
@@ -318,6 +322,33 @@
         });
     },
 
+    _openShareModal: function () {
+      var modal = VT.$('#vt-astro-share-modal');
+      if (modal) modal.classList.add('vt-modal--open');
+    },
+
+    _closeShareModal: function () {
+      var modal = VT.$('#vt-astro-share-modal');
+      if (modal) modal.classList.remove('vt-modal--open');
+    },
+
+    _copyLink: function () {
+      var self = this;
+      var url = window.location.href;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function () {
+          var btn = VT.$('#vt-astro-share-copy');
+          if (btn) { btn.textContent = 'Lien copie !'; setTimeout(function () { btn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copier le lien'; }, 2000); }
+        });
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); } catch (e) { /* ignore */ }
+        document.body.removeChild(ta);
+      }
+    },
+
     _shareImage: function () {
       var self = this;
       var scoreText = (VT.$('#vt-result-score') || {}).textContent || '0%';
@@ -503,6 +534,7 @@
 
       VT.$$('.vt-modal-overlay').forEach(function (m) {
         m.classList.remove('vt-modal--open');
+        m.style.display = '';
       });
 
       var emailForm = VT.$('#vt-email-form');

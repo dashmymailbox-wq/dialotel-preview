@@ -168,8 +168,9 @@ function vt_call_mistral( $api_key, $model, $messages ) {
 			'Authorization' => 'Bearer ' . $api_key,
 		),
 		'body'    => wp_json_encode( array(
-			'model'    => $model,
-			'messages' => $messages,
+			'model'      => $model,
+			'messages'   => $messages,
+			'max_tokens' => 2048,
 		) ),
 		'timeout' => 30,
 	) );
@@ -199,8 +200,9 @@ function vt_call_openai( $api_key, $model, $messages ) {
 			'Authorization' => 'Bearer ' . $api_key,
 		),
 		'body'    => wp_json_encode( array(
-			'model'    => $model,
-			'messages' => $messages,
+			'model'      => $model,
+			'messages'   => $messages,
+			'max_tokens' => 2048,
 		) ),
 		'timeout' => 30,
 	) );

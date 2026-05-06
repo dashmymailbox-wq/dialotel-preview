@@ -30,7 +30,13 @@ function vt_render_shortcode( $atts ) {
 	}
 
 	// Verifier si l'app est activee
-	if ( ! get_option( 'vt_app_' . $atts['type'] . '_enabled', true ) ) {
+	$enabled_map = array(
+		'compatibilite-amoureuse'   => get_option( 'vt_app_amoureuse_enabled', '0' ) === '1',
+		'compatibilite-astrologique' => get_option( 'vt_app_astro_enabled', '0' ) === '1',
+		'tirage-tarot'              => true,
+		'numerologie'               => true,
+	);
+	if ( isset( $enabled_map[ $atts['type'] ] ) && ! $enabled_map[ $atts['type'] ] ) {
 		return '';
 	}
 

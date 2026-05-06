@@ -78,11 +78,6 @@
       // Bouton "Partager mon score"
       VT.on('#vt-amoureuse-btn-share', 'click', function () { self._shareImage(); });
 
-      // Boutons plateforme
-      VT.on('.vt-share-btn', 'click', function () {
-        self._shareToPlatform(this.getAttribute('data-platform'));
-      });
-
       // Boutons modale partage
       VT.on('#vt-amoureuse-share-copy-link', 'click', function () { self._copyLink(); });
 
@@ -377,39 +372,6 @@
         caption += '\n' + resumeEl.textContent.trim();
       }
       return { name1: name1, name2: name2, score: score, text: text, caption: caption, url: window.location.href };
-    },
-
-    _shareToPlatform: function (platform) {
-      var self = this;
-      var data = this._getShareData();
-
-      // Toujours ouvrir la modale avec l'image
-      this._shareImage();
-
-      // Puis partager via la plateforme
-      switch (platform) {
-        case 'facebook':
-          window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(data.url), '_blank', 'width=600,height=400');
-          break;
-        case 'whatsapp':
-          window.open('https://wa.me/?text=' + encodeURIComponent(data.caption + '\n' + data.url), '_blank');
-          break;
-        case 'tiktok':
-        case 'instagram':
-        case 'snapchat':
-          setTimeout(function () { self._showAssistText(platform); }, 300);
-          break;
-      }
-
-      VT.Analytics.track('vt_share', { platform: platform, type: 'compatibilite-amoureuse' });
-    },
-
-    _showAssistText: function (platform) {
-      var el = document.getElementById('vt-amoureuse-share-assist-text');
-      if (!el) return;
-      var names = { tiktok: 'TikTok', instagram: 'Instagram', snapchat: 'Snapchat' };
-      el.textContent = 'Image generee ! Telechargez-la, puis ouvrez ' + (names[platform] || platform) + ' pour la partager.';
-      el.style.display = 'block';
     },
 
     _copyLink: function () {

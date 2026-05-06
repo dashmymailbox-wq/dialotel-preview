@@ -70,7 +70,8 @@
       "Bash(git ls-tree *)",
       "Bash(npx @wp-now/wp-now start --path=\"c:/Users/Olivier/Desktop/CLAUDE/Z-AI_PLUGIN_TIRAGES/wordpress\" --skip-browser --reset)",
       "Bash(git fetch *)",
-      "Bash(npx @wp-now/wp-now start --path=\"c:/Users/Olivier/Desktop/CLAUDE/Z-AI_PLUGIN_TIRAGES/clients/dialotel/wordpress\" --skip-browser --reset)"
+      "Bash(npx @wp-now/wp-now start --path=\"c:/Users/Olivier/Desktop/CLAUDE/Z-AI_PLUGIN_TIRAGES/clients/dialotel/wordpress\" --skip-browser --reset)",
+      "Bash(npx @wp-now/wp-now start --path=\"c:/Users/Olivier/Desktop/CLAUDE/Z-AI_PLUGIN_TIRAGES\" --skip-browser --reset)"
     ]
   }
 }

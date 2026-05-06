@@ -16,7 +16,8 @@ $cta_hook       = get_option( 'vt_astro_cta_hook', 'Votre duo astrologique vous 
 $cta_btn_text   = get_option( 'vt_astro_cta_btn_text', 'Consulter un voyant specialiste en astrologie' );
 $cta_url        = get_option( 'vt_astro_cta_url', '#' );
 $faq_enabled    = get_option( 'vt_astro_faq_enabled', true );
-$share_enabled  = get_option( 'vt_astro_share_enabled', true );
+$share_enabled       = get_option( 'vt_astro_share_enabled', true );
+$astro_email_enabled = get_option( 'vt_astro_email_enabled', '1' ) === '1';
 $tts_enabled    = get_option( 'vt_tts_enabled', false );
 $rate_enabled   = get_option( 'vt_rate_limit_enabled', false );
 $rate_free      = get_option( 'vt_rate_free', 3 );
@@ -257,6 +258,7 @@ $faq_defaults = array(
 				<div class="vt-astro-divider"></div>
 
 				<!-- Email inline -->
+				<?php if ( $astro_email_enabled ) : ?>
 				<div class="vt-email-inline" id="vt-astro-email-inline">
 					<h3><?php echo esc_html( $email_title ); ?></h3>
 					<p><?php echo esc_html( $email_desc ); ?></p>
@@ -270,6 +272,7 @@ $faq_defaults = array(
 						<p style="color:var(--theme-secondary); text-align:center;">Merci ! Votre bon de -<?php echo intval( $discount_pct ); ?>% a ete envoye.</p>
 					</div>
 				</div>
+				<?php endif; ?>
 
 				<div class="vt-result-actions">
 					<?php if ( $cta_enabled ) : ?>
@@ -325,31 +328,25 @@ $faq_defaults = array(
 		</div>
 	</div>
 
-</div>
-
-<?php if ( $share_enabled ) : ?>
-<!-- Modal partage -->
-<div class="vt-modal-overlay" id="vt-astro-share-modal">
-	<div class="vt-modal">
-		<button type="button" class="vt-modal-close" id="vt-astro-share-modal-close" aria-label="Fermer">
-			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-		</button>
-		<h3 style="margin-bottom:1rem;">Partager mon resultat</h3>
-		<div class="vt-share-btns" style="display:flex;flex-direction:column;gap:0.75rem;">
-			<a id="vt-astro-share-whatsapp" href="#" target="_blank" rel="noopener" class="btn-hex btn-hex--secondary" style="background:#25D366;border-color:#25D366;text-decoration:none;">
-				WhatsApp
-			</a>
-			<a id="vt-astro-share-facebook" href="#" target="_blank" rel="noopener" class="btn-hex btn-hex--secondary" style="background:#1877F2;border-color:#1877F2;text-decoration:none;">
-				Facebook
-			</a>
-			<button type="button" id="vt-astro-share-copy" class="btn-hex">
-				<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-				Copier le lien
+	<?php if ( $share_enabled ) : ?>
+	<!-- Modal partage -->
+	<div class="vt-modal-overlay" id="vt-astro-share-modal">
+		<div class="vt-modal">
+			<button type="button" class="vt-modal-close" id="vt-astro-share-modal-close" aria-label="Fermer">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
 			</button>
+			<h3 style="margin-bottom:1rem;">Partager mon resultat</h3>
+			<div class="vt-share-btns" style="display:flex;flex-direction:column;gap:0.75rem;">
+				<button type="button" id="vt-astro-share-copy" class="btn-hex">
+					<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+					Copier le lien
+				</button>
+			</div>
 		</div>
 	</div>
+	<?php endif; ?>
+
 </div>
-<?php endif; ?>
 
 <!-- Config -->
 <script type="application/json" id="vt-astro-config">
@@ -360,7 +357,7 @@ $faq_defaults = array(
 	"ai": { "proxyUrl": "<?php echo esc_url( $proxy_url ); ?>" },
 	"tts": { "enabled": <?php echo $tts_enabled ? 'true' : 'false'; ?>, "autoplay": false },
 	"rateLimit": { "enabled": <?php echo $rate_enabled ? 'true' : 'false'; ?>, "freePerDay": <?php echo intval( $rate_free ); ?>, "extendedPerDay": <?php echo intval( $rate_extended ); ?> },
-	"emailCapture": { "enabled": true, "emailProxyUrl": "<?php echo esc_url( $email_proxy ); ?>", "provider": "proxy" },
+	"emailCapture": { "enabled": <?php echo $astro_email_enabled ? 'true' : 'false'; ?>, "emailProxyUrl": "<?php echo esc_url( $email_proxy ); ?>", "provider": "proxy" },
 	"ctaVoyants": { "enabled": <?php echo $cta_enabled ? 'true' : 'false'; ?>, "url": "<?php echo esc_url( $cta_url ); ?>" }
 }
 </script>

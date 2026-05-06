@@ -76,18 +76,11 @@ function vt_activate_plugin() {
 		'vt_astro_faq_enabled'     => true,
 		'vt_astro_faq_title'       => '',
 		// Share
-		'vt_share_enabled'    => true,
-		'vt_share_facebook'   => true,
-		'vt_share_whatsapp'   => true,
-		'vt_share_tiktok'     => true,
-		'vt_share_instagram'  => true,
-		'vt_share_snapchat'   => true,
+		'vt_share_enabled'         => true,
 		'vt_astro_share_enabled'   => true,
-		'vt_astro_share_facebook'  => true,
-		'vt_astro_share_whatsapp'  => true,
-		'vt_astro_share_tiktok'    => true,
-		'vt_astro_share_instagram' => true,
-		'vt_astro_share_snapchat'  => true,
+		// Email encart
+		'vt_email_enabled'         => true,
+		'vt_astro_email_enabled'   => true,
 		// APIs
 		'vt_ai_provider'      => 'mistral',
 		'vt_ai_mistral_key'   => '',
@@ -177,8 +170,6 @@ function vt_activate_plugin() {
 		}
 	}
 
-	// Creer la page compat-amoureuse (app principale)
-	vt_ensure_app_page( 'compatibilite-amoureuse', 'vt_page_slug', 'tirage-compatibilite-amoureuse', 'vt_page_title', 'Compatibilite Amoureuse' );
 }
 
 /* ============================================================
@@ -222,7 +213,3 @@ function vt_ensure_app_page( $app_type, $slug_opt, $slug_default, $title_opt, $t
 	return $page_id;
 }
 
-// Retrocompat wrapper
-function vt_ensure_page_exists() {
-	return vt_ensure_app_page( 'compatibilite-amoureuse', 'vt_page_slug', 'tirage-compatibilite-amoureuse', 'vt_page_title', 'Compatibilite Amoureuse' );
-}
