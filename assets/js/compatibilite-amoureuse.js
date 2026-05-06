@@ -349,7 +349,7 @@
         splash.className = 'vt-splash';
         splash.id = 'vt-amoureuse-splash';
         splash.setAttribute('aria-hidden', 'true');
-        splash.innerHTML = '<img class="vt-splash-logo" src="assets/logo-hexagon-voyance.webp" alt="Hexagon Voyance">';
+        splash.innerHTML = '<img class="vt-splash-logo" src="' + (window.vtWpConfig && vtWpConfig.logoUrl || '') + '" alt="Hexagon Voyance">';
         appEl.insertBefore(splash, appEl.firstChild);
         container.classList.remove('vt-ready');
         container.style.opacity = '0';
@@ -603,7 +603,7 @@
       var logoImg = new Image();
       logoImg.onload  = function () { doRender(logoImg); };
       logoImg.onerror = function () { doRender(null); };
-      logoImg.src = (app.config && app.config.logoUrl) || '../wordpress/assets/logo-hexagon-voyance.webp';
+      logoImg.src = (app.config && app.config.logoUrl) || (window.vtWpConfig && vtWpConfig.logoUrl) || '';
     }
   };
 
