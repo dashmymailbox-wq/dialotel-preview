@@ -15,7 +15,7 @@ $email_proxy = admin_url( 'admin-ajax.php?action=vt_email_proxy' );
 // Options dynamiques
 $counter_base   = get_option( 'vt_counter_base', 4200 );
 $discount_pct   = get_option( 'vt_discount_pct', 30 );
-$email_enabled  = get_option( 'vt_email_enabled', '1' ) === '1';
+$email_enabled  = filter_var( get_option( 'vt_email_enabled', '1' ), FILTER_VALIDATE_BOOLEAN );
 $cta_enabled    = get_option( 'vt_cta_enabled', true );
 $cta_hook       = get_option( 'vt_cta_hook', 'Votre couple vous interroge ? Parlez a un expert' );
 $cta_btn_text   = get_option( 'vt_cta_btn_text', 'Consulter un voyant specialiste en relations amoureuses' );
@@ -165,8 +165,8 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 							<input type="text" id="vt-amoureuse-name1" placeholder="Ex : Marie" required autocomplete="given-name">
 						</div>
 						<div class="vt-am-field-group">
-							<label for="vt-amoureuse-birth1">Date de naissance (optionnel)</label>
-							<input type="date" id="vt-amoureuse-birth1" autocomplete="bday" value="2000-01-01">
+						<label for="vt-amoureuse-birth1">Date de naissance</label>
+						<input type="date" id="vt-amoureuse-birth1" autocomplete="bday" value="2000-01-01" required>
 						</div>
 					</div>
 					<div class="vt-am-form-heart" aria-hidden="true">
@@ -179,8 +179,8 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 							<input type="text" id="vt-amoureuse-name2" placeholder="Ex : Pierre" required autocomplete="given-name">
 						</div>
 						<div class="vt-am-field-group">
-							<label for="vt-amoureuse-birth2">Date de naissance (optionnel)</label>
-							<input type="date" id="vt-amoureuse-birth2" autocomplete="bday" value="2000-01-01">
+						<label for="vt-amoureuse-birth2">Date de naissance</label>
+						<input type="date" id="vt-amoureuse-birth2" autocomplete="bday" value="2000-01-01" required>
 						</div>
 					</div>
 				</div>
@@ -330,17 +330,17 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 
 	<!-- Modale partage -->
 	<div class="vt-modal-overlay" id="vt-amoureuse-share-modal">
-		<div class="vt-modal vt-share-modal">
-			<button class="vt-modal-close" onclick="this.closest('.vt-modal-overlay').style.display='none'" aria-label="Fermer">
+		<div class="vt-modal">
+			<button type="button" class="vt-modal-close" id="vt-amoureuse-share-modal-close" aria-label="Fermer">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
 			</button>
-			<h3>Votre image de compatibilite</h3>
-			<img id="vt-amoureuse-share-preview" alt="Apercu du tirage" style="max-width:100%;border-radius:10px;margin:1rem 0;">
-			<div class="vt-share-modal-actions">
-				<a id="vt-amoureuse-share-download" download="compatibilite-amoureuse.png" class="btn-hex">Telecharger l'image</a>
-				<button id="vt-amoureuse-share-copy-link" class="btn-hex btn-hex--secondary" type="button">Copier le lien</button>
+			<img id="vt-amoureuse-share-preview" style="width:100%;border-radius:12px;margin-bottom:1rem;display:none;" alt="Mon resultat">
+			<div class="vt-share-btns" style="display:flex;flex-direction:column;gap:0.75rem;">
+				<a id="vt-amoureuse-share-download" class="btn-hex" style="display:none;text-align:center;text-decoration:none;" download="compatibilite-amoureuse.png">
+					<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+					Telecharger l'image
+				</a>
 			</div>
-			<p class="vt-share-assist-text" id="vt-amoureuse-share-assist-text" style="display:none;"></p>
 		</div>
 	</div>
 
@@ -366,9 +366,25 @@ $brand_name     = get_option( 'vt_brand_name', 'Hexagon Voyance' );
 </script>
 
 <script type="text/plain" id="vt-prompt-compat-amour">
-Tu es un astrologue et expert en compatibilite amoureuse. Redige une analyse de compatibilite en JSON uniquement :
-{ "score": <1-100>, "resume": "<2-3 phrases>", "pointsFort": ["<1>", "<2>", "<3>"], "tensions": ["<1>", "<2>"], "conseil": "<2-3 phrases>" }
-Ton : bienveillant, positif, encourageant. Texte en francais. Reponds UNIQUEMENT avec le JSON.
+Tu es un astrologue et expert en compatibilite amoureuse. Redige une analyse de compatibilite en JSON uniquement.
+OBLIGATOIRE : tu dois remplir ABSOLUMENT TOUS les champs du JSON, sans exception. Aucun champ ne peut etre vide ou absent.
+
+Format de reponse exigé :
+{
+  "score": <nombre 1-100>,
+  "resume": "<2-3 phrases de synthese>",
+  "pointsFort": ["<point fort 1>", "<point fort 2>", "<point fort 3>"],
+  "tensions": ["<tension 1>", "<tension 2>"],
+  "conseil": "<2-3 phrases de conseil concret>"
+}
+
+Regles :
+- "pointsFort" doit contenir exactement 3 elements, chacun une phrase complete
+- "tensions" doit contenir exactement 2 elements, chacun une phrase complete
+- "conseil" doit etre 2-3 phrases de conseil actionnable
+- Ton : bienveillant, positif, encourageant
+- Texte en francais
+- Reponds UNIQUEMENT avec le JSON, aucun texte en dehors
 </script>
 
 <!-- Anneaux mandala au niveau <body> — échappent aux ancêtres WP qui piègent position:fixed -->

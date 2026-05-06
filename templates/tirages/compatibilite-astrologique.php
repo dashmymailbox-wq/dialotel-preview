@@ -17,7 +17,7 @@ $cta_btn_text   = get_option( 'vt_astro_cta_btn_text', 'Consulter un voyant spec
 $cta_url        = get_option( 'vt_astro_cta_url', '#' );
 $faq_enabled    = get_option( 'vt_astro_faq_enabled', true );
 $share_enabled       = get_option( 'vt_astro_share_enabled', true );
-$astro_email_enabled = get_option( 'vt_astro_email_enabled', '1' ) === '1';
+$astro_email_enabled = filter_var( get_option( 'vt_astro_email_enabled', '1' ), FILTER_VALIDATE_BOOLEAN );
 $tts_enabled    = get_option( 'vt_tts_enabled', false );
 $rate_enabled   = get_option( 'vt_rate_limit_enabled', false );
 $rate_free      = get_option( 'vt_rate_free', 3 );
@@ -130,6 +130,22 @@ $faq_defaults = array(
 					</button>
 				</div>
 				<p class="vt-rate-info"></p>
+
+			<?php if ( $faq_enabled ) : ?>
+			<!-- FAQ SEO -->
+			<section class="vt-faq" itemscope itemtype="https://schema.org/FAQPage">
+				<h2 class="vt-faq-title"><?php echo esc_html( get_option( 'vt_astro_faq_title', 'Questions frequentes' ) ); ?></h2>
+				<?php for ( $i = 1; $i <= 5; $i++ ) :
+					$faq_q = get_option( "vt_astro_faq_q{$i}" ) ?: $faq_defaults[$i]['q'];
+					$faq_a = get_option( "vt_astro_faq_a{$i}" ) ?: $faq_defaults[$i]['a'];
+					?>
+				<details class="vt-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+					<summary class="vt-faq-q" itemprop="name"><?php echo esc_html( $faq_q ); ?></summary>
+					<p class="vt-faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><span itemprop="text"><?php echo esc_html( $faq_a ); ?></span></p>
+				</details>
+				<?php endfor; ?>
+			</section>
+			<?php endif; ?>
 			</div>
 		</div>
 
@@ -296,21 +312,6 @@ $faq_defaults = array(
 					</button>
 				</div>
 
-				<?php if ( $faq_enabled ) : ?>
-				<div class="vt-faq" style="margin-top:2.5rem; text-align:left;">
-					<h2 class="vt-astro-section-title" style="margin-bottom:1.25rem;"><?php echo esc_html( get_option( 'vt_astro_faq_title', 'Questions frequentes' ) ); ?></h2>
-					<?php for ( $i = 1; $i <= 5; $i++ ) :
-						$faq_q = get_option( "vt_astro_faq_q{$i}" ) ?: $faq_defaults[$i]['q'];
-						$faq_a = get_option( "vt_astro_faq_a{$i}" ) ?: $faq_defaults[$i]['a'];
-					?>
-					<details class="vt-faq-item">
-						<summary class="vt-faq-q"><?php echo esc_html( $faq_q ); ?></summary>
-						<p class="vt-faq-a"><?php echo esc_html( $faq_a ); ?></p>
-					</details>
-					<?php endfor; ?>
-				</div>
-				<?php endif; ?>
-
 			</div>
 		</div>
 
@@ -335,12 +336,12 @@ $faq_defaults = array(
 			<button type="button" class="vt-modal-close" id="vt-astro-share-modal-close" aria-label="Fermer">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
 			</button>
-			<h3 style="margin-bottom:1rem;">Partager mon resultat</h3>
+			<img id="vt-astro-share-preview" style="width:100%;border-radius:12px;margin-bottom:1rem;display:none;" alt="Mon resultat">
 			<div class="vt-share-btns" style="display:flex;flex-direction:column;gap:0.75rem;">
-				<button type="button" id="vt-astro-share-copy" class="btn-hex">
-					<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-					Copier le lien
-				</button>
+				<a id="vt-astro-share-download" class="btn-hex" style="display:none;text-align:center;text-decoration:none;">
+					<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+					Telecharger l'image
+				</a>
 			</div>
 		</div>
 	</div>
@@ -402,8 +403,22 @@ $faq_defaults = array(
 
 <script type="text/plain" id="vt-astro-prompt">
 Tu es un astrologue expert. Le theme choisi est : {theme}.
+OBLIGATOIRE : tu dois remplir ABSOLUMENT TOUS les champs du JSON, sans exception. Aucun champ ne peut etre vide ou absent.
+
 Analyse la compatibilite {sign1} / {sign2} selon ce theme et reponds UNIQUEMENT en JSON :
-{ "score": <1-100>, "profil": "<2-3 phrases sur le duo selon le theme>", "traits": ["<trait1>", "<trait2>", "<trait3>"], "conseil": "<2-3 phrases adaptees au theme>" }
-Themes : amour (relation romantique), amitie (liens amicaux), travail (collaboration pro), famille (liens familiaux).
-Ton : bienveillant, poetique, precis. Texte en francais. Aucun texte en dehors du JSON.
+{
+  "score": <nombre 1-100>,
+  "profil": "<2-3 phrases sur le duo selon le theme>",
+  "traits": ["<trait partage 1>", "<trait partage 2>", "<trait partage 3>"],
+  "conseil": "<2-3 phrases adaptees au theme>"
+}
+
+Regles :
+- "profil" doit etre 2-3 phrases completes decrivant le duo
+- "traits" doit contenir exactement 3 elements, chacun une phrase complete
+- "conseil" doit etre 2-3 phrases de conseil actionnable
+- Themes : amour (relation romantique), amitie (liens amicaux), travail (collaboration pro), famille (liens familiaux)
+- Ton : bienveillant, poetique, precis
+- Texte en francais
+- Reponds UNIQUEMENT avec le JSON, aucun texte en dehors
 </script>

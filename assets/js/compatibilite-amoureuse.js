@@ -77,9 +77,10 @@
 
       // Bouton "Partager mon score"
       VT.on('#vt-amoureuse-btn-share', 'click', function () { self._shareImage(); });
-
-      // Boutons modale partage
-      VT.on('#vt-amoureuse-share-copy-link', 'click', function () { self._copyLink(); });
+      VT.on('#vt-amoureuse-share-modal-close', 'click', function () {
+        var m = VT.$('#vt-amoureuse-share-modal');
+        if (m) m.classList.remove('vt-modal--open');
+      });
 
       // Exposer _shareImage globalement pour le onclick inline du bouton
       window._vtShareImage = function () { self._shareImage(); };
@@ -113,12 +114,12 @@
         return;
       }
 
-      if (birth1 && !/^\d{4}-\d{2}-\d{2}$/.test(birth1)) {
-        VT.App.showError(this, 'Format de date invalide.');
+      if (!birth1 || !/^\d{4}-\d{2}-\d{2}$/.test(birth1)) {
+        VT.App.showError(this, 'Veuillez entrer une date de naissance valide pour la premiere personne.');
         return;
       }
-      if (birth2 && !/^\d{4}-\d{2}-\d{2}$/.test(birth2)) {
-        VT.App.showError(this, 'Format de date invalide.');
+      if (!birth2 || !/^\d{4}-\d{2}-\d{2}$/.test(birth2)) {
+        VT.App.showError(this, 'Veuillez entrer une date de naissance valide pour la deuxieme personne.');
         return;
       }
 
@@ -251,13 +252,13 @@
       var strengthsEl = VT.$('#vt-amoureuse-result-strengths');
       var self2 = this;
       if (strengthsEl) strengthsEl.innerHTML = result.pointsFort.map(function (p) {
-        return '<li>' + self2._sanitize(p) + '</li>';
+        return '<li>' + VT.App.sanitize(p) + '</li>';
       }).join('');
 
       // Tensions
       var tensionsEl = VT.$('#vt-amoureuse-result-tensions');
       if (tensionsEl) tensionsEl.innerHTML = result.tensions.map(function (p) {
-        return '<li>' + self2._sanitize(p) + '</li>';
+        return '<li>' + VT.App.sanitize(p) + '</li>';
       }).join('');
 
       // Conseil
@@ -321,10 +322,11 @@
       // Fermer les modales
       VT.$$('.vt-modal-overlay').forEach(function (m) {
         m.classList.remove('vt-modal--open');
+        m.style.display = '';
       });
 
       // Reset email form
-      var emailForm = VT.$('#vt-email-form');
+      var emailForm = VT.$('#vt-amoureuse-email-form');
       var emailSuccess = VT.$('.vt-email-success');
       if (emailForm) emailForm.classList.remove('vt-hidden');
       if (emailSuccess) emailSuccess.classList.add('vt-hidden');
@@ -356,54 +358,6 @@
       }
 
       VT.StepEngine.goTo(0);
-    },
-
-    /* ===== Partage social ===== */
-
-    _getShareData: function () {
-      var scoreEl = VT.$('#vt-amoureuse-result-score');
-      var score = scoreEl ? scoreEl.textContent.trim() : '';
-      var name1 = this._name1 || '';
-      var name2 = this._name2 || '';
-      var text = name1 + ' + ' + name2 + ' = ' + score + ' de compatibilite !';
-      var resumeEl = VT.$('#vt-amoureuse-result-resume');
-      var caption = text;
-      if (resumeEl && resumeEl.textContent.trim()) {
-        caption += '\n' + resumeEl.textContent.trim();
-      }
-      return { name1: name1, name2: name2, score: score, text: text, caption: caption, url: window.location.href };
-    },
-
-    _copyLink: function () {
-      var url = window.location.href;
-      this._copyToClipboard(url, 'Lien copie !');
-    },
-
-    _copyToClipboard: function (text, msg) {
-      var self = this;
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(function () {
-          self._showToast(msg);
-        });
-      } else {
-        var ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        self._showToast(msg);
-      }
-    },
-
-    _showToast: function (msg) {
-      var toast = document.getElementById('vt-amoureuse-share-toast');
-      if (!toast) return;
-      toast.textContent = msg;
-      toast.classList.add('vt-share-toast--visible');
-      setTimeout(function () { toast.classList.remove('vt-share-toast--visible'); }, 2500);
     },
 
     _shareImage: function () {
@@ -624,14 +578,16 @@
         ctx.restore();
 
         /* Affichage dans la modale */
-        var dataURL = canvas.toDataURL('image/png');
+        var dataURL;
+        try { dataURL = canvas.toDataURL('image/png'); }
+        catch(e) { console.error('[VT] canvas.toDataURL failed:', e); return; }
         var modal   = document.getElementById('vt-amoureuse-share-modal');
         var preview = document.getElementById('vt-amoureuse-share-preview');
         var dlBtn   = document.getElementById('vt-amoureuse-share-download');
         if (!modal) return;
-        if (preview) preview.src  = dataURL;
-        if (dlBtn)   dlBtn.href   = dataURL;
-        modal.style.display = 'flex';
+        if (preview){ preview.src  = dataURL; preview.style.display = 'block'; }
+        if (dlBtn){ dlBtn.href   = dataURL; dlBtn.style.display = 'inline-flex'; }
+        modal.classList.add('vt-modal--open');
 
         VT.Analytics.track('vt_share', { platform: 'image', type: 'compatibilite-amoureuse' });
       }

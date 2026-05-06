@@ -66,9 +66,8 @@
 
       window._vtShareImage = function () { self._shareImage(); };
 
-      VT.on('#vt-astro-btn-share', 'click', function () { self._openShareModal(); });
+      VT.on('#vt-astro-btn-share', 'click', function () { self._shareImage(); });
       VT.on('#vt-astro-share-modal-close', 'click', function () { self._closeShareModal(); });
-      VT.on('#vt-astro-share-copy', 'click', function () { self._copyLink(); });
 
       VT.on('#vt-astro-email-form', 'submit', function (e) {
         e.preventDefault();
@@ -112,9 +111,9 @@
 
     _lookupScore: function (sign1, sign2) {
       if (!this.matrixData) return null;
-      var key1 = sign1 + '-' + sign2;
-      var key2 = sign2 + '-' + sign1;
-      return this.matrixData[key1] || this.matrixData[key2] || null;
+      var s1 = this.matrixData[sign1];
+      var s2 = this.matrixData[sign2];
+      return (s1 && s1[sign2]) || (s2 && s2[sign1]) || null;
     },
 
     _doTirage: function () {
@@ -169,8 +168,11 @@
 
       var prompt = this._buildPrompt(sign1Name, sign2Name, baseScore);
 
+      // Appel IA avec delai minimum du rituel (6s)
       var aiConfig = this.config.ai || {};
       VT.AI.init(aiConfig);
+      var ritualStart = Date.now();
+      var MIN_RITUAL = 6000;
 
       // Messages de patience cycles pendant l'appel IA
       var _pMsgs = [
@@ -192,14 +194,18 @@
           var result = self._parseResponse(response);
           if (result) {
             if (baseScore) result.score = baseScore;
-            try {
-              self._showResult(result);
-            } catch (e) {
-              console.error('[VT] Erreur _showResult :', e);
-            }
-            VT.RateLimiter.recordTirage(tirageId);
-            VT.Counter.increment();
-            VT.Analytics.track('vt_tirage_completed', { type: 'compatibilite-astrologique', score: result.score });
+            var elapsed = Date.now() - ritualStart;
+            var wait = Math.max(0, MIN_RITUAL - elapsed);
+            setTimeout(function () {
+              try {
+                self._showResult(result);
+              } catch (e) {
+                console.error('[VT] Erreur _showResult :', e);
+              }
+              VT.RateLimiter.recordTirage(tirageId);
+              VT.Counter.increment();
+              VT.Analytics.track('vt_tirage_completed', { type: 'compatibilite-astrologique', score: result.score });
+            }, wait);
           } else {
             VT.App.showError(self, 'Impossible d\'interpreter le resultat. Reessayez.');
           }
@@ -227,12 +233,12 @@
         var jsonMatch = response.match(/\{[\s\S]*\}/);
         if (!jsonMatch) return null;
         var data = JSON.parse(jsonMatch[0]);
-        if (!data.score && !data.profilCombine) return null;
+        if (!data.score && !data.profil) return null;
         return {
           score: Math.min(100, Math.max(1, parseInt(data.score, 10) || 50)),
-          profilCombine: data.profilCombine || '',
+          profilCombine: data.profil || data.profilCombine || '',
           traits: data.traits || [],
-          conseils: data.conseils || ''
+          conseils: data.conseil || data.conseils || ''
         };
       } catch (e) {
         console.error('[VT] Parsing resultat :', e);
@@ -289,69 +295,14 @@
       if (errorEl) errorEl.classList.add('vt-hidden');
     },
 
-    _extendRateLimit: function () {
-      var email = VT.$('#vt-astro-extend-email').value.trim();
-      if (!email || !email.includes('@')) return;
-
-      var tirageId = this.config.tirageId || 'compat-astro';
-      VT.RateLimiter.extendLimit(tirageId);
-      VT.Analytics.track('vt_rate_limit_extended', { type: 'compatibilite-astrologique' });
-
-      var modal = VT.$('#vt-astro-rate-limit-modal');
-      if (modal) modal.classList.remove('vt-modal--open');
-
-      this._doTirage();
-    },
-
-
-    _submitEmail: function () {
-      var email = VT.$('#vt-astro-email-input').value.trim();
-      if (!email || !email.includes('@')) return;
-
-      var self = this;
-      VT.Email.submit(email)
-        .then(function () {
-          VT.Analytics.track('vt_email_submitted', { type: 'compatibilite-astrologique' });
-          var formEl = VT.$('#vt-astro-email-form');
-          var successEl = VT.$('.vt-email-success');
-          if (formEl) formEl.classList.add('vt-hidden');
-          if (successEl) successEl.classList.remove('vt-hidden');
-        })
-        .catch(function () {
-          VT.App.showError(self, 'Erreur lors de l\'envoi. Reessayez.');
-        });
-    },
-
-    _openShareModal: function () {
-      var modal = VT.$('#vt-astro-share-modal');
-      if (modal) modal.classList.add('vt-modal--open');
-    },
-
     _closeShareModal: function () {
       var modal = VT.$('#vt-astro-share-modal');
       if (modal) modal.classList.remove('vt-modal--open');
     },
 
-    _copyLink: function () {
-      var self = this;
-      var url = window.location.href;
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(url).then(function () {
-          var btn = VT.$('#vt-astro-share-copy');
-          if (btn) { btn.textContent = 'Lien copie !'; setTimeout(function () { btn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copier le lien'; }, 2000); }
-        });
-      } else {
-        var ta = document.createElement('textarea');
-        ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select();
-        try { document.execCommand('copy'); } catch (e) { /* ignore */ }
-        document.body.removeChild(ta);
-      }
-    },
-
     _shareImage: function () {
       var self = this;
-      var scoreText = (VT.$('#vt-result-score') || {}).textContent || '0%';
+      var scoreText = (VT.$('#vt-astro-result-score') || {}).textContent || '0%';
       var score = parseInt(scoreText, 10) || 0;
       var sign1 = this._sign1, sign2 = this._sign2;
       var profileEl = VT.$('#vt-astro-result-profile');
@@ -509,9 +460,9 @@
         var preview=document.getElementById('vt-astro-share-preview');
         var dlBtn=document.getElementById('vt-astro-share-download');
         if(!modal) return;
-        if(preview) preview.src=dataURL;
-        if(dlBtn){ dlBtn.href=dataURL; dlBtn.download='compatibilite-astrologique.png'; }
-        modal.style.display='flex';
+        if(preview){ preview.src=dataURL; preview.style.display='block'; }
+        if(dlBtn){ dlBtn.href=dataURL; dlBtn.download='compatibilite-astrologique.png'; dlBtn.style.display='inline-flex'; }
+        modal.classList.add('vt-modal--open');
         VT.Analytics.track('vt_share',{platform:'image',type:'compatibilite-astrologique'});
       }
 
@@ -537,13 +488,37 @@
         m.style.display = '';
       });
 
-      var emailForm = VT.$('#vt-email-form');
+      var emailForm = VT.$('#vt-astro-email-form');
       var emailSuccess = VT.$('.vt-email-success');
       if (emailForm) emailForm.classList.remove('vt-hidden');
       if (emailSuccess) emailSuccess.classList.add('vt-hidden');
 
       this._hideError();
       VT.App.checkRateLimit(this);
+
+      // Re-afficher le splash
+      var appEl = VT.$('.vt-app');
+      var container = VT.$('.vt-container');
+      if (appEl && container) {
+        var splash = document.createElement('div');
+        splash.className = 'vt-splash';
+        splash.id = 'vt-astro-splash';
+        splash.setAttribute('aria-hidden', 'true');
+        splash.innerHTML = '<img class="vt-splash-logo" src="assets/logo-hexagon-voyance.webp" alt="Hexagon Voyance">';
+        appEl.insertBefore(splash, appEl.firstChild);
+        container.classList.remove('vt-ready');
+        container.style.opacity = '0';
+
+        setTimeout(function () {
+          splash.classList.add('vt-splash--hiding');
+          setTimeout(function () {
+            splash.remove();
+            container.classList.add('vt-ready');
+            container.style.opacity = '';
+          }, 600);
+        }, 2600);
+      }
+
       VT.StepEngine.goTo(0);
     }
   };
